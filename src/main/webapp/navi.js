@@ -16,10 +16,10 @@ const navInnerHTML = `
         <ul class=" flex space-x-10 font-semibold ">
           <li class=" hover:underline underline-offset-4 ">NEW</li>
           <li class=" hover:underline underline-offset-4 ">BEST SELLERS</li>
-          <li class=" hover:underline underline-offset-4 "><a href="item.html">EARRINGS</a></li>
-          <li class=" hover:underline underline-offset-4 ">RINGS</li>
-          <li class=" hover:underline underline-offset-4 ">NECKLACES</li>
-          <li class=" hover:underline underline-offset-4 ">BRACELETS</li>
+          <li class=" hover:underline underline-offset-4 "><a href="earrings.html">EARRINGS</a></li>
+          <li class=" hover:underline underline-offset-4 "><a href="rings.html">RINGS</a></li>
+          <li class=" hover:underline underline-offset-4 "><a href="necklaces.html">NECKLACES</a></li>
+          <li class=" hover:underline underline-offset-4 "><a href="bracelets.html">BRACELETS</a></li>
         </ul>
       </div>
 
