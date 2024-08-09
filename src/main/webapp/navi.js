@@ -67,10 +67,12 @@ const navInnerHTML = `
         <i class="fa-lg fa far fa-times"></i>
       </div>
       <h2 id="headerWel" class="text-3xl font-bold mb-6 text-center text-slate-800">Welcome to Jewelry Palace</h2>
-      <form method="get" action="authenticationServlet">
+      
+     <!-- For Servlet Page -->
+      <form method="post" action="authenticationServlet">
         <div id="userNameContainer" class="mb-4">
           <label for="userName" class="block text-sm font-medium text-slate-700 mb-1">Enter your name</label>
-          <input type="text" id="userName" name="userName" class="w-full px-0 py-2 border-b border-gray-300 focus:border-slate-950 focus:outline-none transition duration-200" required>
+          <input type="text" id="userName" name="username" class="w-full px-0 py-2 border-b border-gray-300 focus:border-slate-950 focus:outline-none transition duration-200" required>
         </div>
         <div class="mb-4">
           <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Enter your email</label>
@@ -84,6 +86,7 @@ const navInnerHTML = `
           <button id="submitBtn" type="submit" class="w-full bg-slate-500 text-white py-2 rounded-md shadow-lg hover:bg-slate-600 focus:ring-4 focus:ring-slate-300 transition ease-in-out duration-150">SIGN UP</button>
         </div>
       </form>
+      
     </div>
   </div>
 

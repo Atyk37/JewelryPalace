@@ -1,56 +1,52 @@
 package authentication;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-/**
- * Servlet implementation class authenticationServlet
- */
+import database.DB_connection;
+
 @WebServlet("/authenticationServlet")
 public class authenticationServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+
     public authenticationServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter out = response.getWriter();
-		String userName = request.getParameter("userName");
-	    String email = request.getParameter("email");
-	    String password = request.getParameter("password");
-	    
-	    if(userName.equals("testuser")&&password.equals("password")&&email.equals("testemail@gmail.com")) {
-	    	RequestDispatcher rd = request.getRequestDispatcher("userprofile.html");
-	    	rd.forward(request,response);
-	    }else {
-	        response.sendRedirect("index.html");
-	    }
-	    
-	    out.close();
-	}
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	// Retrieve user data from request parameters
+        String action = request.getParameter("action");
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+        // Check if any parameter is null or empty
+        if (email == null || email.isEmpty() || password == null || password.isEmpty() || 
+            ("signUp".equals(action) && (username == null || username.isEmpty()))) {
+            response.sendRedirect("index.html"); // Redirect to index if any parameter is missing
+            return;
+        }
 
+        // Use DB_connection to process the request
+        DB_connection dbConnection = new DB_connection();
+        boolean result = false;
+
+        if ("signIn".equals(action)) {
+            result = dbConnection.authenticate(email, password);
+        } else if ("signUp".equals(action)) {
+            result = dbConnection.addUser(username, email, password);
+        }
+
+        // Redirect based on the result
+        if (result) {
+            response.sendRedirect("userprofile.html");
+        } else {
+            response.sendRedirect("index.html?error=true");
+        }
+    }
 }

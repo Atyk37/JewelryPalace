@@ -10,14 +10,14 @@
     <welcome-file>default.htm</welcome-file>
   </welcome-file-list>
   
-  	<servlet>
-   		<servlet-name>authenticationServlet</servlet-name>
-    	<servlet-class>authentication.authenticationServlet</servlet-class>
-	</servlet>
+ <servlet>
+    <servlet-name>authenticationServlet</servlet-name>
+    <servlet-class>authentication.authenticationServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>authenticationServlet</servlet-name>
+    <url-pattern>/authenticationServlet</url-pattern>
+</servlet-mapping>
 
-	<servlet-mapping>
-    	<servlet-name>authenticationServlet</servlet-name>
-    	<url-pattern>/authenticationServlet</url-pattern>
-	</servlet-mapping>
 	
 </web-app>
