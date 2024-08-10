@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Jewelry Palace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="fontawesomepro/css/all.min.css">
+  <link rel="icon" href="./logo/logo7.png">
+</head>
+
+<body>
+
+<!-- nav bar & loginForm -->
+<div id="nav"></div>
+
+<!-- Item Collection -->
+<section class="container mx-auto pt-20 ">
+    <div class=" text-normal font-semibold p-10 pb-5">
+        <a href="index.html">Home &nbsp;/&nbsp;</a>
+        <span>Rings</span>
+    </div>
+    <div class=" px-20 py-3 ">
+        
+        <div class=" mb-5">
+            <h1 class=" font-bold text-4xl ">RINGS</h1>
+            <p class=" tracking-wide text-xl ">Elevate your jewelry ensemble with silver and gold rings.</p>
+        </div>
+
+        <div class=" flex flex-wrap gap-8 ">
+
+            <!-- Each item  -->
+            <div class="w-80 h-96 relative my-7 ">
+                <div>
+                    <i class=" heart-icon fa-lg fal fa-heart cursor-pointer absolute top-3 right-2 text-white"></i>
+                    <img class="w-80 h-96 object-cover" src="./earrings_image/de3426.jpg" alt="Earrings DE-3426">
+                </div>
+                <div class="font-mono font-medium">
+                    <p class="font-bold pt-1">DE-3426</p>
+                    <p>3,999,000 kyats</p>
+                </div>
+            </div>
+     
+        </div>
+    </div>
+</section>
+
+<!-- elf sight  -->
+<script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+<div class="elfsight-app-28c6dc95-5400-49df-a698-6341ed374307" data-elfsight-app-lazy></div>
+
+
+</body>
+
+<script>
+
+const heartIcons = document.querySelectorAll('.heart-icon');
+
+heartIcons.forEach(icon => {
+  icon.addEventListener('click', function () {
+
+    this.classList.toggle('far');
+    this.classList.toggle('fas');
+    this.classList.toggle('text-red-500');
+
+  });
+});
+
+  </script>
+
+<script src="script.js"></script>
+<script src="navi.js"></script>
+
+</html>
