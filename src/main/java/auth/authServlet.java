@@ -98,7 +98,7 @@ public class authServlet extends HttpServlet {
         String currentUsername = (String) session.getAttribute("username");
         String currentEmail = (String) session.getAttribute("email");
 
-        if (currentUsername == null || currentEmail == null) { // Updated condition to check for null values
+        if (currentUsername == null || currentEmail == null) { 
             out.println("Sign In First!");
         } else {
             out.println("<!DOCTYPE html>\r\n"
@@ -135,23 +135,16 @@ public class authServlet extends HttpServlet {
                 + "        <div class=\" hover:drop-shadow-xl relative\">\r\n"
                 + "          <i id=\"profileIcon\" class=\" group fa-lg far fa-user cursor-pointer\">\r\n"
                 + "            <div class=\"hidden group-hover:flex w-[400px] delay-100 duration-100 bg-slate-50 right-[-163px] top-[25px] shadow-slate-400 shadow-md absolute \">\r\n"
-                + "              <div class=\"flex flex-col p-10 font-bold font-sans \">\r\n"
-                + "                <div class=\" text-2xl text-left mb-4 \">\r\n"
-                + "                  DISCOVER ALL THINGS IN JEWELRY PALACE.\r\n"
+                + "              <div class=\"flex flex-col p-10 font-semibold font-sans relative\">\r\n"
+                + "                <div class=\" text-base text-left mb-4 inline \">\r\n"
+                + "                    Welcome Back,<span>&nbsp;"+session.getAttribute("username")+"</span>\r\n"
                 + "                </div>\r\n"
-                + "                <div class=\" text-left mb-4 text-sm font-normal\">\r\n"
-                + "                  One account to shop personalized recommendations and exclusive products.\r\n"
-                + "                </div>\r\n"
-                + "                <div id=\"signInLink\" class=\" cursor-pointer py-3 mb-4 text-center text-xl text-slate-50 bg-slate-950 \">\r\n"
-                + "                  SIGN IN\r\n"
-                + "              	</div>\r\n"
-                + "              	<div class=\"text-left text-sm font-normal\">\r\n"
-                + "                	Don't have an account?\r\n"
-                + "                	<span id=\"signUpLink\" class=\" font-semibold ml-2 cursor-pointer\" >Sign up</span>\r\n"
+                + "                <div id=\"signOutLink\" class=\" cursor-pointer text-center text-sm py-5 absolute bottom-0 \">\r\n"
+                + "                  Sign out\r\n"
                 + "              	</div>\r\n"
                 + "              </div>\r\n"
                 + "            </div>\r\n"
-                + "          </i>\r\n"
+                + "          </i>"
                 + "        </div>\r\n"
                 + "        <a href=\"#\">\r\n"
                 + "          <div class=\" hover:drop-shadow-xl \">\r\n"
@@ -346,9 +339,6 @@ public class authServlet extends HttpServlet {
                 + "    shoppingCartBox.style.transform = 'translateX(100%)';\r\n"
                 + "});\r\n"
                 + "\r\n"
-                + "// Removed unnecessary action handling code\r\n"
-                + "// Document element for action handling was removed since it caused errors\r\n"
-                + "// Ensure username field visibility before form submission\r\n"
                 + "</script>\r\n"
                 + "</body>\r\n"
                 + "</html>\r\n");

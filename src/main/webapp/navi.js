@@ -118,8 +118,8 @@ function showLoginForm() {
 // Event listener for Sign Up link
 signUpLink.addEventListener("click", function() {
   showLoginForm();
-  userNameContainer.classList.remove("hidden"); // Ensure username container is visible for Sign Up
-  userNameInput.removeAttribute('required'); // Ensure username field is not required
+  userNameContainer.classList.remove("hidden"); 
+  userNameInput.removeAttribute('required'); 
   submitBtn.textContent = 'SIGN UP'; 
   headerWel.textContent = 'Welcome to Jewelry Palace';
 });
@@ -127,8 +127,8 @@ signUpLink.addEventListener("click", function() {
 // Event listener for Sign In link
 signInLink.addEventListener("click", function(){
   showLoginForm();
-  userNameContainer.classList.add("hidden"); // Hide username container for Sign In
-  userNameInput.removeAttribute('required'); // Remove required attribute for Sign In
+  userNameContainer.classList.add("hidden"); 
+  userNameInput.removeAttribute('required'); 
   submitBtn.textContent = 'SIGN IN'; 
   headerWel.textContent = 'Welcome Back';
 });
@@ -157,6 +157,4 @@ closeShoppingCart.addEventListener('click', function () {
     shoppingCartBox.style.transform = 'translateX(100%)';
 });
 
-// Removed unnecessary action handling code
-// Document element for action handling was removed since it caused errors
-// Ensure username field visibility before form submission
+
