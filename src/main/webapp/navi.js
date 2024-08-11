@@ -23,20 +23,36 @@ const navInnerHTML = `
         <div class=" hover:drop-shadow-xl relative">
           <i id="profileIcon" class=" group fa-lg far fa-user cursor-pointer">
             <div class="hidden group-hover:flex w-[400px] delay-100 duration-100 bg-slate-50 right-[-163px] top-[25px] shadow-slate-400 shadow-md absolute ">
-              <div class="flex flex-col p-10 font-bold font-sans ">
-                <div class=" text-2xl text-left mb-4 ">
-                  DISCOVER ALL THINGS IN JEWELRY PALACE.
+              <div class="flex flex-col p-10 ">
+
+                <div id="beforeLogin" class=" font-bold font-sans ">
+                  <div class=" text-2xl text-left mb-4 ">
+                    DISCOVER ALL THINGS IN JEWELRY PALACE.
+                  </div>
+                  <div class=" text-left mb-4 text-sm font-normal">
+                    One account to shop personalized recommendations and exclusive products.
+                  </div>
+                  <div id="signInLink" class=" cursor-pointer py-3 mb-4 text-center text-xl text-slate-50 bg-slate-950 ">
+                    SIGN IN
+                  </div>
+                  <div class="text-left text-sm font-normal">
+                    Don't have an account?
+                    <span id="signUpLink" class=" font-semibold ml-2 cursor-pointer" >Sign up</span>
+                  </div>
                 </div>
-                <div class=" text-left mb-4 text-sm font-normal">
-                  One account to shop personalized recommendations and exclusive products.
+                
+                <div id="afterLogin" class=" ">
+                  <div class=" text-base text-left mb-4 inline">
+                    Welcome Back,
+                    <span>&nbsp; 
+                      session.getAttribute("username") 
+                    </span>
+                  </div>
+                  <div id="signOutLink" class=" cursor-pointer text-center text-sm py-5 absolute bottom-0"></div>
+                    Sign out
+                  </div
                 </div>
-                <div id="signInLink" class=" cursor-pointer py-3 mb-4 text-center text-xl text-slate-50 bg-slate-950 ">
-                  SIGN IN
-              	</div>
-              	<div class="text-left text-sm font-normal">
-                	Don't have an account?
-                	<span id="signUpLink" class=" font-semibold ml-2 cursor-pointer" >Sign up</span>
-              	</div>
+
               </div>
             </div>
           </i>
@@ -108,6 +124,8 @@ const profileIcon = document.getElementById('profileIcon');
 const shoppingCartIcon = document.getElementById('shoppingCartIcon');
 const shoppingCartBox = document.getElementById('shoppingCartBox');
 const closeShoppingCart = document.getElementById('closeShoppingCart');
+const beforeLogin = document.getElementById('beforeLogin');
+const afterLogin = document.getElementById('afterLogin');
 
 // Function to show the login form
 function showLoginForm() {
@@ -119,7 +137,7 @@ function showLoginForm() {
 signUpLink.addEventListener("click", function() {
   showLoginForm();
   userNameContainer.classList.remove("hidden"); 
-  userNameInput.removeAttribute('required'); 
+  userNameInput.removeAttribute("required"); 
   submitBtn.textContent = 'SIGN UP'; 
   headerWel.textContent = 'Welcome to Jewelry Palace';
 });
@@ -128,7 +146,7 @@ signUpLink.addEventListener("click", function() {
 signInLink.addEventListener("click", function(){
   showLoginForm();
   userNameContainer.classList.add("hidden"); 
-  userNameInput.removeAttribute('required'); 
+  userNameInput.removeAttribute("required"); 
   submitBtn.textContent = 'SIGN IN'; 
   headerWel.textContent = 'Welcome Back';
 });
@@ -138,15 +156,6 @@ closeLoginForm.addEventListener("click", function() {
   loginForm.classList.add("hidden");
 });
 
-// Event listener for Shopping Cart icon
-shoppingCartIcon.addEventListener('click', function () {
-    shoppingCartBox.style.transform = 'translateX(0)';
-});
-
-// Event listener for close button in shopping cart
-closeShoppingCart.addEventListener('click', function () {
-    shoppingCartBox.style.transform = 'translateX(100%)';
-});
 // Event listener for Shopping Cart icon
 shoppingCartIcon.addEventListener('click', function () {
     shoppingCartBox.style.transform = 'translateX(0)';
