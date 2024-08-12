@@ -45,12 +45,12 @@ const navInnerHTML = `
                   <div class=" text-base text-left mb-4 inline">
                     Welcome Back,
                     <span>&nbsp; 
-                      session.getAttribute("username") 
+                      session.getAttribute("username")
                     </span>
                   </div>
-                  <div id="signOutLink" class=" cursor-pointer text-center text-sm py-5 absolute bottom-0"></div>
+                  <div id="signOutLink" class=" cursor-pointer text-center text-sm py-5 absolute bottom-0">
                     Sign out
-                  </div
+                  </div>
                 </div>
 
               </div>
