@@ -8,61 +8,59 @@ const navInnerHTML = `
       </div>
 
       <div>
-        <ul class=" flex space-x-10 font-semibold ">
-          <li class=" hover:underline underline-offset-4 ">NEW</li>
-          <li class=" hover:underline underline-offset-4 ">BEST SELLERS</li>
-          <li class=" hover:underline underline-offset-4 "><a href="earrings.html">EARRINGS</a></li>
-          <li class=" hover:underline underline-offset-4 "><a href="rings.html">RINGS</a></li>
-          <li class=" hover:underline underline-offset-4 "><a href="necklaces.html">NECKLACES</a></li>
-          <li class=" hover:underline underline-offset-4 "><a href="bracelets.html">BRACELETS</a></li>
+        <ul class="flex space-x-10 font-semibold">
+          <li class="hover:underline underline-offset-4">NEW</li>
+          <li class="hover:underline underline-offset-4">BEST SELLERS</li>
+          <li class="hover:underline underline-offset-4"><a href="earrings.html">EARRINGS</a></li>
+          <li class="hover:underline underline-offset-4"><a href="rings.html">RINGS</a></li>
+          <li class="hover:underline underline-offset-4"><a href="necklaces.html">NECKLACES</a></li>
+          <li class="hover:underline underline-offset-4"><a href="bracelets.html">BRACELETS</a></li>
         </ul>
       </div>
 
-      <!-- sign up button hover-->
-      <div class=" mr-12 flex space-x-8 ">
-        <div class=" hover:drop-shadow-xl relative">
-          <i id="profileIcon" class=" group fa-lg far fa-user cursor-pointer">
-            <div class="hidden group-hover:flex w-[400px] delay-100 duration-100 bg-slate-50 right-[-163px] top-[25px] shadow-slate-400 shadow-md absolute ">
-              <div class="flex flex-col p-10 ">
-
-                <div id="beforeLogin" class=" font-bold font-sans ">
-                  <div class=" text-2xl text-left mb-4 ">
+      <!-- sign up button hover -->
+      <div class="mr-12 flex space-x-8">
+        <div class="hover:drop-shadow-xl relative">
+          <i id="profileIcon" class="group fa-lg far fa-user cursor-pointer">
+            <div class="hidden group-hover:flex w-[400px] delay-100 duration-100 bg-slate-50 right-[-163px] top-[25px] shadow-slate-400 shadow-md absolute">
+              <div class="flex flex-col p-10">
+                <div id="beforeLogin" class="font-bold font-sans">
+                  <div class="text-2xl text-left mb-4">
                     DISCOVER ALL THINGS IN JEWELRY PALACE.
                   </div>
-                  <div class=" text-left mb-4 text-sm font-normal">
+                  <div class="text-left mb-4 text-sm font-normal">
                     One account to shop personalized recommendations and exclusive products.
                   </div>
-                  <div id="signInLink" class=" cursor-pointer py-3 mb-4 text-center text-xl text-slate-50 bg-slate-950 ">
+                  <div id="signInLink" class="cursor-pointer py-3 mb-4 text-center text-xl text-slate-50 bg-slate-950">
                     SIGN IN
                   </div>
                   <div class="text-left text-sm font-normal">
                     Don't have an account?
-                    <span id="signUpLink" class=" font-semibold ml-2 cursor-pointer" >Sign up</span>
+                    <span id="signUpLink" class="font-semibold ml-2 cursor-pointer">Sign up</span>
                   </div>
                 </div>
                 
-                <div id="afterLogin" class=" ">
-                  <div class=" text-base text-left mb-4 inline">
+                <div id="afterLogin">
+                  <div class="text-base text-left mb-4 inline">
                     Welcome Back,
-                    <span>&nbsp; 
-                      session.getAttribute("username")
+                    <span>
+                    	${(window && window.session && window.session.getAttribute("username")) || "Login"}
                     </span>
                   </div>
-                  <div id="signOutLink" class=" cursor-pointer text-center text-sm py-5 absolute bottom-0">
+                  <div id="signOutLink" class="cursor-pointer text-center text-sm py-5 absolute bottom-0">
                     Sign out
                   </div>
                 </div>
-
               </div>
             </div>
           </i>
         </div>
         <a href="#">
-          <div class=" hover:drop-shadow-xl ">
+          <div class="hover:drop-shadow-xl">
             <i class="fa-lg far fa-heart cursor-pointer"></i>
           </div>
         </a>
-        <div id="shoppingCartIcon" class=" hover:drop-shadow-xl ">
+        <div id="shoppingCartIcon" class="hover:drop-shadow-xl">
           <i class="fa-lg far fa-shopping-cart cursor-pointer"></i>
         </div>
       </div>
@@ -77,7 +75,6 @@ const navInnerHTML = `
       </div>
       <h2 id="headerWel" class="text-3xl font-bold mb-6 text-center text-slate-800">Welcome to Jewelry Palace</h2>
       
-      <!-- For Servlet Page -->
       <form method="post" action="authServlet">
         <div id="userNameContainer" class="mb-4">
           <label for="userName" class="block text-sm font-medium text-slate-700 mb-1">Enter your name</label>
@@ -105,10 +102,10 @@ const navInnerHTML = `
             <i class="fa-lg fa far fa-times"></i>
         </div>
         <h2 class="text-xl font-bold my-8">Shopping Cart</h2>
-        <!-- <p>No items in the cart.</p> -->
     </div>
   </div>
 `;
+
 
 navContainer.innerHTML = navInnerHTML;
 
