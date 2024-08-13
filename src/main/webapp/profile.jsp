@@ -1,14 +1,54 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="ISO-8859-1">
 <title>Jewelry Palace</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="fontawesomepro/css/all.min.css">
 <link rel="icon" href="./logo/logo7.png">
+<script type="text/javascript" src="${pageContext.request.contextPath}/script.js" }></script>
+<script>
+	//Function to save data to LocalStorage
+	function saveToLocalStorage(key, value) {
+	    localStorage.setItem(key, value);
+	}
+	
+	// Function to get data from LocalStorage
+	function getFromLocalStorage(key) {
+	    return localStorage.getItem(key);
+	}
+	
+	// Example usage
+	function handlePageLoad() {
+	var name = "<%= session.getAttribute("name") != null ? session.getAttribute("name").toString() : "" %>";
+	var email = "<%= session.getAttribute("email") != null ? session.getAttribute("email").toString() : "" %>";
+	console.log("Name:", name || "No Name");
+	console.log("Email:", email || "No Email");
+	
+	saveToLocalStorage('name', name);
+	saveToLocalStorage('email', email);
+	saveToLocalStorage('isLoggedIn', true);
+	
+	}
+		
+	// Ensure the function runs when the page loads
+	// window.onload = handlePageLoad;
+	document.addEventListener('DOMContentLoaded', handlePageLoad);
+
+</script>
+
 </head>
 
 <body>
+
+<% 
+    String username = (String) session.getAttribute("username");
+    String email = (String) session.getAttribute("email");
+%>
 
 <!-- nav bar & loginForm -->
 <div id="nav"></div>
@@ -36,11 +76,11 @@
         <div class="font-semibold">My Profile</div>
         <div>
             <p class="font-semibold">Name</p>
-            <p></p>
+            <p><%= username %></p>
         </div>
         <div>
             <p class="font-semibold">Email</p>
-            <p></p>
+            <p><%= email %></p>
         </div>
     </div>
     <!--My Wishlist -->
@@ -109,6 +149,5 @@
 
 
 </script>
-
 </body>
 </html>

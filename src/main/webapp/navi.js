@@ -1,166 +1,209 @@
-const navContainer =  document.getElementById("nav")
+// Function to initialize the navigation bar
+function initializeNav() {
+  const navContainer = document.getElementById("nav");
+  let isLoggedIn = localStorage.getItem("isLoggedIn");
 
-const navInnerHTML = `
-  <section class="menuBar">
-    <div class="fixed flex items-center justify-between w-full bg-slate-50 border border-x-0 border-slate-950 h-16 z-10">
-      <div>
-        <img class="w-[180px] p-1 ml-12 mr-12" src="./logo/logo9.png" alt="">
-      </div>
+  const navInnerHTML = `
+    <section class="menuBar">
+      <div class="fixed flex items-center justify-between w-full bg-slate-50 border border-x-0 border-slate-950 h-16 z-10">
+        <div>
+          <img class="w-[180px] p-1 ml-12 mr-12" src="./logo/logo9.png" alt="">
+        </div>
 
-      <div>
-        <ul class="flex space-x-10 font-semibold">
-          <li class="hover:underline underline-offset-4">NEW</li>
-          <li class="hover:underline underline-offset-4">BEST SELLERS</li>
-          <li class="hover:underline underline-offset-4"><a href="earrings.html">EARRINGS</a></li>
-          <li class="hover:underline underline-offset-4"><a href="rings.html">RINGS</a></li>
-          <li class="hover:underline underline-offset-4"><a href="necklaces.html">NECKLACES</a></li>
-          <li class="hover:underline underline-offset-4"><a href="bracelets.html">BRACELETS</a></li>
-        </ul>
-      </div>
+        <div>
+          <ul class="flex space-x-10 font-semibold">
+            <li class="hover:underline underline-offset-4">NEW</li>
+            <li class="hover:underline underline-offset-4">BEST SELLERS</li>
+            <li class="hover:underline underline-offset-4"><a href="earrings.html">EARRINGS</a></li>
+            <li class="hover:underline underline-offset-4"><a href="rings.html">RINGS</a></li>
+            <li class="hover:underline underline-offset-4"><a href="necklaces.html">NECKLACES</a></li>
+            <li class="hover:underline underline-offset-4"><a href="bracelets.html">BRACELETS</a></li>
+          </ul>
+        </div>
 
-      <!-- sign up button hover -->
-      <div class="mr-12 flex space-x-8">
-        <div class="hover:drop-shadow-xl relative">
-          <i id="profileIcon" class="group fa-lg far fa-user cursor-pointer">
-            <div class="hidden group-hover:flex w-[400px] delay-100 duration-100 bg-slate-50 right-[-163px] top-[25px] shadow-slate-400 shadow-md absolute">
-              <div class="flex flex-col p-10">
-                <div id="beforeLogin" class="font-bold font-sans">
-                  <div class="text-2xl text-left mb-4">
-                    DISCOVER ALL THINGS IN JEWELRY PALACE.
+        <div class="mr-12 flex space-x-8">
+          <div class="hover:drop-shadow-xl relative">
+            <i id="profileIcon" class="group fa-lg far fa-user cursor-pointer">
+              <div class="hidden group-hover:flex w-[400px] delay-100 duration-100 bg-slate-50 right-[-163px] top-[25px] shadow-slate-400 shadow-md absolute">
+                <div class="flex flex-col p-10">
+                  ${isLoggedIn ? `
+                  <div id="afterLogin" class=" space-y-5">
+                    <div class="text-xl text-left mb-4 inline">
+                      Welcome Back,
+                      <span>${sessionStorage.getItem('username')}</span>
+                    </div>
+                    <a class=" text-base text-left hover:opacity-75 my-7 underline-offset-2 block" href="profile.jsp">
+                      My profile
+                    </a>
+                    <div id="signOutLink" class="cursor-pointer text-left text-base  mb-5 hover:opacity-75 underline-offset-2">
+                      Sign out
+                    </div>
                   </div>
-                  <div class="text-left mb-4 text-sm font-normal">
-                    One account to shop personalized recommendations and exclusive products.
+                  ` : `
+                  <div id="beforeLogin" class="font-bold font-sans">
+                    <div class="text-2xl text-left mb-4">
+                      DISCOVER ALL THINGS IN JEWELRY PALACE.
+                    </div>
+                    <div class="text-left mb-4 text-sm font-normal">
+                      One account to shop personalized recommendations and exclusive products.
+                    </div>
+                    <div id="signInLink" class="cursor-pointer py-3 mb-4 text-center text-xl text-slate-50 bg-slate-950">
+                      SIGN IN
+                    </div>
+                    <div class="text-left text-sm font-normal">
+                      Don't have an account?
+                      <span id="signUpLink" class="font-semibold ml-2 cursor-pointer">Sign up</span>
+                    </div>
                   </div>
-                  <div id="signInLink" class="cursor-pointer py-3 mb-4 text-center text-xl text-slate-50 bg-slate-950">
-                    SIGN IN
-                  </div>
-                  <div class="text-left text-sm font-normal">
-                    Don't have an account?
-                    <span id="signUpLink" class="font-semibold ml-2 cursor-pointer">Sign up</span>
-                  </div>
-                </div>
-                
-                <div id="afterLogin">
-                  <div class="text-base text-left mb-4 inline">
-                    Welcome Back,
-                    <span>
-                    	${(window && window.session && window.session.getAttribute("username")) || "Login"}
-                    </span>
-                  </div>
-                  <div id="signOutLink" class="cursor-pointer text-center text-sm py-5 absolute bottom-0">
-                    Sign out
-                  </div>
+                  `}
                 </div>
               </div>
-            </div>
-          </i>
-        </div>
-        <a href="#">
-          <div class="hover:drop-shadow-xl">
-            <i class="fa-lg far fa-heart cursor-pointer"></i>
+            </i>
           </div>
-        </a>
-        <div id="shoppingCartIcon" class="hover:drop-shadow-xl">
-          <i class="fa-lg far fa-shopping-cart cursor-pointer"></i>
+          <a href="#">
+            <div class="hover:drop-shadow-xl">
+              <i class="fa-lg far fa-heart cursor-pointer"></i>
+            </div>
+          </a>
+          <div id="shoppingCartIcon" class="hover:drop-shadow-xl">
+            <i class="fa-lg far fa-shopping-cart cursor-pointer"></i>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- login Form for Sign Up & Sign In -->
-  <div id="loginForm" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 justify-center items-center z-10">
-    <div class="bg-slate-50 p-8 rounded shadow-lg w-1/3 relative">
-      <div id="closeLoginForm" class="absolute top-3 right-3 cursor-pointer text-slate-400 hover:text-gray-600">
-        <i class="fa-lg fa far fa-times"></i>
+    <div id="loginForm" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 justify-center items-center z-10">
+      <div class="bg-slate-50 p-8 rounded shadow-lg w-1/3 relative">
+        <div id="closeLoginForm" class="absolute top-3 right-3 cursor-pointer text-slate-400 hover:text-gray-600">
+          <i class="fa-lg fa far fa-times"></i>
+        </div>
+        <h2 id="headerWel" class="text-3xl font-bold mb-6 text-center text-slate-800">Welcome to Jewelry Palace</h2>
+        
+        <form method="post" action="authServlet">
+          <div id="userNameContainer" class="mb-4">
+            <label for="userName" class="block text-sm font-medium text-slate-700 mb-1">Enter your name</label>
+            <input type="text" id="userName" name="username" class="w-full px-0 py-2 border-b border-gray-300 focus:border-slate-950 focus:outline-none transition duration-200" required>
+          </div>
+          <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Enter your email</label>
+            <input type="email" id="email" name="email" class="w-full px-0 py-2 border-b border-slate-300 focus:border-slate-950 focus:outline-none transition duration-200" required>
+          </div>
+          <div class="mb-6">
+            <label for="password" class="block text-sm font-medium text-slate-700 mb-1">Enter your password</label>
+            <input type="password" id="password" name="password" class="w-full px-0 py-2 border-b border-slate-300 focus:border-slate-950 focus:outline-none transition duration-200" required>
+          </div>
+          <div>
+            <button id="submitBtn" type="submit" class="w-full bg-slate-500 text-white py-2 rounded-md shadow-lg hover:bg-slate-600 focus:ring-4 focus:ring-slate-300 transition ease-in-out duration-150">SIGN UP</button>
+          </div>
+        </form>
       </div>
-      <h2 id="headerWel" class="text-3xl font-bold mb-6 text-center text-slate-800">Welcome to Jewelry Palace</h2>
-      
-      <form method="post" action="authServlet">
-        <div id="userNameContainer" class="mb-4">
-          <label for="userName" class="block text-sm font-medium text-slate-700 mb-1">Enter your name</label>
-          <input type="text" id="userName" name="username" class="w-full px-0 py-2 border-b border-gray-300 focus:border-slate-950 focus:outline-none transition duration-200" required>
-        </div>
-        <div class="mb-4">
-          <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Enter your email</label>
-          <input type="email" id="email" name="email" class="w-full px-0 py-2 border-b border-slate-300 focus:border-slate-950 focus:outline-none transition duration-200" required>
-        </div>
-        <div class="mb-6">
-          <label for="password" class="block text-sm font-medium text-slate-700 mb-1">Enter your password</label>
-          <input type="password" id="password" name="password" class="w-full px-0 py-2 border-b border-slate-300 focus:border-slate-950 focus:outline-none transition duration-200" required>
-        </div>
-        <div>
-          <button id="submitBtn" type="submit" class="w-full bg-slate-500 text-white py-2 rounded-md shadow-lg hover:bg-slate-600 focus:ring-4 focus:ring-slate-300 transition ease-in-out duration-150">SIGN UP</button>
-        </div>
-      </form>
     </div>
-  </div>
 
-  <!-- shopping cart box -->
-  <div id="shoppingCartBox" class="fixed top-0 right-0 h-screen w-96 bg-white shadow-xl z-10 transform translate-x-full transition-transform duration-300 ease-in-out">
-    <div class="p-4 relative h-full">
+    <div id="shoppingCartBox" class="fixed top-0 right-0 h-screen w-96 bg-white shadow-xl z-10 transform translate-x-full transition-transform duration-300 ease-in-out">
+      <div class="p-4 relative h-full">
         <div id="closeShoppingCart" class="cursor-pointer text-slate-500 hover:text-slate-950 absolute top-4 right-4">
-            <i class="fa-lg fa far fa-times"></i>
+          <i class="fa-lg fa far fa-times"></i>
         </div>
         <h2 class="text-xl font-bold my-8">Shopping Cart</h2>
+      </div>
     </div>
-  </div>
-`;
+  `;
 
+  navContainer.innerHTML = navInnerHTML;
 
-navContainer.innerHTML = navInnerHTML;
+  const signOutLink = document.getElementById('signOutLink');
+  if (signOutLink) {
+    signOutLink.addEventListener('click', handleSignOut);
+  }
 
-const signUpLink = document.getElementById("signUpLink");
-const signInLink = document.getElementById('signInLink');
-const loginForm = document.getElementById("loginForm");
-const closeLoginForm = document.getElementById("closeLoginForm");
-const userNameContainer = document.getElementById('userNameContainer');
-const userNameInput = document.getElementById('userName');
-const submitBtn = document.getElementById('submitBtn');
-const headerWel = document.getElementById('headerWel');
-const profileIcon = document.getElementById('profileIcon');
-const shoppingCartIcon = document.getElementById('shoppingCartIcon');
-const shoppingCartBox = document.getElementById('shoppingCartBox');
-const closeShoppingCart = document.getElementById('closeShoppingCart');
-const beforeLogin = document.getElementById('beforeLogin');
-const afterLogin = document.getElementById('afterLogin');
+  const signUpLink = document.getElementById("signUpLink");
+  const signInLink = document.getElementById('signInLink');
+  const loginForm = document.getElementById("loginForm");
+  const closeLoginForm = document.getElementById("closeLoginForm");
+  const userNameContainer = document.getElementById('userNameContainer');
+  const userNameInput = document.getElementById('userName');
+  const submitBtn = document.getElementById('submitBtn');
+  const headerWel = document.getElementById('headerWel');
+  const shoppingCartIcon = document.getElementById('shoppingCartIcon');
+  const shoppingCartBox = document.getElementById('shoppingCartBox');
+  const closeShoppingCart = document.getElementById('closeShoppingCart');
+
+ // Event listener for Sign Up link
+  if (signUpLink) {
+    signUpLink.addEventListener("click", function() {
+      showLoginForm();
+      userNameContainer.classList.remove("hidden"); 
+      userNameInput.removeAttribute("required"); 
+      submitBtn.textContent = 'SIGN UP'; 
+      headerWel.textContent = 'Welcome to Jewelry Palace';
+    });
+  }
+
+ // Event listener for Sign In link
+  if (signInLink) {
+    signInLink.addEventListener("click", function(){
+      showLoginForm();
+      userNameContainer.classList.add("hidden"); 
+      userNameInput.removeAttribute("required"); 
+      submitBtn.textContent = 'SIGN IN'; 
+      headerWel.textContent = 'Welcome Back';
+    });
+  }
+
+ // Event listener for close button in login form
+  if (closeLoginForm) {
+    closeLoginForm.addEventListener("click", function() {
+      loginForm.classList.add("hidden");
+    });
+  }
+
+ // Event listener for Shopping Cart icon
+  if (shoppingCartIcon) {
+    shoppingCartIcon.addEventListener('click', function () {
+      shoppingCartBox.style.transform = 'translateX(0)';
+    });
+  }
+
+ // Event listener for close button in shopping cart
+  if (closeShoppingCart) {
+    closeShoppingCart.addEventListener('click', function () {
+      shoppingCartBox.style.transform = 'translateX(100%)';
+    });
+  }
+}
 
 // Function to show the login form
 function showLoginForm() {
-  loginForm.classList.remove("hidden");
-  loginForm.classList.add("flex");
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.classList.remove("hidden");
+    loginForm.classList.add("flex");
+  }
 }
 
-// Event listener for Sign Up link
-signUpLink.addEventListener("click", function() {
-  showLoginForm();
-  userNameContainer.classList.remove("hidden"); 
-  userNameInput.removeAttribute("required"); 
-  submitBtn.textContent = 'SIGN UP'; 
-  headerWel.textContent = 'Welcome to Jewelry Palace';
-});
+// Function to sign out link
+function handleSignOut() {
+  localStorage.removeItem('isLoggedIn');
+  localStorage.removeItem('username');
+  localStorage.removeItem('email');
+  
+  sessionStorage.removeItem('username');
+  sessionStorage.removeItem('email');
+  
+  const beforeLogin = document.getElementById('beforeLogin');
+  const afterLogin = document.getElementById('afterLogin');
+  
+  if (beforeLogin) {
+    beforeLogin.classList.remove('hidden');
+  }
+  
+  if (afterLogin) {
+    afterLogin.classList.add('hidden');
+  }
+  
+  window.location.href = 'index.html';
+}
 
-// Event listener for Sign In link
-signInLink.addEventListener("click", function(){
-  showLoginForm();
-  userNameContainer.classList.add("hidden"); 
-  userNameInput.removeAttribute("required"); 
-  submitBtn.textContent = 'SIGN IN'; 
-  headerWel.textContent = 'Welcome Back';
-});
-
-// Event listener for close button in login form
-closeLoginForm.addEventListener("click", function() {
-  loginForm.classList.add("hidden");
-});
-
-// Event listener for Shopping Cart icon
-shoppingCartIcon.addEventListener('click', function () {
-    shoppingCartBox.style.transform = 'translateX(0)';
-});
-
-// Event listener for close button in shopping cart
-closeShoppingCart.addEventListener('click', function () {
-    shoppingCartBox.style.transform = 'translateX(100%)';
-});
+document.addEventListener('DOMContentLoaded', initializeNav);
 
 
