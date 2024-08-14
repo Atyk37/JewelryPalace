@@ -103,7 +103,6 @@
 <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
 <div class="elfsight-app-28c6dc95-5400-49df-a698-6341ed374307" data-elfsight-app-lazy></div>
 
-<script src="script.js"></script>
 <script src="navi.js"></script>
 <script>
     // profile, wishlist, purchase page add & remove
