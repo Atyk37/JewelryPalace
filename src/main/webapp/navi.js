@@ -2,6 +2,7 @@
 function initializeNav() {
   const navContainer = document.getElementById("nav");
   let isLoggedIn = localStorage.getItem("isLoggedIn");
+  const getUserName = localStorage.getItem('username') || sessionStorage.getItem('username');
 
   const navInnerHTML = `
     <section class="menuBar">
@@ -30,7 +31,7 @@ function initializeNav() {
                   <div id="afterLogin" class=" space-y-5">
                     <div class="text-xl text-left mb-4 inline">
                       Welcome Back,
-                      <span>${sessionStorage.getItem('username')}</span>
+                      <span>${getUserName}</span>
                     </div>
                     <a class=" text-base text-left hover:opacity-75 my-7 underline-offset-2 block" href="profile.jsp">
                       My profile
