@@ -10,7 +10,6 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="fontawesomepro/css/all.min.css">
 <link rel="icon" href="./logo/logo7.png">
-<script type="text/javascript" src="${pageContext.request.contextPath}/script.js" }></script>
 <script>
 	//Function to save data to LocalStorage
 	function saveToLocalStorage(key, value) {
@@ -24,19 +23,18 @@
 	
 	// Example usage
 	function handlePageLoad() {
-	var name = "<%= session.getAttribute("name") != null ? session.getAttribute("name").toString() : "" %>";
+	var username = "<%= session.getAttribute("username") != null ? session.getAttribute("username").toString() : "" %>";
 	var email = "<%= session.getAttribute("email") != null ? session.getAttribute("email").toString() : "" %>";
-	console.log("Name:", name || "No Name");
+	console.log("Name:", username || "No Name");
 	console.log("Email:", email || "No Email");
 	
-	saveToLocalStorage('name', name);
+	saveToLocalStorage('username', username);
 	saveToLocalStorage('email', email);
 	saveToLocalStorage('isLoggedIn', true);
 	
 	}
-		
+	
 	// Ensure the function runs when the page loads
-	// window.onload = handlePageLoad;
 	document.addEventListener('DOMContentLoaded', handlePageLoad);
 
 </script>
@@ -86,7 +84,7 @@
     <!--My Wishlist -->
     <div id="myWishlist" class="hidden pt-10 space-y-10 text-xl">
         <div class="font-semibold">My Wishlist</div>  
-        <div>
+        <div id="wishListContainer">
             <!-- Wishlist items go here -->
         </div>      
     </div>
@@ -98,6 +96,9 @@
         </div>
     </div>
 </section>
+
+<!-- footer section  -->
+<div id="footer"></div>
 
 <!-- elf sight  -->
 <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
@@ -146,7 +147,7 @@
         showSection(purchaseHistory, purchase, 'PURCHASE HISTORY', 'Purchase History');
     });
 
-
+ 
 </script>
 </body>
 </html>

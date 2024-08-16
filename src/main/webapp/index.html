@@ -32,84 +32,17 @@
 
 <body>
 
-	<!-- nav bar & loginForm -->
+  <!-- nav bar & loginForm -->
   <div id="nav"></div>
 
   <!-- home page -->
   <div id="home"></div>
   
   <!-- BEST SELLERS -->
-  <section>
-    <div class="py-10 ml-10 tracking-widest rounded-2xl">
-      <p class="text-5xl ml-10 font-semibold font-mono">BEST SELLERS</p>
-      <div class="scrollbar-hidden flex py-10 px-0 ml-10 bg-slate-50 overflow-x-auto">
-        <div class="flex whitespace-nowrap space-x-12">
+  <div id="bestseller"></div>
 
-          <div class="w-80 h-96 relative mb-7 inline-block">
-            <div>
-              <i class="heart-icon fa-lg fal fa-heart cursor-pointer absolute top-3 right-2 text-white"></i>
-              <img class="w-80 h-96 object-cover" src="./earrings_image/de3426.jpg" alt="Earrings DE-3426">
-            </div>
-            <div class="font-mono font-medium">
-              <p class="font-bold pt-1">DE-3426</p>
-              <p>3,999,000 kyats</p>
-            </div>
-          </div>
-  
-          <div class="w-80 h-96 relative mb-7 inline-block">
-            <div>
-              <i class="heart-icon fa-lg fal fa-heart cursor-pointer absolute top-3 right-2 text-white"></i>
-              <img class="w-80 h-96 object-cover" src="./earrings_image/de3426.jpg" alt="Earrings DE-3426">
-            </div>
-            <div class="font-mono font-medium">
-              <p class="font-bold pt-1">DE-3426</p>
-              <p>3,999,000 kyats</p>
-            </div>
-          </div>
-  
-          <div class="w-80 h-96 relative mb-7 inline-block">
-            <div>
-              <i class="heart-icon fa-lg fal fa-heart cursor-pointer absolute top-3 right-2 text-white"></i>
-              <img class="w-80 h-96 object-cover" src="./earrings_image/de3426.jpg" alt="Earrings DE-3426">
-            </div>
-            <div class="font-mono font-medium">
-              <p class="font-bold pt-1">DE-3426</p>
-              <p>3,999,000 kyats</p>
-            </div>
-          </div>
-  
-          <div class="w-80 h-96 relative mb-7 inline-block">
-            <div>
-              <i class="heart-icon fa-lg fal fa-heart cursor-pointer absolute top-3 right-2 text-white"></i>
-              <img class="w-80 h-96 object-cover" src="./earrings_image/de3426.jpg" alt="Earrings DE-3426">
-            </div>
-            <div class="font-mono font-medium">
-              <p class="font-bold pt-1">DE-3426</p>
-              <p>3,999,000 kyats</p>
-            </div>
-          </div>
-  
-          <div class="w-80 h-96 relative mb-7 inline-block">
-            <div>
-              <i class="heart-icon fa-lg fal fa-heart cursor-pointer absolute top-3 right-2 text-white"></i>
-              <img class="w-80 h-96 object-cover" src="./earrings_image/de3426.jpg" alt="Earrings DE-3426">
-            </div>
-            <div class="font-mono font-medium">
-              <p class="font-bold pt-1">DE-3426</p>
-              <p>3,999,000 kyats</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <section class=" text-center">
-    <h1>Gold Prices</h1>
-    <p id="global-gold-price">Loading global gold price...</p>
-    <p id="local-gold-price">Loading local gold price...</p>
-  </section>
+  <!-- footer section  -->
+  <div id="footer"></div>
   
   <!-- elf sight  -->
   <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
@@ -119,58 +52,10 @@
 
 <script src="navi.js"></script>
 <script src="home.js"></script>
+<script src="bestseller.js"></script>
 <script>
 
-  const heartIcons = document.querySelectorAll('.heart-icon');
-  
-  heartIcons.forEach(icon => {
-    icon.addEventListener('click', function () {
-  
-      this.classList.toggle('far');
-      this.classList.toggle('fas');
-      this.classList.toggle('text-red-500');
-  
-    });
-  });
-  
-  const goldApiKey = 'goldapi-3png1slzsjql5y-io';
-  const exchangeRateApiUrl = 'https://api.exchangerate-api.com/v4/latest/USD';
 
-  const goldApiUrl = "https://www.goldapi.io/api/XAU/USD";
-
-  var myHeaders = new Headers();
-  myHeaders.append("x-access-token", goldApiKey);
-  myHeaders.append("Content-Type", "application/json");
-
-  var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-  };
-
-  async function fetchPrices() {
-      try {
-          
-          const goldResponse = await fetch(goldApiUrl, requestOptions);
-          const goldData = await goldResponse.json();
-          const goldPriceUsd = goldData.price; 
-
-          const exchangeResponse = await fetch(exchangeRateApiUrl);
-          const exchangeData = await exchangeResponse.json();
-          const usdToMmkRate = exchangeData.rates.MMK; 
-
-          const goldPriceMmk = goldPriceUsd * usdToMmkRate;
-
-          document.getElementById('global-gold-price').textContent = `Global Gold Price: $${goldPriceUsd.toFixed(2)} USD`;
-          document.getElementById('local-gold-price').textContent = `Local Gold Price: ${goldPriceMmk.toFixed(2)} MMK`;
-      } catch (error) {
-          console.error('Error fetching prices:', error);
-          document.getElementById('global-gold-price').textContent = 'Error fetching global gold price';
-          document.getElementById('local-gold-price').textContent = 'Error fetching local gold price';
-      }
-  }
-
-  fetchPrices();
 	
 </script>
 

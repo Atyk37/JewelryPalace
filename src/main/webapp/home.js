@@ -47,7 +47,7 @@
 
       <!-- Earrings -->
       <div class="relative w-96 h-96 border border-slate-950 overflow-hidden group">
-        <a href="earrings.html">
+        <a href="earring.jsp">
 
         <img class="object-cover w-full h-full transition-opacity duration-300 ease-in-out group-hover:opacity-0" src="./item/earring.jpg" alt="Earrings">
       
@@ -69,7 +69,7 @@
 
       <!-- Rings -->
       <div class="relative w-96 h-96 border border-slate-950 overflow-hidden group">
-        <a href="rings.html">
+        <a href="ring.jsp">
 
         <img class="object-cover w-full h-full transition-opacity duration-300 ease-in-out group-hover:opacity-0" src="./item/ring.jpg" alt="Rings">
       
@@ -91,7 +91,7 @@
 
       <!-- Bracelets -->
       <div class="relative w-96 h-96 border border-slate-950 overflow-hidden group">
-        <a href="bracelets.html">
+        <a href="bracelet.jsp">
 
         <img class="object-cover w-full h-full transition-opacity duration-300 ease-in-out group-hover:opacity-0" src="./item/bracelet.jpg" alt="Bracelets">
       
@@ -113,7 +113,7 @@
 
       <!-- Necklaces -->
       <div class="relative w-96 h-96 border border-slate-950 overflow-hidden group">
-        <a href="necklaces.html">
+        <a href="necklace.jsp">
 
           <img class="object-cover w-full h-full transition-opacity duration-300 ease-in-out group-hover:opacity-0" src="./item/necklace.jpg" alt="Necklaces">
       
