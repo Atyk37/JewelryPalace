@@ -15,11 +15,11 @@
           <div class="w-80 h-96 relative mb-7 inline-block">
               <div>
                 <i class="heart-icon fa-lg fal fa-heart cursor-pointer absolute top-3 right-2 text-white"></i>
-                <img class="w-80 h-96 object-cover" src="./earrings_image/ring1.jpg" alt="Earrings DE-3426">
+                <img class="w-80 h-96 object-cover" src="./product_image/earring1.jpg" alt="Earrings DE-3426">
               </div>
               <div class="font-mono font-medium">
-              	<p class="font-bold pt-1"><a href="itemdetails.html">DE-3426</a></p>
-                <p>3,999,000 kyats</p>
+              	<p class="font-bold pt-1"><a href="itemdetails.html">ER-0001</a></p>
+                <p>3130000 kyats</p>
               </div>
           </div>
 

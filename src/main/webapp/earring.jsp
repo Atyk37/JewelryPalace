@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="flex flex-wrap justify-center gap-16 p-10">
+    <div class="flex flex-wrap gap-16 px-16 py-10">
     <%
         String url = "jdbc:mysql://localhost:3306/jewelrypalace";
         String user = "root";
@@ -56,34 +56,39 @@
         String sql;
         
         String sort = request.getParameter("sort");
+        String productType = "earring"; 
+        
         if ("price".equals(sort)) {
-            sql = "SELECT id, name, product_type, image, price FROM category ORDER BY price ASC";
+            sql = "SELECT id, name, product_type, image, price FROM category WHERE product_type = ? ORDER BY price ASC"; 
         } else {
-            sql = "SELECT id, name, product_type, image, price FROM category";
+            sql = "SELECT id, name, product_type, image, price FROM category WHERE product_type = ?"; 
         }
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection conn = DriverManager.getConnection(url, user, password);
-                 PreparedStatement pstmt = conn.prepareStatement(sql);
-                 ResultSet rs = pstmt.executeQuery()) {
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-                while (rs.next()) {
-                    String name = rs.getString("name");
-                    String imagePath = rs.getString("image");
-                    double price = rs.getDouble("price");
+                pstmt.setString(1, productType); 
+                try (ResultSet rs = pstmt.executeQuery()) {
+
+                    while (rs.next()) {
+                        String name = rs.getString("name");
+                        String imagePath = rs.getString("image");
+                        double price = rs.getDouble("price");
     %>
-                    <div class="w-80 h-96 relative mb-7 inline-block">
-                        <div>
-                            <i class="heart-icon fa-lg fal fa-heart cursor-pointer absolute top-3 right-2 text-white"></i>
-                            <img class="w-80 h-96 object-cover" src="./<%= imagePath %>" alt="<%= name %>">
+                        <div class="w-80 h-96 relative mb-7 inline-block">
+                            <div>
+                                <i class="heart-icon fa-lg fal fa-heart cursor-pointer absolute top-3 right-2 text-white"></i>
+                                <img class="w-80 h-96 object-cover" src="./product_image/<%= imagePath %>" alt="<%= name %>">
+                            </div>
+                            <div class="font-mono font-medium">
+                                <p class="font-bold pt-1"><a href="itemdetails.html"><%= name %></a></p>
+                                <p><%= price %> kyats</p>
+                            </div>
                         </div>
-                        <div class="font-mono font-medium">
-                            <p class="font-bold pt-1"><a href="itemdetails.html"><%= name %></a></p>
-                            <p><%= price %> kyats</p>
-                        </div>
-                    </div>
     <%
+                    }
                 }
             }
         } catch (ClassNotFoundException e) {
