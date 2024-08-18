@@ -100,9 +100,9 @@ function initializeNav() {
       </div>
     </div>
 
-    <div id="shoppingCartBox" class="fixed top-0 right-0 h-screen w-96 bg-white shadow-xl z-10 transform translate-x-full transition-transform duration-300 ease-in-out">
+    <div id="shoppingCartBox" class="fixed top-0 right-0 h-screen w-96 bg-white shadow-xl z-20 transform translate-x-full transition-transform duration-300 ease-in-out">
       <div class="p-4 relative h-full">
-        <div id="closeShoppingCart" class="cursor-pointer text-slate-500 hover:text-slate-950 absolute top-4 right-4">
+        <div id="closeShoppingCart" class="cursor-pointer z-20 text-slate-500 hover:text-slate-950 absolute top-4 right-4">
           <i class="fa-lg fa far fa-times"></i>
         </div>
         <h2 class="text-xl font-bold my-8">Shopping Cart</h2>

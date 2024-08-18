@@ -59,9 +59,9 @@
         String productType = "necklace"; 
         
         if ("price".equals(sort)) {
-            sql = "SELECT id, name, product_type, image, price FROM category WHERE product_type = ? ORDER BY price ASC"; 
+            sql = "SELECT id, name, category, image, price FROM product WHERE category = ? ORDER BY price ASC"; 
         } else {
-            sql = "SELECT id, name, product_type, image, price FROM category WHERE product_type = ?"; 
+            sql = "SELECT id, name, category, image, price FROM product WHERE category = ?"; 
         }
         
         try {

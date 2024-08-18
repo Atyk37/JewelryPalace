@@ -16,7 +16,7 @@ import javax.servlet.http.Part;
  * Servlet implementation class AddProductServlet
  */
 @WebServlet("/AddProductServlet")
-@MultipartConfig  // This annotation is crucial for handling file uploads
+@MultipartConfig  
 public class AddProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static final String UPLOAD_DIRECTORY = "product_image";
@@ -46,13 +46,11 @@ public class AddProductServlet extends HttpServlet {
 	        String price = request.getParameter("price");
 	        Part imagePart = request.getPart("image");
 
-	        // Check if imagePart is not null and has a file
 	        if (imagePart == null || imagePart.getSize() == 0) {
 	            response.sendRedirect("admin.jsp?status=error&message=Image upload failed. Please select an image.");
 	            return;
 	        }
 
-	        // Get the file name and save it to the server
 	        String fileName = imagePart.getSubmittedFileName();
 	        String imagePath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
 	        File uploadDir = new File(imagePath);
@@ -64,11 +62,10 @@ public class AddProductServlet extends HttpServlet {
 	            return;
 	        }
 	        
-	        // Save product details to database
 	        try {
 	            Class.forName("com.mysql.cj.jdbc.Driver");
 	            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jewelrypalace", "root", "root");
-	            String query = "INSERT INTO category (name, product_type, price, image) VALUES (?, ?, ?, ?)";
+	            String query = "INSERT INTO product (name, category, price, image) VALUES (?, ?, ?, ?)";
 	            PreparedStatement stmt = conn.prepareStatement(query);
 	            stmt.setString(1, name);
 	            stmt.setString(2, productType);
