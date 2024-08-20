@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="fontawesomepro/css/all.min.css">
   <link rel="icon" href="./logo/logo7.png">
-
+  
   <style>
 
     /* Hide horizontal scrollbar for WebKit browsers (Chrome, Safari) */
@@ -27,9 +29,8 @@
     }
 
   </style>
-
+  
 </head>
-
 <body>
 
   <!-- nav bar & loginForm -->
@@ -47,9 +48,9 @@
   <!-- elf sight  -->
   <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
   <div class="elfsight-app-28c6dc95-5400-49df-a698-6341ed374307" data-elfsight-app-lazy></div>
+	
 
 </body>
-
 <script src="navi.js"></script>
 <script src="home.js"></script>
 <script src="bestseller.js"></script>

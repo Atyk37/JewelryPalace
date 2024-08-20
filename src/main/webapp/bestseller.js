@@ -18,7 +18,7 @@
                 <img class="w-80 h-96 object-cover" src="./product_image/earring1.jpg" alt="Earrings DE-3426">
               </div>
               <div class="font-mono font-medium">
-              	<p class="font-bold pt-1"><a href="itemdetails.html">ER-0001</a></p>
+              	<p class="font-bold pt-1"><a href="itemDetail.jsp">ER-0001</a></p>
                 <p>3130000 kyats</p>
               </div>
           </div>

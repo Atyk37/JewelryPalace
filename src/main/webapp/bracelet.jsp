@@ -26,7 +26,7 @@
     
     <div class="text-normal flex justify-between font-semibold pt-20">
         <div>
-            <a href="index.html" class="">Home &nbsp;/&nbsp;</a>
+            <a href="index.jsp" class="">Home &nbsp;/&nbsp;</a>
             <span id="textForPfMwPh">Bracelets</span>
             <h1 class="pl-16 font-mono mt-5 text-5xl tracking-tighter">BRACELETS</h1>
             <p class="pl-16 font-mono text-xl">Elevate your jewelry ensemble with silver and gold bracelets.</p>

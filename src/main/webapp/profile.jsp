@@ -53,7 +53,7 @@
 
 <section class="container mx-auto p-10 pb-5">
     <div class="text-normal font-semibold pt-20">
-        <a href="index.html" class="">Home &nbsp;/&nbsp;</a>
+        <a href="index.jsp" class="">Home &nbsp;/&nbsp;</a>
         <span id="textForPfMwPh">My Profile</span>
         <h1 id="pageTitle" class="font-mono mt-5 text-5xl tracking-tighter">MY PROFILE</h1>
     </div>
