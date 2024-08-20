@@ -26,7 +26,7 @@ function initializeNav() {
           <div class="hover:drop-shadow-xl relative">
             <i class=" group fa-lg far fa-user cursor-pointer">
               <div class="hidden group-hover:flex w-[400px] delay-100 duration-100 bg-slate-50 right-[-163px] top-[25px] shadow-slate-400 shadow-md absolute">
-                <div class="flex flex-col p-10">
+                <div class="flex z-20 flex-col p-10">
                 
                   ${isLoggedIn ? `
                   <div id="afterLogin" class=" space-y-5">
@@ -125,6 +125,27 @@ function initializeNav() {
   const closeShoppingCart = document.getElementById('closeShoppingCart');
   const signOutLink = document.getElementById('signOutLink');
 
+// Function to validate password
+function validatePassword(password) {
+  // Regular expression for password requirements: at least 8 characters, 
+  // at least one uppercase letter, one lowercase letter, one digit, and one special character
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return passwordRegex.test(password);
+}
+
+// Event listener for the form submission
+document.querySelector('form[action="authServlet"]').addEventListener('submit', function(event) {
+  const passwordInput = document.getElementById('password');
+  const password = passwordInput.value;
+
+  if (!validatePassword(password)) {
+    event.preventDefault(); // Prevent form submission
+    alert('Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
+    passwordInput.focus(); // Focus on the password input for correction
+  }
+});
+
+
  // Event listener for Sign Up link
   if (signUpLink) {
     signUpLink.addEventListener("click", function() {
@@ -203,7 +224,7 @@ function handleSignOut() {
     afterLogin.classList.add('hidden');
   }
   
-  window.location.href = 'index.html';
+  window.location.href = 'index.jsp';
 }
 
 document.addEventListener('DOMContentLoaded', initializeNav);

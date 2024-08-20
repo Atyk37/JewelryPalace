@@ -13,23 +13,14 @@ import javax.servlet.http.HttpSession;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-/**
- * Servlet implementation class authServlet
- */
 @WebServlet("/authServlet")
 public class authServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public authServlet() {
         super();
     }
 
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         response.setContentType("text/html");
@@ -43,6 +34,7 @@ public class authServlet extends HttpServlet {
 
         String signUpQuery = "INSERT INTO Users (name, email, password) VALUES (?, ?, ?)";
         String signInQuery = "SELECT name, password FROM Users WHERE email = ?"; 
+        String checkEmailQuery = "SELECT email FROM Users WHERE email = ?"; 
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -63,16 +55,26 @@ public class authServlet extends HttpServlet {
                         session.setAttribute("username", storedUsername); 
                         session.setAttribute("email", email);
                     } else {
-                        out.println("Invalid email or password.");
+                        out.println("<script>alert('Invalid email or password.'); location='index.jsp';</script>");
                         return;
                     }
                 } else {
-                    out.println("Invalid email or password.");
+                    out.println("<script>alert('Invalid email or password.'); location='index.jsp';</script>");
                     return;
                 }
                 resultSet.close();
                 pstmt.close();
             } else {
+                // Check if email already exists
+                PreparedStatement checkEmailStmt = conn.prepareStatement(checkEmailQuery); 
+                checkEmailStmt.setString(1, email);
+                ResultSet emailResultSet = checkEmailStmt.executeQuery();
+
+                if (emailResultSet.next()) { 
+                    out.println("<script>alert('This email is already registered.'); location='index.jsp';</script>");
+                    return; 
+                }
+
                 // Sign Up
                 PreparedStatement pstmt = conn.prepareStatement(signUpQuery);
                 pstmt.setString(1, username);
@@ -84,9 +86,12 @@ public class authServlet extends HttpServlet {
                     session.setAttribute("username", username);
                     session.setAttribute("email", email);
                 } else {
-                    out.println("Failed to sign up.");
+                    out.println("<script>alert('Failed to sign up.'); location='index.jsp';</script>");
                     return;
                 }
+                emailResultSet.close(); 
+                checkEmailStmt.close(); 
+                pstmt.close();
             }
 
             conn.close();
@@ -99,15 +104,12 @@ public class authServlet extends HttpServlet {
         String currentEmail = (String) session.getAttribute("email");
 
         if (currentUsername == null || currentEmail == null) { 
-            out.println("Sign In First!");
+            out.println("<script>alert('Sign In First!'); location='index.jsp';</script>");
         } else {
-        	response.sendRedirect("profile.jsp");
+            response.sendRedirect("profile.jsp");
         }
     }
 
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
