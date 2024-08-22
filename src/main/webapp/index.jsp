@@ -35,7 +35,7 @@
     <div id="home"></div>
 
     <!-- BEST SELLERS -->  
-    <section>
+    <section id="bestseller">
         <div class="py-10 ml-10 tracking-widest rounded-2xl">
             <p class="text-5xl ml-10 font-semibold font-mono">BEST SELLERS</p>
             <div class="flex py-10 px-0 ml-10 bg-slate-50 overflow-x-auto scrollbar-hidden">

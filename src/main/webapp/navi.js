@@ -14,7 +14,7 @@ function initializeNav() {
         <div>
           <ul class="flex space-x-10 font-semibold">
             <li class="hover:underline underline-offset-4"><a href="index.jsp">HOME</a></li>
-            <li class="hover:underline underline-offset-4"><a href="#">BEST SELLERS</a></li>
+            <li class="hover:underline underline-offset-4"><a href="bestseller.jsp">BEST SELLERS</a></li>
             <li class="hover:underline underline-offset-4"><a href="earring.jsp">EARRINGS</a></li>
             <li class="hover:underline underline-offset-4"><a href="ring.jsp">RINGS</a></li>
             <li class="hover:underline underline-offset-4"><a href="bracelet.jsp">BRACELETS</a></li>

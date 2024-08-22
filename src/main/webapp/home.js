@@ -25,7 +25,7 @@
 
       <!-- Best Sellers -->
       <div class=" relative w-96 h-96 border border-slate-950 overflow-hidden group">
-        <a href="#">
+        <a href="bestseller.jsp">
 
         <img class="object-cover w-full h-full transition-opacity duration-300 ease-in-out group-hover:opacity-0" src="./item/bestseller.jpg" alt="BestSeller">
       
