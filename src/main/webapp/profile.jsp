@@ -61,9 +61,6 @@
         <div id="profile" class="p-3 w-max bg-slate-300 cursor-pointer">
             My Profile
         </div>
-        <div id="wishlist" class="p-3 w-max bg-slate-300 cursor-pointer">
-            My Wishlist
-        </div>
         <div id="purchase" class="p-3 w-max bg-slate-300 cursor-pointer">
             Purchase History
         </div>
@@ -81,13 +78,7 @@
             <p><%= email %></p>
         </div>
     </div>
-    <!--My Wishlist -->
-    <div id="myWishlist" class="hidden pt-10 space-y-10 text-xl">
-        <div class="font-semibold">My Wishlist</div>  
-        <div id="wishListContainer">
-            <!-- Wishlist items go here -->
-        </div>      
-    </div>
+   
     <!-- Purchase History -->
     <div id="purchaseHistory" class="hidden pt-10 space-y-10 text-xl">
         <div class="font-semibold">Purchase History</div>
@@ -109,8 +100,6 @@
     // profile, wishlist, purchase page add & remove
 	const profile = document.getElementById('profile');
     const myProfile = document.getElementById('myProfile');
-    const wishlist = document.getElementById('wishlist');
-    const myWishlist = document.getElementById('myWishlist');
     const purchase = document.getElementById('purchase');
     const purchaseHistory = document.getElementById('purchaseHistory');
     const pageTitle = document.getElementById('pageTitle'); 
@@ -119,11 +108,9 @@
     function showSection(sectionToShow, activeButton, titleText, spanText) {
 
         myProfile.classList.add('hidden');
-        myWishlist.classList.add('hidden');
         purchaseHistory.classList.add('hidden');
         
         profile.classList.remove('border');
-        wishlist.classList.remove('border');
         purchase.classList.remove('border');
 
         sectionToShow.classList.remove('hidden');
@@ -137,10 +124,6 @@
 
     profile.addEventListener('click', function() {
         showSection(myProfile, profile, 'MY PROFILE', 'My Profile');
-    });
-
-    wishlist.addEventListener('click', function() {
-        showSection(myWishlist, wishlist, 'MY WISHLIST', 'My Wishlist');
     });
 
     purchase.addEventListener('click', function() {

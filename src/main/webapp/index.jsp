@@ -35,7 +35,7 @@
     <div id="home"></div>
 
     <!-- BEST SELLERS -->  
-    <section id="bestseller">
+    <section>
         <div class="py-10 ml-10 tracking-widest rounded-2xl">
             <p class="text-5xl ml-10 font-semibold font-mono">BEST SELLERS</p>
             <div class="flex py-10 px-0 ml-10 bg-slate-50 overflow-x-auto scrollbar-hidden">
@@ -88,36 +88,35 @@
         </div>
     </section>
 
-<!-- Modal for product details -->
-<div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
-    <div class="bg-white rounded-sm shadow-lg p-6 max-w-4xl mx-auto">
-        <span id="closeModal" class="close cursor-pointer float-right">
-            <i class="fa-lg fa far fa-times"></i>
-        </span>
-        <div class="flex">
-            <img id="modalImage" class="w-80 h-80 object-cover rounded-sm" src="" alt="">
-            <div class="ml-6 flex flex-col justify-between">
-                <div>
-                	<p id="modalProductName" class="text-2xl font-bold text-slate-800"></p>
-                	<p id="modalProductPrice" class="text-xl text-slate-600 mt-1"></p>
-                	<p class="mt-8 text-slate-700">
-                    These exquisite earrings are crafted with precision and elegance. Made from high-quality materials, they feature a stunning design that adds a touch of sophistication to any outfit. Perfect for special occasions or as a luxurious gift.
-                </p>
-                </div>
-               
-                <div class="flex justify-between ">
-                    <button class="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
-                        Add to Wishlist
-                    </button>
-                    <button class="w-full ml-2 px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
-                        Add to Cart
-                    </button>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-</div>
+	<!-- Modal for product details -->
+	<div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
+	    <div class="bg-white rounded-sm shadow-lg p-6 max-w-4xl mx-auto">
+	        <span id="closeModal" class="close cursor-pointer float-right">
+	            <i class="fa-lg fa far fa-times"></i>
+	        </span>
+	        <div class="flex">
+	            <img id="modalImage" class="w-80 h-80 object-cover rounded-sm" src="" alt="">
+	            <div class="ml-6 flex flex-col justify-between">
+	                <div>
+	                    <p id="modalProductName" class="text-2xl font-bold text-slate-800"></p>
+	                    <p id="modalProductPrice" class="text-xl text-slate-600 mt-1"></p>
+	                    <p class="mt-8 text-slate-700">
+	                        These exquisite earrings are crafted with precision and elegance. Made from high-quality materials, they feature a stunning design that adds a touch of sophistication to any outfit. Perfect for special occasions or as a luxurious gift.
+	                    </p>
+	                </div>
+	
+	                <div class="flex justify-between ">
+	                    <button id="addToWishlist" class="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
+	                        Add to Wishlist
+	                    </button>
+	                    <button class="w-full ml-2 px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
+	                        Add to Cart
+	                    </button>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 
     <!-- footer section  -->
     <div id="footer"></div>
@@ -128,28 +127,54 @@
     
     <script src="navi.js"></script>
     <script src="home.js"></script>
+    
     <script>
-
     function openModal(productName, productImage, productPrice) {
-            document.getElementById("modalProductName").innerText = productName;
-            document.getElementById("modalImage").src = productImage;
-            document.getElementById("modalProductPrice").innerText = productPrice + " kyats";
+        document.getElementById("modalProductName").innerText = productName;
+        document.getElementById("modalImage").src = productImage;
+        document.getElementById("modalProductPrice").innerText = productPrice + " kyats";
 
-            const modal = document.getElementById("productModal");
-            modal.classList.remove("hidden"); 
-        }
+        const modal = document.getElementById("productModal");
+        modal.classList.remove("hidden");
 
-        document.getElementById("closeModal").onclick = function() {
-            const modal = document.getElementById("productModal");
-            modal.classList.add("hidden"); 
-        }
+        // Add click event to the Add to Wishlist button
+        document.getElementById("addToWishlist").onclick = function() {
+            addToWishlist(productName, productImage, productPrice);
+        };
+    }
 
-        window.onclick = function(event) {
-            const modal = document.getElementById("productModal");
-            if (event.target === modal) {
-                modal.classList.add("hidden"); 
-            }
+    function addToWishlist(productName, productImage, productPrice) {
+        // Retrieve existing wishlist from local storage
+        let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+        // Check if the product is already in the wishlist
+        const exists = wishlist.find(item => item.name === productName);
+        if (!exists) {
+            // Add new product to the wishlist
+            wishlist.push({
+                name: productName,
+                image: productImage,
+                price: productPrice
+            });
+            localStorage.setItem("wishlist", JSON.stringify(wishlist));
+            alert(productName + " has been added to your wishlist!");
+        } else {
+            alert(productName + " is already in your wishlist.");
         }
-    </script>
+    }
+
+	    document.getElementById("closeModal").onclick = function() {
+	        const modal = document.getElementById("productModal");
+	        modal.classList.add("hidden");
+	    }
+	
+	    window.onclick = function(event) {
+	        const modal = document.getElementById("productModal");
+	        if (event.target === modal) {
+	            modal.classList.add("hidden");
+	        }
+	    }
+	</script>
+    
 </body>
 </html>

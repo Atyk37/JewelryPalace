@@ -64,7 +64,7 @@ function initializeNav() {
             </i>
           </div>
           <div class=" hover:drop-shadow-xl">
-            <i class="fa-lg far fa-heart cursor-pointer"></i>
+           <a href="wishlist.jsp"><i class="fa-lg far fa-heart cursor-pointer"></i></a>
           </div>
           <div id="shoppingCartIcon" class="hover:drop-shadow-xl">
             <i class="fa-lg far fa-shopping-cart cursor-pointer"></i>
