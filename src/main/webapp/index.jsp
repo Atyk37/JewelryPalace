@@ -11,21 +11,21 @@
     <link rel="icon" href="./logo/logo7.png">
 </head>
 <style>
-	/* Hide horizontal scrollbar for WebKit browsers (Chrome, Safari) */
-        .scrollbar-hidden::-webkit-scrollbar {
-            display: none;
-        }
+    /* Hide horizontal scrollbar for WebKit browsers (Chrome, Safari) */
+    .scrollbar-hidden::-webkit-scrollbar {
+        display: none;
+    }
 
-        /* Hide scrollbar for Firefox */
-        .scrollbar-hidden {
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
+    /* Hide scrollbar for Firefox */
+    .scrollbar-hidden {
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
 
-        /* Hide scrollbar for IE and Edge */
-        .scrollbar-hidden {
-            -ms-overflow-style: none;
-        }
+    /* Hide scrollbar for IE and Edge */
+    .scrollbar-hidden {
+        -ms-overflow-style: none;
+    }
 </style>
 <body>
     <!-- nav bar & loginForm -->
@@ -65,7 +65,7 @@
                                         <img class="w-80 h-96 object-cover" src="./product_image/<%= productImage %>" alt="<%= productId %>">
                                     </div>
                                     <div class="font-mono font-medium">
-                                        <p class="font-bold pt-1 cursor-pointer " ><%= productId %></p>
+                                        <p class="font-bold pt-1 cursor-pointer"><%= productId %></p>
                                         <p><%= productPrice %> kyats</p>
                                     </div>
                                 </div>
@@ -88,35 +88,35 @@
         </div>
     </section>
 
-	<!-- Modal for product details -->
-	<div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
-	    <div class="bg-white rounded-sm shadow-lg p-6 max-w-4xl mx-auto">
-	        <span id="closeModal" class="close cursor-pointer float-right">
-	            <i class="fa-lg fa far fa-times"></i>
-	        </span>
-	        <div class="flex">
-	            <img id="modalImage" class="w-80 h-80 object-cover rounded-sm" src="" alt="">
-	            <div class="ml-6 flex flex-col justify-between">
-	                <div>
-	                    <p id="modalProductName" class="text-2xl font-bold text-slate-800"></p>
-	                    <p id="modalProductPrice" class="text-xl text-slate-600 mt-1"></p>
-	                    <p class="mt-8 text-slate-700">
-	                        These exquisite earrings are crafted with precision and elegance. Made from high-quality materials, they feature a stunning design that adds a touch of sophistication to any outfit. Perfect for special occasions or as a luxurious gift.
-	                    </p>
-	                </div>
-	
-	                <div class="flex justify-between ">
-	                    <button id="addToWishlist" class="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
-	                        Add to Wishlist
-	                    </button>
-	                    <button class="w-full ml-2 px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
-	                        Add to Cart
-	                    </button>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div>
+    <!-- Modal for product details -->
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
+        <div class="bg-white rounded-sm shadow-lg p-6 max-w-4xl mx-auto">
+            <span id="closeModal" class="close cursor-pointer float-right">
+                <i class="fa-lg fa far fa-times"></i>
+            </span>
+            <div class="flex">
+                <img id="modalImage" class="w-80 h-80 object-cover rounded-sm" src="" alt="">
+                <div class="ml-6 flex flex-col justify-between">
+                    <div>
+                        <p id="modalProductName" class="text-2xl font-bold text-slate-800"></p>
+                        <p id="modalProductPrice" class="text-xl text-slate-600 mt-1"></p>
+                        <p class="mt-8 text-slate-700">
+                            These exquisite earrings are crafted with precision and elegance. Made from high-quality materials, they feature a stunning design that adds a touch of sophistication to any outfit. Perfect for special occasions or as a luxurious gift.
+                        </p>
+                    </div>
+
+                    <div class="flex justify-between ">
+                        <button id="addToWishlist" class="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
+                            Add to Wishlist
+                        </button>
+                        <button id="addToCart" class="w-full ml-2 px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- footer section  -->
     <div id="footer"></div>
@@ -141,6 +141,11 @@
         document.getElementById("addToWishlist").onclick = function() {
             addToWishlist(productName, productImage, productPrice);
         };
+
+        // Add click event to the Add to Cart button
+        document.getElementById("addToCart").onclick = function() {
+            addToCart(productName, productImage, productPrice);
+        };
     }
 
     function addToWishlist(productName, productImage, productPrice) {
@@ -163,18 +168,40 @@
         }
     }
 
-	    document.getElementById("closeModal").onclick = function() {
-	        const modal = document.getElementById("productModal");
-	        modal.classList.add("hidden");
-	    }
-	
-	    window.onclick = function(event) {
-	        const modal = document.getElementById("productModal");
-	        if (event.target === modal) {
-	            modal.classList.add("hidden");
-	        }
-	    }
-	</script>
+    function addToCart(productName, productImage, productPrice) {
+        // Retrieve existing cart from local storage
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // Check if the product is already in the cart
+        const exists = cart.find(item => item.name === productName);
+        if (exists) {
+            exists.quantity += 1; // Update quantity
+            alert(productName + "'s quantity has been updated in your cart!");
+        } else {
+            // Add new product to the cart
+            cart.push({
+                name: productName,
+                image: productImage,
+                price: productPrice,
+                quantity: 1 // Initialize quantity
+            });
+            alert(productName + " has been added to your cart!");
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    document.getElementById("closeModal").onclick = function() {
+        const modal = document.getElementById("productModal");
+        modal.classList.add("hidden");
+    }
+    
+    window.onclick = function(event) {
+        const modal = document.getElementById("productModal");
+        if (event.target === modal) {
+            modal.classList.add("hidden");
+        }
+    }
+    </script>
     
 </body>
 </html>

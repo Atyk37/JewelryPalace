@@ -18,26 +18,25 @@ function initializeNav() {
             <li class="hover:underline underline-offset-4"><a href="earring.jsp">EARRINGS</a></li>
             <li class="hover:underline underline-offset-4"><a href="ring.jsp">RINGS</a></li>
             <li class="hover:underline underline-offset-4"><a href="bracelet.jsp">BRACELETS</a></li>
-			<li class="hover:underline underline-offset-4"><a href="necklace.jsp">NECKLACES</a></li>
+            <li class="hover:underline underline-offset-4"><a href="necklace.jsp">NECKLACES</a></li>
           </ul>
         </div>
 
         <div class="mr-12 flex space-x-8">
           <div class="hover:drop-shadow-xl relative">
-            <i class=" group fa-lg far fa-user cursor-pointer">
+            <i class="group fa-lg far fa-user cursor-pointer">
               <div class="hidden group-hover:flex w-[400px] delay-100 duration-100 bg-slate-50 right-[-163px] top-[25px] shadow-slate-400 shadow-md absolute">
                 <div class="flex z-20 flex-col p-10">
-                
                   ${isLoggedIn ? `
-                  <div id="afterLogin" class=" space-y-5">
+                  <div id="afterLogin" class="space-y-5">
                     <div class="text-xl text-left mb-4 inline">
                       Welcome Back,
                       <span>${getUserName}</span>
                     </div>
-                    <a class=" text-base text-left hover:opacity-75 my-7 underline-offset-2 block" href="profile.jsp">
+                    <a class="text-base text-left hover:opacity-75 my-7 underline-offset-2 block" href="profile.jsp">
                       My profile
                     </a>
-                    <div id="signOutLink" class="cursor-pointer text-left text-base  mb-5 hover:opacity-75 underline-offset-2">
+                    <div id="signOutLink" class="cursor-pointer text-left text-base mb-5 hover:opacity-75 underline-offset-2">
                       Sign out
                     </div>
                   </div>
@@ -58,13 +57,12 @@ function initializeNav() {
                     </div>
                   </div>
                   `}
-                  
                 </div>
               </div>
             </i>
           </div>
-          <div class=" hover:drop-shadow-xl">
-           <a href="wishlist.jsp"><i class="fa-lg far fa-heart cursor-pointer"></i></a>
+          <div class="hover:drop-shadow-xl">
+            <a href="wishlist.jsp"><i class="fa-lg far fa-heart cursor-pointer"></i></a>
           </div>
           <div id="shoppingCartIcon" class="hover:drop-shadow-xl">
             <i class="fa-lg far fa-shopping-cart cursor-pointer"></i>
@@ -106,130 +104,16 @@ function initializeNav() {
           <i class="fa-lg fa far fa-times"></i>
         </div>
         <h2 class="text-xl font-bold my-8">Shopping Cart</h2>
+        <div id="cartItemsContainer">
+          <!-- Cart items will be displayed here -->
+        </div>
       </div>
     </div>
   `;
 
   navContainer.innerHTML = navInnerHTML;
-
-  const signUpLink = document.getElementById("signUpLink");
-  const signInLink = document.getElementById('signInLink');
-  const loginForm = document.getElementById("loginForm");
-  const closeLoginForm = document.getElementById("closeLoginForm");
-  const userNameContainer = document.getElementById('userNameContainer');
-  const userNameInput = document.getElementById('userName');
-  const submitBtn = document.getElementById('submitBtn');
-  const headerWel = document.getElementById('headerWel');
-  const shoppingCartIcon = document.getElementById('shoppingCartIcon');
-  const shoppingCartBox = document.getElementById('shoppingCartBox');
-  const closeShoppingCart = document.getElementById('closeShoppingCart');
-  const signOutLink = document.getElementById('signOutLink');
-
-// Function to validate password
-function validatePassword(password) {
-  // Regular expression for password requirements: at least 8 characters, 
-  // at least one uppercase letter, one lowercase letter, one digit, and one special character
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  return passwordRegex.test(password);
-}
-
-// Event listener for the form submission
-document.querySelector('form[action="authServlet"]').addEventListener('submit', function(event) {
-  const passwordInput = document.getElementById('password');
-  const password = passwordInput.value;
-
-  if (!validatePassword(password)) {
-    event.preventDefault(); // Prevent form submission
-    alert('Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
-    passwordInput.focus(); // Focus on the password input for correction
-  }
-});
-
-
- // Event listener for Sign Up link
-  if (signUpLink) {
-    signUpLink.addEventListener("click", function() {
-      showLoginForm();
-      userNameContainer.classList.remove("hidden"); 
-      userNameInput.removeAttribute("required"); 
-      submitBtn.textContent = 'SIGN UP'; 
-      headerWel.textContent = 'Welcome to Jewelry Palace';
-    });
-  }
-
- // Event listener for Sign In link
-  if (signInLink) {
-    signInLink.addEventListener("click", function(){
-      showLoginForm();
-      userNameContainer.classList.add("hidden"); 
-      userNameInput.removeAttribute("required"); 
-      submitBtn.textContent = 'SIGN IN'; 
-      headerWel.textContent = 'Welcome Back';
-    });
-  }
-
- //  Event listener for Sign Out link
-  if (signOutLink) {
-    signOutLink.addEventListener('click', handleSignOut);
-  }
-
- // Event listener for close button in login form
-  if (closeLoginForm) {
-    closeLoginForm.addEventListener("click", function() {
-      loginForm.classList.add("hidden");
-    });
-  }
-
- // Event listener for Shopping Cart icon
-  if (shoppingCartIcon) {
-    shoppingCartIcon.addEventListener('click', function () {
-      shoppingCartBox.style.transform = 'translateX(0)';
-    });
-  }
-
- // Event listener for close button in shopping cart
-  if (closeShoppingCart) {
-    closeShoppingCart.addEventListener('click', function () {
-      shoppingCartBox.style.transform = 'translateX(100%)';
-    });
-  }
-}
-
-// Function to show the login form
-function showLoginForm() {
-  const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.classList.remove("hidden");
-    loginForm.classList.add("flex");
-  }
-}
-
-// Function to sign out link
-function handleSignOut() {
-  localStorage.removeItem('isLoggedIn');
-  localStorage.removeItem('username');
-  localStorage.removeItem('email');
   
-  sessionStorage.removeItem('username');
-  sessionStorage.removeItem('email');
-  
-  const beforeLogin = document.getElementById('beforeLogin');
-  const afterLogin = document.getElementById('afterLogin');
-  
-  if (beforeLogin) {
-    beforeLogin.classList.remove('hidden');
-  }
-  
-  if (afterLogin) {
-    afterLogin.classList.add('hidden');
-  }
-  
-  window.location.href = 'index.jsp';
-}
-
-document.addEventListener('DOMContentLoaded', initializeNav);
-
-const footerContainer = document.getElementById("footer");
+  const footerContainer = document.getElementById("footer");
 
 const footerInnerHTML = `
   <section class=" container mx-auto pt-20">
@@ -270,3 +154,133 @@ const footerInnerHTML = `
 
 footerContainer.innerHTML = footerInnerHTML;
 
+  const signUpLink = document.getElementById("signUpLink");
+  const signInLink = document.getElementById('signInLink');
+  const loginForm = document.getElementById("loginForm");
+  const closeLoginForm = document.getElementById("closeLoginForm");
+  const userNameContainer = document.getElementById('userNameContainer');
+  const userNameInput = document.getElementById('userName');
+  const submitBtn = document.getElementById('submitBtn');
+  const headerWel = document.getElementById('headerWel');
+  const shoppingCartIcon = document.getElementById('shoppingCartIcon');
+  const shoppingCartBox = document.getElementById('shoppingCartBox');
+  const closeShoppingCart = document.getElementById('closeShoppingCart');
+  const signOutLink = document.getElementById('signOutLink');
+
+  // Function to validate password
+  function validatePassword(password) {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  }
+
+  // Event listener for the form submission
+  document.querySelector('form[action="authServlet"]').addEventListener('submit', function(event) {
+    const passwordInput = document.getElementById('password');
+    const password = passwordInput.value;
+
+    if (!validatePassword(password)) {
+      event.preventDefault(); // Prevent form submission
+      alert('Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
+      passwordInput.focus(); // Focus on the password input for correction
+    }
+  });
+
+  // Event listener for Sign Up link
+  if (signUpLink) {
+    signUpLink.addEventListener("click", function() {
+      showLoginForm();
+      userNameContainer.classList.remove("hidden"); 
+      userNameInput.removeAttribute("required"); 
+      submitBtn.textContent = 'SIGN UP'; 
+      headerWel.textContent = 'Welcome to Jewelry Palace';
+    });
+  }
+
+  // Event listener for Sign In link
+  if (signInLink) {
+    signInLink.addEventListener("click", function() {
+      showLoginForm();
+      userNameContainer.classList.add("hidden"); 
+      userNameInput.setAttribute("required", ""); 
+      submitBtn.textContent = 'SIGN IN'; 
+      headerWel.textContent = 'Welcome Back!';
+    });
+  }
+
+  // Show login form
+  function showLoginForm() {
+    loginForm.classList.remove("hidden");
+  }
+
+  // Close login form
+  if (closeLoginForm) {
+    closeLoginForm.addEventListener("click", function() {
+      loginForm.classList.add("hidden");
+    });
+  }
+
+  // Event listener for Shopping Cart icon
+  if (shoppingCartIcon) {
+    shoppingCartIcon.addEventListener('click', function() {
+      renderCartItems(); // Call to render items before showing the cart
+      shoppingCartBox.style.transform = 'translateX(0)';
+    });
+  }
+
+  // Close Shopping Cart
+  if (closeShoppingCart) {
+    closeShoppingCart.addEventListener('click', function() {
+      shoppingCartBox.style.transform = 'translateX(100%)';
+    });
+  }
+
+  // Event listener for Sign Out link
+  if (signOutLink) {
+    signOutLink.addEventListener("click", function() {
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("username");
+      // Optionally, redirect to home or refresh page
+      window.location.reload();
+    });
+  }
+}
+
+// Function to add items to the shopping cart
+function addToCart(item) {
+  const cartItems = JSON.parse(localStorage.getItem('cart')) || []; // Updated local storage key
+  cartItems.push(item);
+  localStorage.setItem('cart', JSON.stringify(cartItems)); // Updated local storage key
+  renderCartItems();
+}
+
+// Render Cart Items in the Shopping Cart
+function renderCartItems() {
+  const cartItems = JSON.parse(localStorage.getItem('cart')) || []; // Updated local storage key
+  const cartItemsContainer = document.getElementById('cartItemsContainer');
+
+  const cartItemsHTML = cartItems.map(item => `
+    <div class="flex justify-between items-center p-2 border-b">
+      <div>
+        <img src="${item.image}" alt="${item.name}" class="w-12 h-12">
+        <span>${item.name}</span>
+      </div>
+      <div class="flex items-center">
+        <span>${item.price} MMK</span>
+        <i class="fa-lg far fa-times cursor-pointer ml-2" onclick="removeFromCart('${item.name}')"></i>
+      </div>
+    </div>
+  `).join('');
+
+  cartItemsContainer.innerHTML = cartItemsHTML || '<p>No items in the cart.</p>';
+}
+
+// Remove an item from the shopping cart
+function removeFromCart(itemName) {
+  const cartItems = JSON.parse(localStorage.getItem('cart')) || []; // Updated local storage key
+  const updatedCartItems = cartItems.filter(item => item.name !== itemName);
+  localStorage.setItem('cart', JSON.stringify(updatedCartItems)); // Updated local storage key
+  renderCartItems(); // Re-render the cart items
+}
+
+// Initialize the navigation bar when the document is ready
+document.addEventListener("DOMContentLoaded", initializeNav);
