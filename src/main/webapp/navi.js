@@ -102,16 +102,17 @@ function initializeNav() {
     </div>
 
     <div id="shoppingCartBox" class="fixed top-0 right-0 h-screen w-96 bg-white shadow-xl z-20 transform translate-x-full transition-transform duration-300 ease-in-out">
-      <div class="p-4 relative h-full">
-        <div id="closeShoppingCart" class="cursor-pointer z-20 text-slate-500 hover:text-slate-950 absolute top-4 right-4">
-          <i class="fa-lg fa far fa-times"></i>
-        </div>
-        <h2 class="text-xl font-bold my-8">Shopping Cart</h2>
-        <div id="cartItemsContainer">
-          <!-- Cart items will be displayed here -->
-        </div>
-      </div>
-    </div>
+	  <div class="p-4 relative h-full">
+	    <div id="closeShoppingCart" class="cursor-pointer z-20 text-slate-500 hover:text-slate-950 absolute top-4 right-4">
+	      <i class="fa-lg fa far fa-times"></i>
+	    </div>
+	    <h2 class="text-xl font-bold my-8">Shopping Cart</h2>
+	    <div id="cartItemsContainer" class="scrollbar-hidden overflow-y-auto h-[calc(100%-3rem)]">
+	      <!-- Cart items will be displayed here -->
+	    </div>
+	  </div>
+	</div>
+
   `;
 
   navContainer.innerHTML = navInnerHTML;
@@ -291,8 +292,14 @@ function updateCartCount() {
 
 // Render Cart Items in the Shopping Cart
 function renderCartItems() {
-  const cartItems = JSON.parse(localStorage.getItem('cart')) || []; 
+  const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
   const cartItemsContainer = document.getElementById('cartItemsContainer');
+
+  // Calculate the total cost of items in the cart
+  const totalCost = cartItems.reduce((total, item) => {
+    console.log(`Item: ${item.name}, Price: ${item.price}`); // Debugging log
+    return total + parseFloat(item.price) || 0; // Ensure we parse the price correctly
+  }, 0);
 
   const cartItemsHTML = cartItems.map(item => `
     <div class="flex justify-between pr-3 p-2 border-b">
@@ -309,9 +316,17 @@ function renderCartItems() {
 
   cartItemsContainer.innerHTML = cartItemsHTML || '<p>No items in the cart.</p>';
 
+  // Display total cost if there are items in the cart
   if (cartItems.length > 0) {
+    const totalCostHTML = `
+      <div class="mt-4 text-right text-sm font-semibold">
+        <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
+      </div>
+    `;
+    cartItemsContainer.insertAdjacentHTML('beforeend', totalCostHTML);
+
     const buyButtonHTML = `
-      <div class="mt-4 text-right">
+      <div class="mt-4 text-right mb-32 ">
         <button id="buyButton" class="bg-slate-500 text-white py-2 px-4 rounded-md shadow-lg hover:bg-slate-600 transition ease-in-out duration-150">
           Buy Now
         </button>
@@ -325,9 +340,12 @@ function renderCartItems() {
       purchaseItems();
     });
   }
+
   // Update the cart count after rendering
-    updateCartCount();
+  updateCartCount();
 }
+
+
 
 // Function to handle the purchase of items
 function purchaseItems() {
