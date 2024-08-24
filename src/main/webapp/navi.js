@@ -112,6 +112,21 @@ function initializeNav() {
 	    </div>
 	  </div>
 	</div>
+	
+	<div id="receiptModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-30">
+	  <div class="bg-white p-6 rounded shadow-lg w-1/3 relative">
+	    <div id="closeReceiptModal" class="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-600">
+	      <i class="fa-lg fa far fa-times"></i>
+	    </div>
+	    <h2 class="text-xl font-bold mb-4">Receipt</h2>
+	    <div id="receiptContent">
+	      <!-- Receipt details will be populated here -->
+	    </div>
+	    <button id="confirmPurchase" class="mt-4 w-full bg-slate-500 text-white py-2 rounded-md hover:bg-slate-600">
+	      Confirm Purchase
+	    </button>
+	  </div>
+	</div>
 
   `;
 
@@ -327,7 +342,7 @@ function renderCartItems() {
 
     const buyButtonHTML = `
       <div class="mt-4 text-right mb-32 ">
-        <button id="buyButton" class="bg-slate-500 text-white py-2 px-4 rounded-md shadow-lg hover:bg-slate-600 transition ease-in-out duration-150">
+        <button id="buy-icon" class="bg-slate-500 text-white py-2 px-4 rounded-md shadow-lg hover:bg-slate-600 transition ease-in-out duration-150">
           Buy Now
         </button>
       </div>
@@ -335,7 +350,7 @@ function renderCartItems() {
     cartItemsContainer.insertAdjacentHTML('beforeend', buyButtonHTML);
 
     // Add event listener to the "Buy" button
-    const buyButton = document.getElementById('buyButton');
+    const buyButton = document.getElementById('buy-icon');
     buyButton.addEventListener('click', function() {
       purchaseItems();
     });
@@ -345,15 +360,16 @@ function renderCartItems() {
   updateCartCount();
 }
 
-
-
 // Function to handle the purchase of items
 function purchaseItems() {
   const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
   if (cartItems.length > 0) {
-    // Example of processing the purchase (e.g., send to server, handle payment, etc.)
-    alert('Thank you for your purchase!');
+    // Populate receipt content
+    populateReceipt(cartItems);
+
+    // Show the receipt modal
+    document.getElementById('receiptModal').classList.remove('hidden');
 
     // Clear the cart after purchase
     localStorage.removeItem('cart');
@@ -361,6 +377,40 @@ function purchaseItems() {
   } else {
     alert('Your cart is empty.');
   }
+}
+
+
+// Function to populate the receipt modal with purchased items
+function populateReceipt(cartItems) {
+  const receiptContent = document.getElementById('receiptContent');
+  const totalCost = cartItems.reduce((total, item) => total + parseFloat(item.price) || 0, 0);
+
+  const receiptHTML = cartItems.map(item => `
+    <div class="flex justify-between p-2 border-b">
+      <span>${item.name}</span>
+      <span>${item.price} MMK</span>
+    </div>
+  `).join('');
+
+  const totalCostHTML = `
+    <div class="mt-4 text-right text-sm font-semibold">
+      <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
+    </div>
+  `;
+
+  receiptContent.innerHTML = `${receiptHTML}${totalCostHTML}`;
+  
+    // Add this code after rendering the receipt modal
+	document.getElementById('confirmPurchase').addEventListener('click', function() {
+	  // Handle the purchase confirmation here
+	  alert('Purchase confirmed!'); // Placeholder action
+	  document.getElementById('receiptModal').classList.add('hidden'); // Close the receipt modal
+	});
+	
+	// Ensure the close button also closes the modal
+	document.getElementById('closeReceiptModal').addEventListener('click', function() {
+	  document.getElementById('receiptModal').classList.add('hidden');
+	});
 }
 
 // Function to remove an item from the cart
