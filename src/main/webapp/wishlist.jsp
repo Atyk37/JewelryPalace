@@ -50,20 +50,20 @@
                                 rs = stmt.executeQuery(sql);
 
                                 if (rs.next()) {
-                                    String productId = rs.getString("name");
+                                    String productName = rs.getString("name");
                                     String productImage = rs.getString("image");
                                     String productPrice = rs.getString("price");
                 %>
-                                    <div class="w-80 h-96 relative mb-7 inline-block cursor-pointer" data-product="<%= productId %>" onclick="showProductDetails('<%= productId %>', '<%= productImage %>', '<%= productPrice %> kyats')">
+                                    <div class="w-80 h-96 relative mb-7 inline-block cursor-pointer" data-product="<%= productName %>" onclick="openModal('<%= productName %>', '<%= productImage %>', '<%= productPrice %> kyats')">
                                         <div>
-                                            <img class="w-80 h-96 object-cover" src="./product_image/<%= productImage %>" alt="<%= productId %>">
+                                            <img class="w-80 h-96 object-cover" src="./product_image/<%= productImage %>" alt="<%= productName %>">
                                         </div>
                                         <div class="font-mono font-medium">
-                                            <p class="font-bold pt-1"><%= productId %></p>
+                                            <p class="font-bold pt-1"><%= productName %></p>
                                             <p><%= productPrice %> kyats</p>
                                         </div>
                                         <!-- Move the trash icon to the right side -->
-                                        <button class="removeItem absolute top-2 right-2" data-product="<%= productId %>">
+                                        <button class="removeItem absolute top-2 right-2" data-product="<%= productName %>">
                                             <i class="fas fa-trash-alt text-red-600"></i>
                                         </button>
                                     </div>
@@ -100,15 +100,12 @@
                         <p id="modalProductName" class="text-2xl font-bold text-slate-800"></p>
                         <p id="modalProductPrice" class="text-xl text-slate-600 mt-1"></p>
                         <p class="mt-8 text-slate-700">
-                            These exquisite earrings are crafted with precision and elegance. Made from high-quality materials, they feature a stunning design that adds a touch of sophistication to any outfit. Perfect for special occasions or as a luxurious gift.
+                            These exquisite stuff are crafted with precision and elegance. Made from high-quality materials, they feature a stunning design that adds a touch of sophistication to any outfit. Perfect for special occasions or as a luxurious gift.
                         </p>
                     </div>
 
-                    <div class="flex justify-between mt-4">
-                        <!-- <button id="addToWishlist" class="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
-                            Add to Wishlist
-                        </button> -->
-                        <button class="w-full ml-2 px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
+                    <div class="flex justify-between ">
+                        <button id="addToCart" class="w-full ml-2 px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
                             Add to Cart
                         </button>
                     </div>
@@ -125,6 +122,7 @@
     <div class="elfsight-app-28c6dc95-5400-49df-a698-6341ed374307" data-elfsight-app-lazy></div>
 
     <script src="navi.js"></script>
+    
     <script>
         // Pass wishlist items to JSP
         window.onload = function() {
@@ -143,10 +141,10 @@
                 button.addEventListener('click', function(event) {
                     event.stopPropagation(); // Prevent triggering the modal
 
-                    let productId = this.getAttribute('data-product');
+                    let productName = this.getAttribute('data-product');
 
                     // Remove the item from local storage
-                    wishlist = wishlist.filter(item => item.name !== productId);
+                    wishlist = wishlist.filter(item => item.name !== productName);
                     localStorage.setItem("wishlist", JSON.stringify(wishlist));
 
                     // Reload the page with the updated wishlist items
@@ -156,20 +154,47 @@
             });
         };
 
-        // Function to show product details in the modal
-        function showProductDetails(productId, productImage, productPrice) {
-            document.getElementById('modalImage').src = './product_image/' + productImage;
-            document.getElementById('modalProductName').textContent = productId;
+        function openModal(productName, productImage, productPrice) {
+        	document.getElementById('modalImage').src = './product_image/' + productImage;
+            document.getElementById('modalProductName').textContent = productName;
             document.getElementById('modalProductPrice').textContent = productPrice;
 
-            // Show the modal
+            // Assign the addToCart function to the button's onclick event
+            document.getElementById('addToCart').onclick = function() {
+                addToCart(productName, productImage, productPrice);
+            };
+
             document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        function addToCart(productName, productImage, productPrice) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            const exists = cart.find(item => item.name === productName);
+            if (!exists) {
+                cart.push({
+                    name: productName,
+                    image: productImage,
+                    price: productPrice
+                });
+                localStorage.setItem("cart", JSON.stringify(cart));
+                alert(productName + " has been added to your cart!");
+            } else {
+                alert(productName + " is already in your cart.");
+            }
         }
 
         // Close modal when clicking on the close icon
         document.getElementById('closeModal').onclick = function() {
             document.getElementById('productModal').classList.add('hidden');
         };
+
+
+        // Close modal when clicking on the close icon
+        document.getElementById('closeModal').onclick = function() {
+            document.getElementById('productModal').classList.add('hidden');
+        };
+
     </script>
 
 </body>

@@ -6,7 +6,7 @@ function initializeNav() {
 
   const navInnerHTML = `
     <section class="menuBar">
-      <div class="fixed flex items-center justify-between w-full bg-slate-50 border border-x-0 border-slate-950 h-16 z-10">
+      <div class="fixed flex items-center justify-between w-full bg-slate-50 border border-x-0 border-slate-950 h-16 z-20">
         <div>
           <img class="w-[180px] p-1 ml-12 mr-12" src="./logo/logo9.png" alt="">
         </div>
@@ -66,9 +66,10 @@ function initializeNav() {
           <div class=" hover:drop-shadow-xl">
           	<a href="wishlist.jsp"><i class="fa-lg far fa-heart cursor-pointer"></i></a>
           </div>
-          <div id="shoppingCartIcon" class="hover:drop-shadow-xl">
-            <i class="fa-lg far fa-shopping-cart cursor-pointer"></i>
-          </div>
+          <div id="shoppingCartIcon" class="hover:drop-shadow-xl relative">
+			  <i class="fa-lg far fa-shopping-cart cursor-pointer"></i>
+			  <span id="cartCount" class=" absolute top-[-10px] right-[-13px] bg-red-600 text-white font-bold text-xs rounded-2xl w-5 h-5 flex items-center justify-center border-2 border-white hidden"></span>
+		  </div>
         </div>
       </div>
     </section>
@@ -274,6 +275,20 @@ function handleSignOut() {
 
 document.addEventListener('DOMContentLoaded', initializeNav);
 
+function updateCartCount() {
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCountElement = document.getElementById('cartCount');
+    
+    // Check if there are items in the cart
+    if (cartItems.length > 0) {
+        cartCountElement.textContent = cartItems.length; // Update count
+        cartCountElement.classList.remove('hidden'); // Show the cart count
+    } else {
+        cartCountElement.textContent = ''; // Clear count
+        cartCountElement.classList.add('hidden'); // Hide the cart count
+    }
+}
+
 // Render Cart Items in the Shopping Cart
 function renderCartItems() {
   const cartItems = JSON.parse(localStorage.getItem('cart')) || []; 
@@ -282,7 +297,7 @@ function renderCartItems() {
   const cartItemsHTML = cartItems.map(item => `
     <div class="flex justify-between pr-3 p-2 border-b">
       <div class="flex">
-        <img src="${item.image}" alt="${item.name}" class="w-12 h-12">
+        <img src="./product_image/${item.image}" alt="${item.name}" class="w-12 h-12">
         <div class="flex flex-col ml-2 mt-2 text-sm">
           <span>${item.name}</span>
           <span>${item.price} MMK</span>
@@ -310,6 +325,8 @@ function renderCartItems() {
       purchaseItems();
     });
   }
+  // Update the cart count after rendering
+    updateCartCount();
 }
 
 // Function to handle the purchase of items
@@ -338,5 +355,8 @@ function removeFromCart(itemName) {
 
 // Call the initializeNav function when the page loads
 window.onload = initializeNav;
+
+
+
 
 

@@ -60,7 +60,7 @@
                                 String productImage = rs.getString("image");
                                 String productPrice = rs.getString("price");
                     %>
-                                <div class="w-80 h-96 relative mb-7 inline-block" onclick="openModal('<%= productId %>', './product_image/<%= productImage %>', '<%= productPrice %>')">
+                                <div class="w-80 h-96 relative mb-7 inline-block" onclick="openModal('<%= productId %>', '<%= productImage %>', '<%= productPrice %>')">
                                     <div>
                                         <img class="w-80 h-96 object-cover" src="./product_image/<%= productImage %>" alt="<%= productId %>">
                                     </div>
@@ -131,7 +131,7 @@
     <script>
     function openModal(productName, productImage, productPrice) {
         document.getElementById("modalProductName").innerText = productName;
-        document.getElementById("modalImage").src = productImage;
+        document.getElementById("modalImage").src = "./product_image/"+ productImage;
         document.getElementById("modalProductPrice").innerText = productPrice + " kyats";
 
         const modal = document.getElementById("productModal");
