@@ -98,7 +98,7 @@ function initializeNav() {
       </div>
     </div>
 
-    <div id="shoppingCartBox" class="fixed top-0 right-0 h-screen w-96 bg-white shadow-xl z-20 transform translate-x-full transition-transform duration-300 ease-in-out">
+    <div id="shoppingCartBox" class="fixed top-0 right-0 h-full w-96 bg-white shadow-xl z-20 transform translate-x-full transition-transform duration-300 ease-in-out">
       <div class="p-4 relative h-full">
         <div id="closeShoppingCart" class="cursor-pointer z-20 text-slate-500 hover:text-slate-950 absolute top-4 right-4">
           <i class="fa-lg fa far fa-times"></i>
@@ -115,111 +115,48 @@ function initializeNav() {
   
   const footerContainer = document.getElementById("footer");
 
-const footerInnerHTML = `
-  <section class=" container mx-auto pt-20">
-    <div class=" flex item-center justify-self-start font-mono p-5 border-t-2 border-t-slate-950">
+  const footerInnerHTML = `
+    <section class="container mx-auto pt-20">
+      <div class="flex item-center justify-self-start font-mono p-5 border-t-2 border-t-slate-950">
 
-      <!-- location -->
-      <div class=" mr-14 " >
-      	<iframe class="w-[500px] h-[250px] " src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1351.1289414342793!2d98.69154455341364!3d12.46406470198828!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30fbbac4a940b3c5%3A0xfc8423e9db112e26!2sUniversity%20of%20Computer%20Studies%20(Myeik)!5e1!3m2!1sen!2smm!4v1723697090132!5m2!1sen!2smm" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
-
-      <div class=" flex flex-col gap-16">
-
-        <div class="">
-          <p class=" font-semibold text-2xl pb-2 tracking-widest">CONTACTUS</p>
-          <p class=" text-base "><i class="far fa-phone-rotary"></i>+959784444037</p>
-          <p class=" text-base "><i class="far fa-envelope"></i>&nbsp;thu454909@gmail.com</p>
+        <!-- location -->
+        <div class="mr-14">
+          <iframe class="w-[500px] h-[250px]" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1351.1289414342793!2d98.69154455341364!3d12.46406470198828!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30fbbac4a940b3c5%3A0xfc8423e9db112e26!2sUniversity%20of%20Computer%20Studies%20(Myeik)!5e1!3m2!1sen!2smm!4v1723697090132!5m2!1sen!2smm" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
 
-        <div class=" flex gap-16 ">
-          <div class="">
-            <p class=" font-semibold text-2xl pb-2 tracking-widest">ADDRESS</p>
-            <p class=" text-base ">Myeik&nbsp;<i class="far fa-map-marker-alt"></i> ,</p>
-            <p class=" text-base ">Tanintharyi</p>
+        <div class="flex flex-col gap-16">
+          <div>
+            <p class="font-semibold text-2xl pb-2 tracking-widest">CONTACT US</p>
+            <p class="text-base"><i class="far fa-phone-rotary"></i>+959784444037</p>
+            <p class="text-base"><i class="far fa-envelope"></i>&nbsp;thu454909@gmail.com</p>
           </div>
+
+          <div class="flex gap-16">
+            <div>
+              <p class="font-semibold text-2xl pb-2 tracking-widest">ADDRESS</p>
+              <p class="text-base">Myeik&nbsp;<i class="far fa-map-marker-alt"></i>,</p>
+              <p class="text-base">Tanintharyi</p>
+            </div>
+
+            <div>
+              <p class="font-semibold text-2xl pb-2 tracking-widest">OUR SERVICES</p>
+              <p class="text-base">Online Shopping</p>
+              <p class="text-base">Personalized Products</p>
+              <p class="text-base">Exclusive Discounts</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
   
-          <div class="">
-            <p class=" font-semibold text-2xl pb-2 tracking-widest">CONNECT</p>
-            <p class=" text-base "><i class="fab fa-facebook-square"></i>&nbsp;facebook</p>
-            <p class=" text-base "><i class="fab fa-instagram"></i>&nbsp;Instagram</p>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-`;
-
-footerContainer.innerHTML = footerInnerHTML;
-
-  const signUpLink = document.getElementById("signUpLink");
-  const signInLink = document.getElementById('signInLink');
-  const loginForm = document.getElementById("loginForm");
-  const closeLoginForm = document.getElementById("closeLoginForm");
-  const userNameContainer = document.getElementById('userNameContainer');
-  const userNameInput = document.getElementById('userName');
-  const submitBtn = document.getElementById('submitBtn');
-  const headerWel = document.getElementById('headerWel');
+  footerContainer.innerHTML = footerInnerHTML;
+  
+  // Event listener for Shopping Cart icon
   const shoppingCartIcon = document.getElementById('shoppingCartIcon');
   const shoppingCartBox = document.getElementById('shoppingCartBox');
   const closeShoppingCart = document.getElementById('closeShoppingCart');
-  const signOutLink = document.getElementById('signOutLink');
 
-  // Function to validate password
-  function validatePassword(password) {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password);
-  }
-
-  // Event listener for the form submission
-  document.querySelector('form[action="authServlet"]').addEventListener('submit', function(event) {
-    const passwordInput = document.getElementById('password');
-    const password = passwordInput.value;
-
-    if (!validatePassword(password)) {
-      event.preventDefault(); // Prevent form submission
-      alert('Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
-      passwordInput.focus(); // Focus on the password input for correction
-    }
-  });
-
-  // Event listener for Sign Up link
-  if (signUpLink) {
-    signUpLink.addEventListener("click", function() {
-      showLoginForm();
-      userNameContainer.classList.remove("hidden"); 
-      userNameInput.removeAttribute("required"); 
-      submitBtn.textContent = 'SIGN UP'; 
-      headerWel.textContent = 'Welcome to Jewelry Palace';
-    });
-  }
-
-  // Event listener for Sign In link
-  if (signInLink) {
-    signInLink.addEventListener("click", function() {
-      showLoginForm();
-      userNameContainer.classList.add("hidden"); 
-      userNameInput.setAttribute("required", ""); 
-      submitBtn.textContent = 'SIGN IN'; 
-      headerWel.textContent = 'Welcome Back!';
-    });
-  }
-
-  // Show login form
-  function showLoginForm() {
-    loginForm.classList.remove("hidden");
-  }
-
-  // Close login form
-  if (closeLoginForm) {
-    closeLoginForm.addEventListener("click", function() {
-      loginForm.classList.add("hidden");
-    });
-  }
-
-  // Event listener for Shopping Cart icon
   if (shoppingCartIcon) {
     shoppingCartIcon.addEventListener('click', function() {
       renderCartItems(); // Call to render items before showing the cart
@@ -227,60 +164,113 @@ footerContainer.innerHTML = footerInnerHTML;
     });
   }
 
-  // Close Shopping Cart
   if (closeShoppingCart) {
     closeShoppingCart.addEventListener('click', function() {
       shoppingCartBox.style.transform = 'translateX(100%)';
     });
   }
 
-  // Event listener for Sign Out link
+  // Event listener for Sign In
+  const signInLink = document.getElementById('signInLink');
+  const loginForm = document.getElementById('loginForm');
+  const closeLoginForm = document.getElementById('closeLoginForm');
+  const signUpLink = document.getElementById('signUpLink');
+  const submitBtn = document.getElementById('submitBtn');
+
+  if (signInLink) {
+    signInLink.addEventListener('click', function() {
+      loginForm.classList.remove('hidden');
+    });
+  }
+
+  if (closeLoginForm) {
+    closeLoginForm.addEventListener('click', function() {
+      loginForm.classList.add('hidden');
+    });
+  }
+
+  if (signUpLink) {
+    signUpLink.addEventListener('click', function() {
+      loginForm.classList.remove('hidden');
+      document.getElementById('headerWel').textContent = 'Create a new account';
+      submitBtn.textContent = 'SIGN UP';
+    });
+  }
+
+  // Event listener for Sign Out
+  const signOutLink = document.getElementById('signOutLink');
   if (signOutLink) {
-    signOutLink.addEventListener("click", function() {
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("username");
-      // Optionally, redirect to home or refresh page
-      window.location.reload();
+    signOutLink.addEventListener('click', function() {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('username');
+      sessionStorage.removeItem('username');
+      alert('You have been signed out.');
+      location.reload();
     });
   }
 }
 
-// Function to add items to the shopping cart
-function addToCart(item) {
-  const cartItems = JSON.parse(localStorage.getItem('cart')) || []; // Updated local storage key
-  cartItems.push(item);
-  localStorage.setItem('cart', JSON.stringify(cartItems)); // Updated local storage key
-  renderCartItems();
-}
-
 // Render Cart Items in the Shopping Cart
 function renderCartItems() {
-  const cartItems = JSON.parse(localStorage.getItem('cart')) || []; // Updated local storage key
+  const cartItems = JSON.parse(localStorage.getItem('cart')) || []; 
   const cartItemsContainer = document.getElementById('cartItemsContainer');
 
   const cartItemsHTML = cartItems.map(item => `
-    <div class="flex justify-between items-center p-2 border-b">
-      <div>
+    <div class="flex justify-between pr-3 p-2 border-b">
+      <div class="flex">
         <img src="${item.image}" alt="${item.name}" class="w-12 h-12">
-        <span>${item.name}</span>
+        <div class="flex flex-col ml-2 mt-2 text-sm">
+          <span>${item.name}</span>
+          <span>${item.price} MMK</span>
+        </div>
       </div>
-      <div class="flex items-center">
-        <span>${item.price} MMK</span>
-        <i class="fa-lg far fa-times cursor-pointer ml-2" onclick="removeFromCart('${item.name}')"></i>
-      </div>
+      <i class="far fa-times cursor-pointer ml-2" onclick="removeFromCart('${item.name}')"></i>
     </div>
   `).join('');
 
   cartItemsContainer.innerHTML = cartItemsHTML || '<p>No items in the cart.</p>';
+
+  if (cartItems.length > 0) {
+    const buyButtonHTML = `
+      <div class="mt-4 text-right">
+        <button id="buyButton" class="bg-slate-500 text-white py-2 px-4 rounded-md shadow-lg hover:bg-slate-600 transition ease-in-out duration-150">
+          Buy Now
+        </button>
+      </div>
+    `;
+    cartItemsContainer.insertAdjacentHTML('beforeend', buyButtonHTML);
+
+    // Add event listener to the "Buy" button
+    const buyButton = document.getElementById('buyButton');
+    buyButton.addEventListener('click', function() {
+      purchaseItems();
+    });
+  }
 }
 
-// Remove an item from the shopping cart
+// Function to handle the purchase of items
+function purchaseItems() {
+  const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+  if (cartItems.length > 0) {
+    // Example of processing the purchase (e.g., send to server, handle payment, etc.)
+    alert('Thank you for your purchase!');
+
+    // Clear the cart after purchase
+    localStorage.removeItem('cart');
+    renderCartItems();
+  } else {
+    alert('Your cart is empty.');
+  }
+}
+
+// Function to remove an item from the cart
 function removeFromCart(itemName) {
-  const cartItems = JSON.parse(localStorage.getItem('cart')) || []; // Updated local storage key
-  const updatedCartItems = cartItems.filter(item => item.name !== itemName);
-  localStorage.setItem('cart', JSON.stringify(updatedCartItems)); // Updated local storage key
-  renderCartItems(); // Re-render the cart items
+  let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+  cartItems = cartItems.filter(item => item.name !== itemName);
+  localStorage.setItem('cart', JSON.stringify(cartItems));
+  renderCartItems();
 }
 
-// Initialize the navigation bar when the document is ready
-document.addEventListener("DOMContentLoaded", initializeNav);
+// Call the initializeNav function when the page loads
+window.onload = initializeNav;
