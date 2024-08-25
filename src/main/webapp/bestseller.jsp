@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*, java.util.*" %>
+<%
+boolean isLoggedInServer = session.getAttribute("username") != null;
+%>  
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -117,67 +121,85 @@
 <script src="navi.js"></script>
 
 <script>
-    function openModal(productName, productImage, productPrice) {
-        document.getElementById("modalProductName").innerText = productName;
-        document.getElementById("modalImage").src = "./product_image/" + productImage;
-        document.getElementById("modalProductPrice").innerText = productPrice + " kyats";
 
-        const modal = document.getElementById("productModal");
-        modal.classList.remove("hidden");
+// Retrieve the isLoggedIn value from local storage
+const isLoggedInLocalStorage = localStorage.getItem('isLoggedIn') === 'true';
+// Pass the server-side login status to JavaScript
+const isLoggedInServer = <%= isLoggedInServer ? "true" : "false" %> === "true";
+// Combine both server-side and client-side checks
+const isLoggedIn = isLoggedInServer || isLoggedInLocalStorage;
+    
+function openModal(productName, productImage, productPrice) {
+    document.getElementById("modalProductName").innerText = productName;
+    document.getElementById("modalImage").src = "./product_image/" + productImage;
+    document.getElementById("modalProductPrice").innerText = productPrice + " kyats";
 
-        // Add click event to the Add to Wishlist button
-        document.getElementById("addToWishlist").onclick = function() {
+    const modal = document.getElementById("productModal");
+    modal.classList.remove("hidden");
+    
+    // Add click event to the Add to Wishlist button
+    document.getElementById("addToWishlist").onclick = function() {
+        if (isLoggedIn) {
             addToWishlist(productName, productImage, productPrice);
-        };
+        } else {
+            alert('Please sign up first.');
+        }
+    };
 
-        // Add click event to the Add to Cart button
-        document.getElementById("addToCart").onclick = function() {
+    // Add click event to the Add to Cart button
+    document.getElementById("addToCart").onclick = function() {
+        if (isLoggedIn) {
             addToCart(productName, productImage, productPrice);
-        };
-    }
-
-    function addToWishlist(productName, productImage, productPrice) {
-        // Retrieve existing wishlist from local storage
-        let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-
-        // Check if the product is already in the wishlist
-        const exists = wishlist.find(item => item.name === productName);
-        if (!exists) {
-            // Add new product to the wishlist
-            wishlist.push({
-                name: productName,
-                image: productImage,
-                price: productPrice
-            });
-            localStorage.setItem("wishlist", JSON.stringify(wishlist));
-            alert(productName + " has been added to your wishlist!");
         } else {
-            alert(productName + " is already in your wishlist.");
+            alert('Please sign up first.');
         }
+    };
+}
+
+function addToWishlist(productName, productImage, productPrice) {
+    // Retrieve existing wishlist from local storage
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+    // Check if the product is already in the wishlist
+    const exists = wishlist.find(item => item.name === productName);
+    if (!exists) {
+        // Add new product to the wishlist
+        wishlist.push({
+            name: productName,
+            image: productImage,
+            price: productPrice
+        });
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        alert(productName + " has been added to your wishlist!");
+    } else {
+        alert(productName + " is already in your wishlist.");
     }
+}
 
-    function addToCart(productName, productImage, productPrice) {
-        // Retrieve existing cart from local storage
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+function addToCart(productName, productImage, productPrice) {
+    // Retrieve existing cart from local storage
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-        // Check if the product is already in the cart
-        const exists = cart.find(item => item.name === productName);
-        if (!exists) {
-            // Add new product to the cart
-            cart.push({
-                name: productName,
-                image: productImage,
-                price: productPrice
-            });
-            localStorage.setItem("cart", JSON.stringify(cart));
-            alert(productName + " has been added to your cart!");
-        } else {
-            alert(productName + " is already in your cart.");
-        }
+    // Check if the product is already in the cart
+    const exists = cart.find(item => item.name === productName);
+    if (!exists) {
+        // Add new product to the cart
+        cart.push({
+            name: productName,
+            image: productImage,
+            price: productPrice
+        });
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert(productName + " has been added to your cart!");
+    } else {
+        alert(productName + " is already in your cart.");
     }
+}
 
-    document.getElementById("closeModal").addEventListener("click", function() {
-        document.getElementById("productModal").classList.add("hidden");
-    });
+document.getElementById("closeModal").addEventListener("click", function() {
+    document.getElementById("productModal").classList.add("hidden");
+});
+
+
 </script>
 </html>

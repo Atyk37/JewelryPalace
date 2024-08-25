@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*" %>
+<%
+boolean isLoggedInServer = session.getAttribute("username") != null;
+%>  
 <!DOCTYPE html>
 <html>
 <head>
@@ -129,6 +132,13 @@
     <script src="home.js"></script>
     
     <script>
+    // Retrieve the isLoggedIn value from local storage
+    const isLoggedInLocalStorage = localStorage.getItem('isLoggedIn') === 'true';
+    // Pass the server-side login status to JavaScript
+    const isLoggedInServer = <%= isLoggedInServer ? "true" : "false" %> === "true";
+    // Combine both server-side and client-side checks
+    const isLoggedIn = isLoggedInServer || isLoggedInLocalStorage;
+    
     function openModal(productName, productImage, productPrice) {
         document.getElementById("modalProductName").innerText = productName;
         document.getElementById("modalImage").src = "./product_image/"+ productImage;
@@ -139,13 +149,22 @@
 
         // Add click event to the Add to Wishlist button
         document.getElementById("addToWishlist").onclick = function() {
-            addToWishlist(productName, productImage, productPrice);
+            if (isLoggedIn) {
+                addToWishlist(productName, productImage, productPrice);
+            } else {
+                alert('Please sign up first.');
+            }
         };
 
         // Add click event to the Add to Cart button
         document.getElementById("addToCart").onclick = function() {
-            addToCart(productName, productImage, productPrice);
+            if (isLoggedIn) {
+                addToCart(productName, productImage, productPrice);
+            } else {
+                alert('Please sign up first.');
+            }
         };
+
     }
 
     function addToWishlist(productName, productImage, productPrice) {
