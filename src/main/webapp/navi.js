@@ -120,7 +120,7 @@ function initializeNav() {
 	    </div>
 	    <h2 class="text-xl font-bold mb-4">Receipt</h2>
 	    <div id="receiptContent">
-	      <!-- Receipt details will be populated here -->
+	      <!-- Receipt details, including the date, will be populated here -->
 	    </div>
 	    <button id="confirmPurchase" class="mt-4 w-full bg-slate-500 text-white py-2 rounded-md hover:bg-slate-600">
 	      Confirm Purchase
@@ -383,8 +383,16 @@ function purchaseItems() {
 // Function to populate the receipt modal with purchased items
 function populateReceipt(cartItems) {
   const receiptContent = document.getElementById('receiptContent');
-  const totalCost = cartItems.reduce((total, item) => total + parseFloat(item.price) || 0, 0);
-
+  const totalCost = cartItems.reduce((total, item) => total + parseFloat(item.price) || 0, 0); 
+	
+  // Get the current date
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString('en-GB', { // format: DD/MM/YYYY
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+	
   const receiptHTML = cartItems.map(item => `
     <div class="flex justify-between p-2 border-b">
       <span>${item.name}</span>
@@ -397,8 +405,15 @@ function populateReceipt(cartItems) {
       <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
     </div>
   `;
+  
+  // Add the date to the top of the receipt
+  const dateHTML = `
+    <div class="mb-4 text-right text-sm font-semibold">
+      <span>Date: ${formattedDate}</span>
+    </div>
+  `;
 
-  receiptContent.innerHTML = `${receiptHTML}${totalCostHTML}`;
+  receiptContent.innerHTML = `${dateHTML}${receiptHTML}${totalCostHTML}`;
   
     // Add this code after rendering the receipt modal
 	document.getElementById('confirmPurchase').addEventListener('click', function() {
