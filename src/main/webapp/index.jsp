@@ -62,8 +62,10 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
                                 String productId = rs.getString("name");
                                 String productImage = rs.getString("image");
                                 String productPrice = rs.getString("price");
+                                int productQuantity = rs.getInt("quantity");
+
                     %>
-                                <div class="w-80 h-96 relative mb-7 inline-block" onclick="openModal('<%= productId %>', '<%= productImage %>', '<%= productPrice %>')">
+                                <div class="w-80 h-96 relative mb-7 inline-block" onclick="openModal('<%= productId %>', '<%= productImage %>', '<%= productPrice %>', '<%= productQuantity %>')">
                                     <div>
                                         <img class="w-80 h-96 object-cover" src="./product_image/<%= productImage %>" alt="<%= productId %>">
                                     </div>
@@ -104,10 +106,10 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
                         <p id="modalProductName" class="text-2xl font-bold text-slate-800"></p>
                         <p id="modalProductPrice" class="text-xl text-slate-600 mt-1"></p>
                         <p class="mt-8 text-slate-700">
-                            These exquisite earrings are crafted with precision and elegance. Made from high-quality materials, they feature a stunning design that adds a touch of sophistication to any outfit. Perfect for special occasions or as a luxurious gift.
+                            These exquisite stuff are crafted with precision and elegance. Made from high-quality materials, they feature a stunning design that adds a touch of sophistication to any outfit. Perfect for special occasions or as a luxurious gift.
                         </p>
                     </div>
-
+					<div id="modalStockStatus" class=" " style="display: inline-block;"></div>
                     <div class="flex justify-between ">
                         <button id="addToWishlist" class="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
                             Add to Wishlist
@@ -120,6 +122,8 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
             </div>
         </div>
     </div>
+
+
 
     <!-- footer section  -->
     <div id="footer"></div>
@@ -139,10 +143,17 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
     // Combine both server-side and client-side checks
     const isLoggedIn = isLoggedInServer || isLoggedInLocalStorage;
     
-    function openModal(productName, productImage, productPrice) {
+    function openModal(productName, productImage, productPrice, productQuantity) {
         document.getElementById("modalProductName").innerText = productName;
         document.getElementById("modalImage").src = "./product_image/"+ productImage;
         document.getElementById("modalProductPrice").innerText = productPrice + " kyats";
+        
+        const stockStatusElement = document.getElementById("modalStockStatus");
+        const stockStatus = productQuantity > 0 ? "In Stock" : "Out of Stock";
+        stockStatusElement.innerText = stockStatus;
+
+        // Set text color based on stock status
+        stockStatusElement.className = productQuantity > 0 ? "text-lg font-semibold mt-2 p-2 text-blue-800" : "text-lg font-semibold mt-2 p-2 text-red-800";
 
         const modal = document.getElementById("productModal");
         modal.classList.remove("hidden");
@@ -193,18 +204,17 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
 
         // Check if the product is already in the cart
         const exists = cart.find(item => item.name === productName);
-        if (exists) {
-            exists.quantity += 1; // Update quantity
-            alert(productName + "'s quantity has been updated in your cart!");
-        } else {
+        if (!exists) {
             // Add new product to the cart
             cart.push({
                 name: productName,
                 image: productImage,
-                price: productPrice,
-                quantity: 1 // Initialize quantity
+                price: productPrice
             });
+            localStorage.setItem("cart", JSON.stringify(cart));
             alert(productName + " has been added to your cart!");
+        } else {
+            alert(productName + " is already in your cart.");
         }
         localStorage.setItem("cart", JSON.stringify(cart));
     }
