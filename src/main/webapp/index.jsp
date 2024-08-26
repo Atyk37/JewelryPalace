@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="java.util.*" %>
 <%
 boolean isLoggedInServer = session.getAttribute("username") != null;
 %>  
+<%@ page import="Submit.Review" %> <!-- Adjust this line -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,6 +31,32 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
     .scrollbar-hidden {
         -ms-overflow-style: none;
     }
+    
+    /* Custom Scroll bar Style */
+
+	::-webkit-scrollbar {
+	  width: 12px;
+	}
+	
+	::-webkit-scrollbar-thumb {
+	  background-color: #888;
+	  border-radius: 10px;
+	}
+	
+	::-webkit-scrollbar-thumb:hover {
+	  background-color: #555;
+	}
+	
+	::-webkit-scrollbar-track {
+	  background: #f1f1f1;
+	}
+	
+	/* Firefox scrollbar styles */
+	* {
+	  scrollbar-width:thin;
+	  scrollbar-color: var(--secondary) #f1f1f1;
+	}
+	
 </style>
 <body>
     <!-- nav bar & loginForm -->
@@ -109,6 +137,7 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
                             These exquisite stuff are crafted with precision and elegance. Made from high-quality materials, they feature a stunning design that adds a touch of sophistication to any outfit. Perfect for special occasions or as a luxurious gift.
                         </p>
                     </div>
+
 					<div id="modalStockStatus" class=" " style="display: inline-block;"></div>
                     <div class="flex justify-between ">
                         <button id="addToWishlist" class="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
@@ -122,8 +151,56 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
             </div>
         </div>
     </div>
-
-
+    
+	<!-- Review Container -->
+	<section class="py-10 px-6 bg-gray-100">
+	    <h2 class="text-5xl font-semibold font-mono text-center mb-6">What Our Clients Say</h2>
+	    <div class="flex justify-between">
+	        <div class="flex flex-col justify-center">
+	            <div id="reviewsContainer" class=" mb-6 rounded-sm max-w-[800px] overflow-y-auto max-h-64">
+	                <!-- Existing reviews will be displayed here -->
+				    <%
+				        @SuppressWarnings("unchecked") // Suppress unchecked cast warning
+				        List<Review> reviews = (List<Review>) request.getAttribute("reviews");
+				        if (reviews != null) {
+				            for (Review review : reviews) {
+				    %>
+				        <div class="flex flex-col border border-gray-300 max-w-[800px] rounded-sm p-4 mb-4 shadow-sm relative ">
+				            <div class=" flex justify-between items-center">
+				                <p class="font-semibold text-xl"><%= review.getUserName() %></p>
+				                <p class="text-slate-950 font-semibold text-sm "><%= review.getCreatedAt() != null ? review.getCreatedAt().toString() : "No date available" %></p> <!-- Display created_at -->
+				            </div>
+				            <div class="">
+				            	<p class="text-slate-800 text-md"><%= review.getContent() %></p>
+				            </div>
+				            <div class="absolute bottom-1 right-1">
+				                <form action="SubmitReviewServlet" method="POST" style="display:inline;">
+				                    <input type="hidden" name="reviewId" value="<%= review.getId() %>">
+				                    <button type="submit" name="action" value="delete" class="px-2 py-0 bg-red-500 text-white rounded-sm mb-0">Delete</button>
+				                </form>
+				            </div>
+				        </div>
+				    <%
+				            }
+				        } else {
+				    %>
+				        <p>No reviews available.</p>
+				    <%
+				        }
+				    %>
+	            </div>
+	        </div>
+	        
+	        <div class="w-full md:w-1/2">
+	            <form id="reviewForm" action="SubmitReviewServlet" method="POST" class="flex flex-col">
+	                <textarea name="reviewContent" id="reviewText" rows="4" class="border border-slate-300 rounded-sm p-3 mb-4 min-h-48 focus:outline-none focus:ring-2 focus:ring-slate-500" placeholder="Write your review here..." required></textarea>
+	                <button type="submit" class="px-4 py-2 bg-slate-600 text-white font-semibold rounded-sm shadow hover:bg-slate-500 transition duration-200">
+	                    Submit Review
+	                </button>
+	            </form>
+	        </div>
+	    </div>
+	</section>
 
     <!-- footer section  -->
     <div id="footer"></div>
@@ -136,6 +213,9 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
     <script src="home.js"></script>
     
     <script>
+    
+
+    
     // Retrieve the isLoggedIn value from local storage
     const isLoggedInLocalStorage = localStorage.getItem('isLoggedIn') === 'true';
     // Pass the server-side login status to JavaScript

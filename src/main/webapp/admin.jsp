@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="java.sql.Connection, java.sql.DriverManager, java.sql.PreparedStatement, java.sql.ResultSet, java.sql.SQLException" %>
+<%@ page import="java.sql.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,21 +13,22 @@
 
     <!-- Admin Panel Sidebar -->
     <div class="flex">
-        <div class="w-1/5 bg-gray-800 text-white h-screen p-4">
+    
+        <div class="w-1/5 bg-gray-800 text-white h-screen fixed p-4">
             <div class="text-2xl font-bold mb-6">Admin Dashboard</div>
             <ul class="space-y-4">
                 <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('dashboard')">Dashboard</a></li>
+                <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('userList')">Users</a></li>
+                <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('categories')">Products</a></li>
                 <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('addProduct')">Add Products</a></li>
                 <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('deleteProduct')">Delete Products</a></li>
-                <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded">Categories</a></li>
-				<li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('userList')">Users</a></li>
                 <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded">Reports</a></li>
                 <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded">Settings</a></li>
             </ul>
         </div>
 
         <!-- Main Content -->
-        <div class="w-4/5 p-10">
+        <div class="w-4/5 p-10 ml-80">
         
        		<!-- Dashboard Content (Optional) -->
             <section id="dashboard">
@@ -115,9 +116,60 @@
                     </tbody>
                 </table>
             </section>
-
+            
+            <!-- Categories Container -->
+			<section id="categories" class="hidden">
+			    <h1 class="text-4xl font-bold mb-4">Categories</h1>
+			    <table class="min-w-full bg-white border border-gray-200">
+			        <thead>
+			            <tr>
+			                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">ID</th>
+			                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Name</th>
+			                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Category</th>
+			                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Price</th>
+			                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Quantity</th>
+			            </tr>
+			        </thead>
+			        <tbody>
+			            <%
+			                Connection conn = null;
+			                Statement stmt = null;
+			                ResultSet rs = null;
+			
+			                try {
+			                    Class.forName("com.mysql.cj.jdbc.Driver");
+			                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jewelrypalace", "root", "root");
+			
+			                    stmt = conn.createStatement();
+			                    rs = stmt.executeQuery("SELECT id, name, category, price, quantity FROM product");
+			
+			                    // Display data
+			                    while (rs.next()) {
+			            %>
+			                <tr>
+			                	<td class="px-4 py-2 border-b"><%= rs.getString("id") %></td>
+			                    <td class="px-4 py-2 border-b"><%= rs.getString("name") %></td>
+			                    <td class="px-4 py-2 border-b"><%= rs.getString("category") %></td>
+			                    <td class="px-4 py-2 border-b"><%= rs.getDouble("price") %></td>
+			                    <td class="px-4 py-2 border-b"><%= rs.getInt("quantity") %></td>
+			                </tr>
+			            <%
+			                    }
+			                } catch (Exception e) {
+			                    out.println("<tr><td colspan='4' class='px-4 py-2 text-center border-b'>Error: " + e.getMessage() + "</td></tr>");
+			                    e.printStackTrace();
+			                } finally {
+			                    try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+			                    try { if (stmt != null) stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+			                    try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+			                }
+			            %>
+			        </tbody>
+			    </table>
+			</section>
 
         </div>
+        
     </div>
 
     <script src="navi.js"></script>
@@ -128,6 +180,7 @@
             document.getElementById('deleteProduct').classList.add('hidden');
             document.getElementById('dashboard').classList.add('hidden');
             document.getElementById('userList').classList.add('hidden');
+            document.getElementById('categories').classList.add('hidden');
             
             document.getElementById(containerId).classList.remove('hidden');
         }
