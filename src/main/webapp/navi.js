@@ -184,32 +184,6 @@ const footerInnerHTML = `
 
 footerContainer.innerHTML = footerInnerHTML;
 
-document.getElementById("confirmPurchase").addEventListener("click", function() {
-    // Capture the receipt details
-    const paymentMethod = document.getElementById("paymentMethod").value;
-    const paymentAccountPhone = document.getElementById("paymentAccountPhone").value;
-
-    // Send the data to the server using fetch API
-    fetch('processReceipt.jsp', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `paymentMethod=${encodeURIComponent(paymentMethod)}&paymentAccountPhone=${encodeURIComponent(paymentAccountPhone)}`
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.text();
-    })
-    .then(() => {
-        // Redirect to the receipt JSP page
-        window.location.href = 'receipt.jsp';
-    })
-    .catch(error => console.error('Error:', error));
-});
-
   const signUpLink = document.getElementById("signUpLink");
   const signInLink = document.getElementById('signInLink');
   const loginForm = document.getElementById("loginForm");
@@ -292,6 +266,11 @@ document.querySelector('form[action="authServlet"]').addEventListener('submit', 
       shoppingCartBox.style.transform = 'translateX(100%)';
     });
   }
+  
+  
+  
+  
+  
 }
 
 // Function to show the login form
@@ -328,11 +307,13 @@ function handleSignOut() {
 
 document.addEventListener('DOMContentLoaded', initializeNav);
 
+// --------------------------------------------------------------------------------
+
+// Function to update the cart count displayed on the page
 function updateCartCount() {
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
     const cartCountElement = document.getElementById('cartCount');
     
-    // Check if there are items in the cart
     if (cartItems.length > 0) {
         cartCountElement.textContent = cartItems.length; // Update count
         cartCountElement.classList.remove('hidden'); // Show the cart count
@@ -342,136 +323,160 @@ function updateCartCount() {
     }
 }
 
-// Render Cart Items in the Shopping Cart
+// Function to render cart items in the shopping cart
 function renderCartItems() {
-  const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-  const cartItemsContainer = document.getElementById('cartItemsContainer');
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItemsContainer = document.getElementById('cartItemsContainer');
 
-  // Calculate the total cost of items in the cart
-  const totalCost = cartItems.reduce((total, item) => {
-    console.log(`Item: ${item.name}, Price: ${item.price}`); // Debugging log
-    return total + parseFloat(item.price) || 0; // Ensure we parse the price correctly
-  }, 0);
+    // Calculate total cost
+    const totalCost = cartItems.reduce((total, item) => {
+        const itemPrice = parseFloat(item.price) || 0; // Ensure price is a number
+        const itemQuantity = item.quantity || 1; // Default to 1 if quantity is not set
+        return total + (itemPrice * itemQuantity); // Calculate total cost
+    }, 0);
 
-  const cartItemsHTML = cartItems.map(item => `
-    <div class="flex justify-between pr-3 p-2 border-b">
-      <div class="flex">
-        <img src="./product_image/${item.image}" alt="${item.name}" class="w-12 h-12">
-        <div class="flex flex-col ml-2 mt-2 text-sm">
-          <span>${item.name}</span>
-          <span>${item.price} MMK</span>
+    // Generate cart items HTML
+    const cartItemsHTML = cartItems.map(item => `
+        <div class="flex justify-between pr-3 p-2 border-b">
+            <div class="flex">
+                <img src="./product_image/${item.image}" alt="${item.name}" class="w-12 h-12">
+                <div class="flex flex-col ml-2 mt-2 text-sm">
+                    <span>${item.name}</span>
+                    <span>${item.price} MMK</span>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <button class="px-2" onclick="changeQuantity('${item.name}', -1)">-</button>
+                <span class="mx-2">${item.quantity || 1}</span>
+                <button class="px-2" onclick="changeQuantity('${item.name}', 1)">+</button>
+            </div>
+            <i class="far fa-times cursor-pointer ml-2" onclick="removeFromCart('${item.name}')"></i>
         </div>
-      </div>
-      <i class="far fa-times cursor-pointer ml-2" onclick="removeFromCart('${item.name}')"></i>
-    </div>
-  `).join('');
+    `).join('');
 
-  cartItemsContainer.innerHTML = cartItemsHTML || '<p>No items in the cart.</p>';
+    cartItemsContainer.innerHTML = cartItemsHTML || '<p>No items in the cart.</p>';
 
-  // Display total cost if there are items in the cart
-  if (cartItems.length > 0) {
-    const totalCostHTML = `
-      <div class="mt-4 text-right text-sm font-semibold">
-        <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
-      </div>
-    `;
-    cartItemsContainer.insertAdjacentHTML('beforeend', totalCostHTML);
+    // Display total cost and Buy button if there are items in the cart
+    if (cartItems.length > 0) {
+        const totalCostHTML = `
+            <div class="mt-4 text-right text-sm font-semibold">
+                <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
+            </div>
+            <div class="mt-4 text-right mb-32">
+                <button id="buy-icon" class="bg-slate-500 text-white py-2 px-4 rounded-md shadow-lg hover:bg-slate-600 transition ease-in-out duration-150">
+                    Buy Now
+                </button>
+            </div>
+        `;
+        cartItemsContainer.insertAdjacentHTML('beforeend', totalCostHTML);
 
-    const buyButtonHTML = `
-      <div class="mt-4 text-right mb-32 ">
-        <button id="buy-icon" class="bg-slate-500 text-white py-2 px-4 rounded-md shadow-lg hover:bg-slate-600 transition ease-in-out duration-150">
-          Buy Now
-        </button>
-      </div>
-    `;
-    cartItemsContainer.insertAdjacentHTML('beforeend', buyButtonHTML);
+        // Add event listener to the "Buy" button
+        document.getElementById('buy-icon').addEventListener('click', purchaseItems);
+    }
 
-    // Add event listener to the "Buy" button
-    const buyButton = document.getElementById('buy-icon');
-    buyButton.addEventListener('click', function() {
-      purchaseItems();
-    });
-  }
+    // Update cart count
+    updateCartCount();
+}
 
-  // Update the cart count after rendering
-  updateCartCount();
+// Function to change the quantity of an item in the cart
+function changeQuantity(itemName, change) {
+    let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const itemIndex = cartItems.findIndex(item => item.name === itemName);
+
+    if (itemIndex > -1) {
+        cartItems[itemIndex].quantity += change;
+
+        // Ensure quantity does not drop below 1
+        if (cartItems[itemIndex].quantity < 1) {
+            removeFromCart(itemName);
+        } else {
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+            renderCartItems(); // Re-render cart items
+        }
+    }
 }
 
 // Function to handle the purchase of items
 function purchaseItems() {
-  const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
-  if (cartItems.length > 0) {
-    // Populate receipt content
-    populateReceipt(cartItems);
+    if (cartItems.length > 0) {
+        populateReceipt(cartItems);
+        document.getElementById('receiptModal').classList.remove('hidden'); // Show the receipt modal
 
-    // Show the receipt modal
-    document.getElementById('receiptModal').classList.remove('hidden');
-
-    // Clear the cart after purchase
-    localStorage.removeItem('cart');
-    renderCartItems();
-  } else {
-    alert('Your cart is empty.');
-  }
+        // Clear the cart after purchase
+        localStorage.removeItem('cart');
+        renderCartItems();
+    } else {
+        alert('Your cart is empty.');
+    }
 }
-
 
 // Function to populate the receipt modal with purchased items
 function populateReceipt(cartItems) {
-  const receiptContent = document.getElementById('receiptContent');
-  const totalCost = cartItems.reduce((total, item) => total + parseFloat(item.price) || 0, 0); 
-	
-  // Get the current date
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString('en-GB', { // format: DD/MM/YYYY
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-	
-  const receiptHTML = cartItems.map(item => `
-    <div class="flex justify-between p-2 border-b">
-      <span>${item.name}</span>
-      <span>${item.price} MMK</span>
-    </div>
-  `).join('');
+    const receiptContent = document.getElementById('receiptContent');
+    const totalCost = cartItems.reduce((total, item) => {
+        const itemPrice = parseFloat(item.price) || 0; // Ensure price is a number
+        const itemQuantity = item.quantity || 1; // Default to 1 if quantity is not set
+        return total + (itemPrice * itemQuantity); // Calculate total cost
+    }, 0); 
 
-  const totalCostHTML = `
-    <div class="mt-4 text-right text-sm font-semibold">
-      <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
-    </div>
-  `;
-  
-  // Add the date to the top of the receipt
-  const dateHTML = `
-    <div class="mb-4 text-right text-sm font-semibold">
-      <span>Date: ${formattedDate}</span>
-    </div>
-  `;
-
-  receiptContent.innerHTML = `${dateHTML}${receiptHTML}${totalCostHTML}`;
-  
-    // Add this code after rendering the receipt modal
-	document.getElementById('confirmPurchase').addEventListener('click', function() {
-	  // Handle the purchase confirmation here
-	  alert('Purchase confirmed!'); // Placeholder action
-	  document.getElementById('receiptModal').classList.add('hidden'); // Close the receipt modal
-	});
+    // Get the current date
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-GB', { 
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
 	
-	// Ensure the close button also closes the modal
-	document.getElementById('closeReceiptModal').addEventListener('click', function() {
-	  document.getElementById('receiptModal').classList.add('hidden');
-	});
+    const receiptHTML = cartItems.map(item => {
+        const itemPrice = parseFloat(item.price) || 0; // Ensure price is a number
+        const itemQuantity = item.quantity || 1; // Default to 1 if quantity is not set
+        return `
+            <div class="flex justify-between p-2 border-b">
+                <span>${item.name}</span>
+                <span>${(itemPrice * itemQuantity).toFixed(2)} MMK</span>
+            </div>
+        `;
+    }).join('');
+
+    const totalCostHTML = `
+        <div class="mt-4 text-right text-sm font-semibold">
+            <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
+        </div>
+    `;
+  
+    const dateHTML = `
+        <div class="mb-4 text-right text-sm font-semibold">
+            <span>Date: ${formattedDate}</span>
+        </div>
+    `;
+
+    receiptContent.innerHTML = `${dateHTML}${receiptHTML}${totalCostHTML}`;
+    
+    // Add event listeners for receipt modal actions
+    document.getElementById('confirmPurchase').addEventListener('click', function() {
+        alert('Purchase confirmed!'); // Placeholder action
+        document.getElementById('receiptModal').classList.add('hidden'); // Close the receipt modal
+    });
+
+    document.getElementById('closeReceiptModal').addEventListener('click', function() {
+        document.getElementById('receiptModal').classList.add('hidden');
+    });
 }
 
 // Function to remove an item from the cart
 function removeFromCart(itemName) {
-  let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-  cartItems = cartItems.filter(item => item.name !== itemName);
-  localStorage.setItem('cart', JSON.stringify(cartItems));
-  renderCartItems();
+    let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    cartItems = cartItems.filter(item => item.name !== itemName);
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+    renderCartItems();
 }
+
+// Initial call to render cart items when the page loads
+renderCartItems();
+
+
 
 // Call the initializeNav function when the page loads
 window.onload = initializeNav;
