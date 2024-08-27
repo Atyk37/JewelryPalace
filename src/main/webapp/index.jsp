@@ -122,7 +122,7 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
     </section>
 
     <!-- Modal for product details -->
-    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
+    <div id="productModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center z-10">
         <div class="bg-white rounded-sm shadow-lg p-6 max-w-4xl mx-auto">
             <span id="closeModal" class="close cursor-pointer float-right">
                 <i class="fa-lg fa far fa-times"></i>
@@ -158,6 +158,7 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
 	    <div class="flex justify-between">
 	        <div class="flex flex-col justify-center">
 	            <div id="reviewsContainer" class=" mb-6 rounded-sm max-w-[800px] overflow-y-auto max-h-64">
+	            		 
 	                <!-- Existing reviews will be displayed here -->
 				    <%
 				        @SuppressWarnings("unchecked") // Suppress unchecked cast warning
@@ -184,10 +185,46 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
 				            }
 				        } else {
 				    %>
-				        <p>No reviews available.</p>
+				    	<!-- <p>No reviews available.</p> -->
 				    <%
 				        }
 				    %>
+				    
+				    <div class="flex flex-col border border-gray-300 max-w-[800px] rounded-sm p-4 mb-4 shadow-sm relative ">
+				            <div class=" flex justify-between items-center">
+				                <p class="font-semibold text-xl">Aung Thura Kyaw</p>
+				                <p class="text-slate-950 font-semibold text-sm ">2024-08-26 20:57:45.0</p> <!-- Display created_at -->
+				            </div>
+				            <div class="">
+				            	<p class="text-slate-800 text-md">
+				            		I purchased the diamond pendant for my wife, and she absolutely loves it! The craftsmanship is exquisite, and it sparkles beautifully in any light. Highly recommend this piece for anyone looking to add a touch of elegance to their collection.
+				            	</p>
+				            </div>
+				            <div class="absolute bottom-1 right-1">
+				                <form action="SubmitReviewServlet" method="POST" style="display:inline;">
+				                    <input type="hidden" name="reviewId" value="">
+				                    <button type="submit" name="action" value="delete" class="px-2 py-0 bg-red-500 text-white rounded-sm mb-0">Delete</button>
+				                </form>
+				            </div>
+				        </div>
+				        <div class="flex flex-col border border-gray-300 max-w-[800px] rounded-sm p-4 mb-4 shadow-sm relative ">
+				            <div class=" flex justify-between items-center">
+				                <p class="font-semibold text-xl">Aung Thura Kyaw</p>
+				                <p class="text-slate-950 font-semibold text-sm ">2024-08-27 18:24:33.0</p> <!-- Display created_at -->
+				            </div>
+				            <div class="">
+				            	<p class="text-slate-800 text-md">
+									"This ring is stunning! The design is unique, and I've received countless compliments every time I wear it. It truly stands out among my other jewelry pieces. The quality is fantastic, and I couldn't be happier with my purchase!"
+				            	</p>
+				            </div>
+				            <div class="absolute bottom-1 right-1">
+				                <form action="SubmitReviewServlet" method="POST" style="display:inline;">
+				                    <input type="hidden" name="reviewId" value="">
+				                    <button type="submit" name="action" value="delete" class="px-2 py-0 bg-red-500 text-white rounded-sm mb-0">Delete</button>
+				                </form>
+				            </div>
+				        </div>
+				    
 	            </div>
 	        </div>
 	        
@@ -213,8 +250,6 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
     <script src="home.js"></script>
     
     <script>
-    
-
     
     // Retrieve the isLoggedIn value from local storage
     const isLoggedInLocalStorage = localStorage.getItem('isLoggedIn') === 'true';
@@ -255,7 +290,6 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
                 alert('Please sign up first.');
             }
         };
-
     }
 
     function addToWishlist(productName, productImage, productPrice) {

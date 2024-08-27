@@ -122,6 +122,17 @@ function initializeNav() {
 	    <div id="receiptContent">
 	      <!-- Receipt details, including the date, will be populated here -->
 	    </div>
+	    <!-- Payment Method Section -->
+	    <div class="mt-4">
+	      <h3 class="text-md font-semibold mb-2">Payment Method</h3>
+	      <select id="paymentMethod" class="border rounded-sm w-full p-2">
+	        <option value="KBZ Pay">KBZ Pay</option>
+	        <option value="AYA Pay">AYA Pay</option>
+	        <option value="WAVE Pay">WAVE Pay</option>
+	      </select>
+	    <!-- Phone Number Input Section -->
+	      <input type="text" id="paymentAccountPhone" placeholder="Enter payment account phone number" class=" my-2 border rounded-sm w-full p-2" />
+	    </div>
 	    <button id="confirmPurchase" class="mt-4 w-full bg-slate-500 text-white py-2 rounded-md hover:bg-slate-600">
 	      Confirm Purchase
 	    </button>
@@ -172,6 +183,32 @@ const footerInnerHTML = `
 `;
 
 footerContainer.innerHTML = footerInnerHTML;
+
+document.getElementById("confirmPurchase").addEventListener("click", function() {
+    // Capture the receipt details
+    const paymentMethod = document.getElementById("paymentMethod").value;
+    const paymentAccountPhone = document.getElementById("paymentAccountPhone").value;
+
+    // Send the data to the server using fetch API
+    fetch('processReceipt.jsp', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `paymentMethod=${encodeURIComponent(paymentMethod)}&paymentAccountPhone=${encodeURIComponent(paymentAccountPhone)}`
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(() => {
+        // Redirect to the receipt JSP page
+        window.location.href = 'receipt.jsp';
+    })
+    .catch(error => console.error('Error:', error));
+});
 
   const signUpLink = document.getElementById("signUpLink");
   const signInLink = document.getElementById('signInLink');

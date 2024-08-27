@@ -1,11 +1,12 @@
 package Submit;
-import java.sql.Timestamp; // Import the Timestamp class
+
+import java.sql.Timestamp;
 
 public class Review {
     private int id;
     private String userName;
     private String content;
-    private Timestamp createdAt; // Add this field
+    private Timestamp createdAt; // Timestamp field
 
     // Getters and Setters
     public int getId() {
