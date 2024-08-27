@@ -8,6 +8,7 @@
 <meta charset="ISO-8859-1">
 <title>Jewelry Palace</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 <link rel="stylesheet" href="fontawesomepro/css/all.min.css">
 <link rel="icon" href="./logo/logo7.png">
 <script>

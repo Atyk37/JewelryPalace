@@ -7,6 +7,7 @@
     <title>Jewelry Palace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="fontawesomepro/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     <link rel="icon" href="./logo/logo7.png">
 </head>
 <body>
@@ -54,7 +55,7 @@
                                     String productImage = rs.getString("image");
                                     String productPrice = rs.getString("price");
                 %>
-                                    <div class="w-80 h-96 relative mb-7 inline-block cursor-pointer" data-product="<%= productName %>" onclick="openModal('<%= productName %>', '<%= productImage %>', '<%= productPrice %> kyats')">
+                                    <div class="w-80 h-96 relative mb-7 inline-block cursor-pointer" data-product="<%= productName %>" onclick="openModal('<%= productName %>', '<%= productImage %>', '<%= productPrice %>')">
                                         <div>
                                             <img class="w-80 h-96 object-cover" src="./product_image/<%= productImage %>" alt="<%= productName %>">
                                         </div>

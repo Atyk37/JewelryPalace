@@ -114,29 +114,18 @@ function initializeNav() {
 	</div>
 	
 	<div id="receiptModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-30">
-	  <div class="bg-white p-6 rounded shadow-lg w-1/3 relative">
-	    <div id="closeReceiptModal" class="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-600">
-	      <i class="fa-lg fa far fa-times"></i>
+	    <div class="bg-white p-6 rounded shadow-lg w-1/3 relative">
+	        <div id="closeReceiptModal" class="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-600">
+	            <i class="fa-lg fa far fa-times"></i>
+	        </div>
+	        <h2 class="text-xl font-bold mb-4">Receipt</h2>
+	        <div id="receiptContent">
+	            <!-- Receipt details will be populated here -->
+	        </div>
+	        <button id="confirmPurchase" class="mt-4 w-full bg-slate-500 text-white py-2 rounded-md hover:bg-slate-600">
+				Save as Image
+	        </button>
 	    </div>
-	    <h2 class="text-xl font-bold mb-4">Receipt</h2>
-	    <div id="receiptContent">
-	      <!-- Receipt details, including the date, will be populated here -->
-	    </div>
-	    <!-- Payment Method Section -->
-	    <div class="mt-4">
-	      <h3 class="text-md font-semibold mb-2">Payment Method</h3>
-	      <select id="paymentMethod" class="border rounded-sm w-full p-2">
-	        <option value="KBZ Pay">KBZ Pay</option>
-	        <option value="AYA Pay">AYA Pay</option>
-	        <option value="WAVE Pay">WAVE Pay</option>
-	      </select>
-	    <!-- Phone Number Input Section -->
-	      <input type="text" id="paymentAccountPhone" placeholder="Enter payment account phone number" class=" my-2 border rounded-sm w-full p-2" />
-	    </div>
-	    <button id="confirmPurchase" class="mt-4 w-full bg-slate-500 text-white py-2 rounded-md hover:bg-slate-600">
-	      Confirm Purchase
-	    </button>
-	  </div>
 	</div>
 
   `;
@@ -183,6 +172,8 @@ const footerInnerHTML = `
 `;
 
 footerContainer.innerHTML = footerInnerHTML;
+
+
 
   const signUpLink = document.getElementById("signUpLink");
   const signInLink = document.getElementById('signInLink');
@@ -265,13 +256,10 @@ document.querySelector('form[action="authServlet"]').addEventListener('submit', 
     closeShoppingCart.addEventListener('click', function () {
       shoppingCartBox.style.transform = 'translateX(100%)';
     });
-  }
-  
-  
-  
-  
-  
+  } 
 }
+
+//-------------------------------------------------------------------------------------------
 
 // Function to show the login form
 function showLoginForm() {
@@ -313,7 +301,7 @@ document.addEventListener('DOMContentLoaded', initializeNav);
 function updateCartCount() {
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
     const cartCountElement = document.getElementById('cartCount');
-    
+
     if (cartItems.length > 0) {
         cartCountElement.textContent = cartItems.length; // Update count
         cartCountElement.classList.remove('hidden'); // Show the cart count
@@ -323,19 +311,43 @@ function updateCartCount() {
     }
 }
 
-// Function to render cart items in the shopping cart
+// Function to remove an item from the cart
+function removeFromCart(itemName) {
+    let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // Filter out the item to be removed
+    cartItems = cartItems.filter(item => item.name !== itemName);
+    
+    // Update local storage with the new cart items
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+    
+    // Re-render the cart items after removal
+    renderCartItems();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Initial call to render cart items when the page loads
+    renderCartItems();
+});
+
+// Function to render cart items and total cost
 function renderCartItems() {
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
     const cartItemsContainer = document.getElementById('cartItemsContainer');
 
+    if (!cartItemsContainer) {
+        console.error("Element with ID 'cartItemsContainer' not found.");
+        return; // Exit if the element is not found
+    }
+
     // Calculate total cost
     const totalCost = cartItems.reduce((total, item) => {
-        const itemPrice = parseFloat(item.price) || 0; // Ensure price is a number
-        const itemQuantity = item.quantity || 1; // Default to 1 if quantity is not set
-        return total + (itemPrice * itemQuantity); // Calculate total cost
+        const itemPrice = parseFloat(item.price) || 0;
+        const itemQuantity = item.quantity || 1;
+        return total + (itemPrice * itemQuantity);
     }, 0);
 
-    // Generate cart items HTML
+    // Render cart items HTML
     const cartItemsHTML = cartItems.map(item => `
         <div class="flex justify-between pr-3 p-2 border-b">
             <div class="flex">
@@ -356,10 +368,19 @@ function renderCartItems() {
 
     cartItemsContainer.innerHTML = cartItemsHTML || '<p>No items in the cart.</p>';
 
-    // Display total cost and Buy button if there are items in the cart
+    // Display total cost and payment method if items are present
     if (cartItems.length > 0) {
-        const totalCostHTML = `
-            <div class="mt-4 text-right text-sm font-semibold">
+        const paymentHTML = `
+            <div class="mt-4">
+                <h3 class="text-md font-semibold mb-2">Payment Method</h3>
+                <select id="paymentMethod" class="border rounded-sm w-full p-2">
+                    <option value="KBZ Pay">KBZ Pay</option>
+                    <option value="AYA Pay">AYA Pay</option>
+                    <option value="WAVE Pay">WAVE Pay</option>
+                </select>
+                <input type="text" id="paymentAccountPhone" placeholder="Enter payment account phone number" class="my-2 border rounded-sm w-full p-2" />
+            </div>
+            <div class="mt-4 text-right mb-4">
                 <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
             </div>
             <div class="mt-4 text-right mb-32">
@@ -368,14 +389,11 @@ function renderCartItems() {
                 </button>
             </div>
         `;
-        cartItemsContainer.insertAdjacentHTML('beforeend', totalCostHTML);
-
-        // Add event listener to the "Buy" button
+        cartItemsContainer.insertAdjacentHTML('beforeend', paymentHTML);
         document.getElementById('buy-icon').addEventListener('click', purchaseItems);
     }
 
-    // Update cart count
-    updateCartCount();
+    updateCartCount(); // Update cart count display
 }
 
 // Function to change the quantity of an item in the cart
@@ -396,87 +414,134 @@ function changeQuantity(itemName, change) {
     }
 }
 
-// Function to handle the purchase of items
 function purchaseItems() {
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
     if (cartItems.length > 0) {
+        const paymentMethod = document.getElementById('paymentMethod').value;
+        const paymentAccountPhone = document.getElementById('paymentAccountPhone').value;
+
+        // Debugging: Log payment method and phone number
+        console.log("Payment Method:", paymentMethod);
+        console.log("Payment Account Phone:", paymentAccountPhone);
+
+        // Store payment method and phone number in local storage
+        localStorage.setItem('paymentMethod', paymentMethod);
+        localStorage.setItem('paymentAccountPhone', paymentAccountPhone);
+
         populateReceipt(cartItems);
         document.getElementById('receiptModal').classList.remove('hidden'); // Show the receipt modal
 
         // Clear the cart after purchase
         localStorage.removeItem('cart');
-        renderCartItems();
+        renderCartItems(); // Re-render cart items
     } else {
         alert('Your cart is empty.');
     }
 }
 
-// Function to populate the receipt modal with purchased items
 function populateReceipt(cartItems) {
     const receiptContent = document.getElementById('receiptContent');
     const totalCost = cartItems.reduce((total, item) => {
-        const itemPrice = parseFloat(item.price) || 0; // Ensure price is a number
-        const itemQuantity = item.quantity || 1; // Default to 1 if quantity is not set
-        return total + (itemPrice * itemQuantity); // Calculate total cost
+        const itemPrice = parseFloat(item.price) || 0;
+        const itemQuantity = item.quantity || 1;
+        return total + (itemPrice * itemQuantity);
     }, 0); 
 
-    // Get the current date
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('en-GB', { 
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
     });
-	
-    const receiptHTML = cartItems.map(item => {
-        const itemPrice = parseFloat(item.price) || 0; // Ensure price is a number
-        const itemQuantity = item.quantity || 1; // Default to 1 if quantity is not set
-        return `
-            <div class="flex justify-between p-2 border-b">
-                <span>${item.name}</span>
-                <span>${(itemPrice * itemQuantity).toFixed(2)} MMK</span>
-            </div>
-        `;
-    }).join('');
 
-    const totalCostHTML = `
-        <div class="mt-4 text-right text-sm font-semibold">
-            <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
-        </div>
-    `;
-  
-    const dateHTML = `
+    const paymentMethod = localStorage.getItem('paymentMethod') || 'N/A';
+    const paymentAccountPhone = localStorage.getItem('paymentAccountPhone') || 'N/A';
+
+    let receiptHTML = `
         <div class="mb-4 text-right text-sm font-semibold">
             <span>Date: ${formattedDate}</span>
         </div>
+        <table class="min-w-full border-collapse border mb-4">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border px-4 py-2 text-left">Item Description</th>
+                    <th class="border px-4 py-2 text-left">Quantity</th>
+                    <th class="border px-4 py-2 text-left">Unit Price</th>
+                    <th class="border px-4 py-2 text-left">Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${cartItems.map(item => {
+                    const itemPrice = parseFloat(item.price) || 0;
+                    const itemQuantity = item.quantity || 1;
+                    return `
+                        <tr>
+                            <td class="border px-4 py-2">${item.name}</td>
+                            <td class="border px-4 py-2">${itemQuantity}</td>
+                            <td class="border px-4 py-2">${itemPrice.toFixed(2)} MMK</td>
+                            <td class="border px-4 py-2">${(itemPrice * itemQuantity).toFixed(2)} MMK</td>
+                        </tr>
+                    `;
+                }).join('')}
+                <tr>
+                    <td colspan="3" class="border px-4 py-2 text-right font-semibold">Total Cost:</td>
+                    <td class="border px-4 py-2">${totalCost.toFixed(2)} MMK</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="mb-4">
+            <span class="font-semibold">Payment Method:</span> ${paymentMethod}
+        </div>
+        <div class="mb-4">
+            <span class="font-semibold">Account Phone Number:</span> ${paymentAccountPhone}
+        </div>
     `;
 
-    receiptContent.innerHTML = `${dateHTML}${receiptHTML}${totalCostHTML}`;
-    
-    // Add event listeners for receipt modal actions
-    document.getElementById('confirmPurchase').addEventListener('click', function() {
-        alert('Purchase confirmed!'); // Placeholder action
-        document.getElementById('receiptModal').classList.add('hidden'); // Close the receipt modal
-    });
+    receiptContent.innerHTML = receiptHTML;
 
-    document.getElementById('closeReceiptModal').addEventListener('click', function() {
-        document.getElementById('receiptModal').classList.add('hidden');
-    });
+    // Show the modal
+    document.getElementById('receiptModal').classList.remove('hidden');
+
+    // Add event listeners for receipt modal actions after content is set
+    const confirmPurchaseButton = document.getElementById('confirmPurchase');
+    const cancelPurchaseButton = document.getElementById('closeReceiptModal');
+
+    // Check if the buttons exist before adding event listeners
+    if (confirmPurchaseButton) {
+        confirmPurchaseButton.addEventListener('click', () => {
+        
+        // Capture the receipt modal as an image
+        html2canvas(document.querySelector('#receiptModal')).then(canvas => {
+            const dataURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'receipt.png'; // Set the filename for download
+            document.body.appendChild(link); // Append link to the body (needed for Firefox)
+            link.click(); // Programmatically click the link to trigger the download
+            document.body.removeChild(link); // Remove the link after downloading
+        }).catch(error => {
+            console.error('Error capturing receipt:', error); // Log error if html2canvas fails
+        });
+        
+            alert('Purchase confirmed!');
+            closeModal();
+        });
+    }
+
+    if (cancelPurchaseButton) {
+        cancelPurchaseButton.addEventListener('click', () => {
+            closeModal();
+        });
+    }
 }
 
-// Function to remove an item from the cart
-function removeFromCart(itemName) {
-    let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-    cartItems = cartItems.filter(item => item.name !== itemName);
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-    renderCartItems();
+
+// Function to close the receipt modal
+function closeModal() {
+    document.getElementById('receiptModal').classList.add('hidden'); // Hide modal
+    document.getElementById('receiptContent').innerHTML = ''; // Clear receipt content
 }
-
-// Initial call to render cart items when the page loads
-renderCartItems();
-
-
 
 // Call the initializeNav function when the page loads
 window.onload = initializeNav;
