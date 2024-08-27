@@ -114,7 +114,7 @@ function initializeNav() {
 	</div>
 	
 	<div id="receiptModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-30">
-	    <div class="bg-white p-6 rounded shadow-lg w-1/3 relative">
+	    <div class="bg-white p-6 rounded shadow-lg w-2/4 relative">
 	        <div id="closeReceiptModal" class="absolute top-3 right-3 cursor-pointer text-gray-400 hover:text-gray-600">
 	            <i class="fa-lg fa far fa-times"></i>
 	        </div>
@@ -122,7 +122,7 @@ function initializeNav() {
 	        <div id="receiptContent">
 	            <!-- Receipt details will be populated here -->
 	        </div>
-	        <button id="confirmPurchase" class="mt-4 w-full bg-slate-500 text-white py-2 rounded-md hover:bg-slate-600">
+	        <button id="confirmPurchase" class="mt-4 w-full bg-slate-500 text-white py-2 rounded-sm hover:bg-slate-600">
 				Save as Image
 	        </button>
 	    </div>
