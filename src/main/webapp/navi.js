@@ -374,9 +374,9 @@ function renderCartItems() {
             <div class="mt-4">
                 <h3 class="text-md font-semibold mb-2">Payment Method</h3>
                 <select id="paymentMethod" class="border rounded-sm w-full p-2">
-                    <option value="KBZ Pay">KBZ Pay</option>
-                    <option value="AYA Pay">AYA Pay</option>
-                    <option value="WAVE Pay">WAVE Pay</option>
+                    <option value="KBZ PAY">KBZ PAY</option>
+                    <option value="AYA PAY">AYA PAY</option>
+                    <option value="WAVE PAY">WAVE PAY</option>
                 </select>
                 <input type="text" id="paymentAccountPhone" placeholder="Enter payment account phone number" class="my-2 border rounded-sm w-full p-2" />
            		<input type="text" id="customerAddress" placeholder="Enter your address" class="my-2 border rounded-sm w-full p-2" />
@@ -417,7 +417,26 @@ function changeQuantity(itemName, change) {
 
 function purchaseItems() {
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-
+    
+	const phoneNumber = document.getElementById('paymentAccountPhone').value.trim();
+    const address = document.getElementById('customerAddress').value.trim();
+	
+	// Regular expression for validating phone number format (09XXXXXXXXX)
+    const phonePattern = /^09\d{9}$/;
+	
+    // Validate that phone number and address are not empty
+    if (!phoneNumber) {
+        alert("Please enter your payment account phone number.");
+        return;
+    }
+    if (!phonePattern.test(phoneNumber)) {
+        alert("Please enter a valid phone number (format: 09XXXXXXXXX).");
+        return;
+    }
+    if (!address) {
+        alert("Please enter your address.");
+        return;
+    }
     if (cartItems.length > 0) {
         const paymentMethod = document.getElementById('paymentMethod').value;
         const paymentAccountPhone = document.getElementById('paymentAccountPhone').value;
