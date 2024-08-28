@@ -119,60 +119,78 @@
             
             <!-- Categories Container -->
 			<section id="categories" class="hidden">
-			    <h1 class="text-4xl font-bold mb-4">Categories</h1>
-			    <table class="min-w-full bg-white border border-gray-200">
-			        <thead>
-			            <tr>
-			                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">ID</th>
-			                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Name</th>
-			                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Category</th>
-			                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Price</th>
-			                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Quantity</th>
-			            </tr>
-			        </thead>
-			        <tbody>
-			            <%
-			                Connection conn = null;
-			                Statement stmt = null;
-			                ResultSet rs = null;
-			
-			                try {
-			                    Class.forName("com.mysql.cj.jdbc.Driver");
-			                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jewelrypalace", "root", "root");
-			
-			                    stmt = conn.createStatement();
-			                    rs = stmt.executeQuery("SELECT id, name, category, price, quantity FROM product");
-			
-			                    // Display data
-			                    while (rs.next()) {
-			            %>
-			                <tr>
-			                	<td class="px-4 py-2 border-b"><%= rs.getString("id") %></td>
-			                    <td class="px-4 py-2 border-b"><%= rs.getString("name") %></td>
-			                    <td class="px-4 py-2 border-b"><%= rs.getString("category") %></td>
-			                    <td class="px-4 py-2 border-b"><%= rs.getDouble("price") %></td>
-			                    <td class="px-4 py-2 border-b"><%= rs.getInt("quantity") %></td>
-			                </tr>
-			            <%
-			                    }
-			                } catch (Exception e) {
-			                    out.println("<tr><td colspan='4' class='px-4 py-2 text-center border-b'>Error: " + e.getMessage() + "</td></tr>");
-			                    e.printStackTrace();
-			                } finally {
-			                    try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
-			                    try { if (stmt != null) stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
-			                    try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
-			                }
-			            %>
-			        </tbody>
-			    </table>
-			</section>
+    <h1 class="text-4xl font-bold mb-4">Categories</h1>
+    <table class="min-w-full bg-white border border-gray-200">
+        <thead>
+            <tr>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">ID</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Name</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Category</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Price</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Quantity</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 border-b">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+                Connection conn = null;
+                Statement stmt = null;
+                ResultSet rs = null;
+
+                try {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jewelrypalace", "root", "root");
+
+                    stmt = conn.createStatement();
+                    rs = stmt.executeQuery("SELECT id, name, category, price, quantity FROM product");
+
+                    while (rs.next()) {
+                        String productId = rs.getString("id");
+            %>
+                <tr id="row-<%= productId %>">
+                    <td class="px-4 py-2 border-b"><%= productId %></td>
+                    <td class="px-4 py-2 border-b">
+                        <span id="name-<%= productId %>"><%= rs.getString("name") %></span>
+                        <input type="text" id="edit-name-<%= productId %>" value="<%= rs.getString("name") %>" class="hidden border px-2 py-1">
+                    </td>
+                    <td class="px-4 py-2 border-b">
+                        <span id="category-<%= productId %>"><%= rs.getString("category") %></span>
+                        <input type="text" id="edit-category-<%= productId %>" value="<%= rs.getString("category") %>" class="hidden border px-2 py-1">
+                    </td>
+                    <td class="px-4 py-2 border-b">
+                        <span id="price-<%= productId %>"><%= rs.getDouble("price") %></span>
+                        <input type="number" step="0.01" id="edit-price-<%= productId %>" value="<%= rs.getDouble("price") %>" class="hidden border px-2 py-1">
+                    </td>
+                    <td class="px-4 py-2 border-b">
+                        <span id="quantity-<%= productId %>"><%= rs.getInt("quantity") %></span>
+                        <input type="number" id="edit-quantity-<%= productId %>" value="<%= rs.getInt("quantity") %>" class="hidden border px-2 py-1">
+                    </td>
+                    <td class="px-4 py-2 border-b">
+                        <button onclick="editProduct('<%= productId %>')" class="bg-blue-500 text-white px-2 py-1 rounded">Edit</button>
+                        <button onclick="saveProduct('<%= productId %>')" id="save-<%= productId %>" class="hidden bg-green-500 text-white px-2 py-1 rounded">Save</button>
+                    </td>
+                </tr>
+            <%
+                    }
+                } catch (Exception e) {
+                    out.println("<tr><td colspan='6' class='px-4 py-2 text-center border-b'>Error: " + e.getMessage() + "</td></tr>");
+                    e.printStackTrace();
+                } finally {
+                    try { if (rs != null) rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+                    try { if (stmt != null) stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
+                    try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+                }
+            %>
+        </tbody>
+    </table>
+</section>
 
         </div>
         
     </div>
 
     <script src="navi.js"></script>
+    
     <script>
         function showContainer(containerId) {
 
@@ -231,6 +249,50 @@
                 placeholder.textContent = 'Drag & drop an image here or click to select';
                 dropZone.appendChild(placeholder);
             }
+        }
+        
+        function editProduct(productId) {
+            document.getElementById("name-" + productId).classList.add("hidden");
+            document.getElementById("edit-name-" + productId).classList.remove("hidden");
+            document.getElementById("category-" + productId).classList.add("hidden");
+            document.getElementById("edit-category-" + productId).classList.remove("hidden");
+            document.getElementById("price-" + productId).classList.add("hidden");
+            document.getElementById("edit-price-" + productId).classList.remove("hidden");
+            document.getElementById("quantity-" + productId).classList.add("hidden");
+            document.getElementById("edit-quantity-" + productId).classList.remove("hidden");
+            
+            document.getElementById("save-" + productId).classList.remove("hidden");
+        }
+
+        function saveProduct(productId) {
+            const name = document.getElementById("edit-name-" + productId).value;
+            const category = document.getElementById("edit-category-" + productId).value;
+            const price = document.getElementById("edit-price-" + productId).value;
+            const quantity = document.getElementById("edit-quantity-" + productId).value;
+
+            // Send an AJAX request to the servlet to update the product
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "UpdateProductServlet", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Update UI with new values
+                    document.getElementById("name-" + productId).innerText = name;
+                    document.getElementById("category-" + productId).innerText = category;
+                    document.getElementById("price-" + productId).innerText = price;
+                    document.getElementById("quantity-" + productId).innerText = quantity;
+
+                    // Hide the edit inputs
+                    document.getElementById("edit-name-" + productId).classList.add("hidden");
+                    document.getElementById("edit-category-" + productId).classList.add("hidden");
+                    document.getElementById("edit-price-" + productId).classList.add("hidden");
+                    document.getElementById("edit-quantity-" + productId).classList.add("hidden");
+                    
+                    // Hide the save button
+                    document.getElementById("save-" + productId).classList.add("hidden");
+                }
+            };
+            xhr.send("id=" + productId + "&name=" + encodeURIComponent(name) + "&category=" + encodeURIComponent(category) + "&price=" + price + "&quantity=" + quantity);
         }
     </script>
 </body>

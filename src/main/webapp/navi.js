@@ -122,8 +122,8 @@ function initializeNav() {
 	        <div id="receiptContent">
 	            <!-- Receipt details will be populated here -->
 	        </div>
-	        <button id="confirmPurchase" class="mt-4 w-full bg-slate-500 text-white py-2 rounded-sm hover:bg-slate-600">
-				Save as Image
+	        <button id="confirmPurchase" class="mt-4 w-8 h-10 text-slate-950 rounded-sm absolute bottom-0 right-0">
+				<i class="far fa-lg fa-file-download"></i>
 	        </button>
 	    </div>
 	</div>
@@ -379,6 +379,7 @@ function renderCartItems() {
                     <option value="WAVE Pay">WAVE Pay</option>
                 </select>
                 <input type="text" id="paymentAccountPhone" placeholder="Enter payment account phone number" class="my-2 border rounded-sm w-full p-2" />
+           		<input type="text" id="customerAddress" placeholder="Enter your address" class="my-2 border rounded-sm w-full p-2" />
             </div>
             <div class="mt-4 text-right mb-4">
                 <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
@@ -420,6 +421,7 @@ function purchaseItems() {
     if (cartItems.length > 0) {
         const paymentMethod = document.getElementById('paymentMethod').value;
         const paymentAccountPhone = document.getElementById('paymentAccountPhone').value;
+        const customerAddress = document.getElementById('customerAddress').value;
 
         // Debugging: Log payment method and phone number
         console.log("Payment Method:", paymentMethod);
@@ -428,6 +430,7 @@ function purchaseItems() {
         // Store payment method and phone number in local storage
         localStorage.setItem('paymentMethod', paymentMethod);
         localStorage.setItem('paymentAccountPhone', paymentAccountPhone);
+		localStorage.setItem('customerAddress', customerAddress);
 
         populateReceipt(cartItems);
         document.getElementById('receiptModal').classList.remove('hidden'); // Show the receipt modal
@@ -457,6 +460,8 @@ function populateReceipt(cartItems) {
 
     const paymentMethod = localStorage.getItem('paymentMethod') || 'N/A';
     const paymentAccountPhone = localStorage.getItem('paymentAccountPhone') || 'N/A';
+    const CustomerUserName = localStorage.getItem('username') || 'N/A';
+	const CustomerAddress = localStorage.getItem('customerAddress') || 'N/A';
 
     let receiptHTML = `
         <div class="mb-4 text-right text-sm font-semibold">
@@ -490,12 +495,19 @@ function populateReceipt(cartItems) {
                 </tr>
             </tbody>
         </table>
-        <div class="mb-4">
+        <div class="mb-1">
+            <span class="font-semibold">Customer Name:</span> ${CustomerUserName}
+        </div>
+        <div class="mb-1">
             <span class="font-semibold">Payment Method:</span> ${paymentMethod}
         </div>
-        <div class="mb-4">
+        <div class="mb-1">
             <span class="font-semibold">Account Phone Number:</span> ${paymentAccountPhone}
         </div>
+        <div class="mb-1">
+            <span class="font-semibold">Address:</span> ${CustomerAddress}
+        </div>
+        
     `;
 
     receiptContent.innerHTML = receiptHTML;
