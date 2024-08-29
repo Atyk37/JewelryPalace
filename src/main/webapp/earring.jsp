@@ -165,7 +165,7 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
         document.getElementById("modalProductPrice").innerText = productPrice + " kyats";
         
         const stockStatusElement = document.getElementById("modalStockStatus");
-        const stockStatus = productQuantity > 0 ? "In Stock" : "Out of Stock";
+        const stockStatus = productQuantity > 0 ? "INSTOCK" : "Out of Stock";
         stockStatusElement.innerText = stockStatus;
 
         // Set text color based on stock status

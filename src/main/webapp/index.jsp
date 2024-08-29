@@ -17,6 +17,37 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
     <link rel="icon" href="./logo/logo7.png">
 </head>
 <style>
+
+	:root {
+    --gold-color: #D4AF37; /* Gold color for accents and highlights */
+    --secondary-color: #4B0082; /* Indigo for backgrounds and headers */
+    --neutral-color: #F5F5DC; /* Beige as a neutral base */
+	}
+	
+	body {
+    /*background-color: var(--neutral-color);*/
+    color: var(--secondary-color);
+	}
+	
+	.header {
+	    /*background-color: var(--gold-color);*/
+	    color: var(--neutral-color);
+	}
+	
+	.button {
+	    background-color: var(--secondary-color);
+	    color: var(--neutral-color);
+	    border: 2px solid var(--gold-color); /* Use gold for button borders */
+	}
+	
+	.button:hover {
+	    background-color: var(--gold-color); /* Change button color to gold on hover */
+	    color: var(--secondary-color);
+	}
+
+    /* Additional styles, including scrollbars */
+	/* (rest of your existing styles) */
+
     /* Hide horizontal scrollbar for WebKit browsers (Chrome, Safari) */
     .scrollbar-hidden::-webkit-scrollbar {
         display: none;
@@ -240,6 +271,8 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
 	        </div>
 	    </div>
 	</section>
+	
+	
 
     <!-- footer section  -->
     <div id="footer"></div>
@@ -266,7 +299,7 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
         document.getElementById("modalProductPrice").innerText = productPrice + " kyats";
         
         const stockStatusElement = document.getElementById("modalStockStatus");
-        const stockStatus = productQuantity > 0 ? "In Stock" : "Out of Stock";
+        const stockStatus = productQuantity > 0 ? "INSTOCK" : "Out of Stock";
         stockStatusElement.innerText = stockStatus;
 
         // Set text color based on stock status
