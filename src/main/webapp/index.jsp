@@ -271,8 +271,6 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
 	        </div>
 	    </div>
 	</section>
-	
-	
 
     <!-- footer section  -->
     <div id="footer"></div>
@@ -285,7 +283,7 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
     <script src="home.js"></script>
     
     <script>
-    
+
     // Retrieve the isLoggedIn value from local storage
     const isLoggedInLocalStorage = localStorage.getItem('isLoggedIn') === 'true';
     // Pass the server-side login status to JavaScript
