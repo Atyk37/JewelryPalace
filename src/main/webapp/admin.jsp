@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,63 +29,150 @@
         <div class=" p-10 pt-24 ">
         
        		<!-- Dashboard Content -->
-			<section id="dashboard" class="bg-white p-6 rounded-lg shadow-lg">
-		        <h1 class="text-3xl font-bold mb-6">Welcome to the Admin Dashboard</h1>
-		
-		        <!-- Key Metrics Section -->
-		        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-		            <!-- Total Products -->
-					<div class="p-4 bg-blue-500 text-white rounded-lg shadow-md">
-					    <h2 class="text-2xl font-semibold mb-2">Total Products</h2>
-						<p class="text-4xl font-bold"><%= request.getAttribute("totalProducts") != null ? request.getAttribute("totalProducts") : "0" %></p>
-					</div>
-		            
-		            <!-- Total Sales -->
-					<div class="p-4 bg-green-500 text-white rounded-lg shadow-md">
-					    <h2 class="text-2xl font-semibold mb-2">Total Sales</h2>
-					    <p class="text-4xl font-bold">
-					        $<%= (request.getAttribute("totalSales") != null) ? String.format("%.2f", (double) request.getAttribute("totalSales")) : "0.00" %>
-					    </p>
-					</div>
-		
-		            
-		            <!-- Total Users -->
-					<div class="p-4 bg-yellow-500 text-white rounded-lg shadow-md">
-					    <h2 class="text-2xl font-semibold mb-2">Total Users</h2>
-					    <p class="text-4xl font-bold"><%= request.getAttribute("totalUsers") != null ? request.getAttribute("totalUsers") : "0" %></p>
-					</div>
-		        </div>
-		
-		        <!-- Recent Activities Section -->
-		        <div class="mb-6">
-		            <h2 class="text-2xl font-bold mb-4">Recent Activities</h2>
-		            <ul class="space-y-4">
-		                <li class="p-4 bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
-		                    <span>New product "Gold Necklace" added.</span>
-		                    <span class="text-sm text-gray-500">2 hours ago</span>
-		                </li>
-		                <li class="p-4 bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
-		                    <span>User "john_doe" registered.</span>
-		                    <span class="text-sm text-gray-500">5 hours ago</span>
-		                </li>
-		                <li class="p-4 bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
-		                    <span>Product "Silver Ring" was sold.</span>
-		                    <span class="text-sm text-gray-500">1 day ago</span>
-		                </li>
-		            </ul>
-		        </div>
-		
-		        <!-- Quick Links Section -->
-		        <div class="mb-6">
-		            <h2 class="text-2xl font-bold mb-4">Quick Links</h2>
-		            <div class="flex space-x-4">
-		                <a href="#addProduct" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Add Product</a>
-		                <a href="#deleteProduct" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Delete Product</a>
-		                <a href="#reports" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">View Reports</a>
-		            </div>
-		        </div>
-		    </section>
+			<%
+			    // Database connection details
+			    String jdbcUrl = "jdbc:mysql://localhost:3306/jewelrypalace"; // Update with your DB URL
+			    String dbUser = "root"; // Update with your DB username
+			    String dbPassword = "root"; // Update with your DB password
+			
+			    Connection connection = null;
+			    PreparedStatement pstmt = null;
+			    ResultSet productCountResultSet = null; // Changed variable name
+			    ResultSet totalSalesResultSet = null; // Changed variable name
+			    ResultSet userCountResultSet = null; // Changed variable name
+			    ResultSet recentActivitiesResultSet = null; // Result set for recent activities
+			
+			    Integer totalProducts = 0;
+			    Double totalSales = 0.0;
+			    Integer totalUsers = 0;
+			
+			    List<Map<String, String>> recentActivities = new ArrayList<>(); // List to hold recent activities
+			
+			    try {
+			    	// Establish a connection to the database
+			        connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword);
 
+			        // Query to get total products
+			        pstmt = connection.prepareStatement("SELECT COUNT(*) AS total FROM product");
+			        productCountResultSet = pstmt.executeQuery();
+			        if (productCountResultSet.next()) {
+			            totalProducts = productCountResultSet.getInt("total");
+			        }
+			        productCountResultSet.close(); // Close the result set
+
+			        // Query to get total sales
+			        pstmt = connection.prepareStatement("SELECT SUM(price) AS totalSales FROM product");
+			        totalSalesResultSet = pstmt.executeQuery();
+			        if (totalSalesResultSet.next()) {
+			            totalSales = totalSalesResultSet.getDouble("totalSales");
+			        }
+			        totalSalesResultSet.close(); // Close the result set
+
+			        // Query to get total users
+			        pstmt = connection.prepareStatement("SELECT COUNT(*) AS total FROM users");
+			        userCountResultSet = pstmt.executeQuery();
+			        if (userCountResultSet.next()) {
+			            totalUsers = userCountResultSet.getInt("total");
+			        }
+
+			        // Query to fetch recent product additions
+			        pstmt = connection.prepareStatement("SELECT name, added_time FROM product ORDER BY added_time DESC LIMIT 5");
+			        recentActivitiesResultSet = pstmt.executeQuery();
+			        while (recentActivitiesResultSet.next()) {
+			            Map<String, String> activity = new HashMap<>();
+			            activity.put("message", "New product \"" + recentActivitiesResultSet.getString("name") + "\" added.");
+			            activity.put("time", recentActivitiesResultSet.getTimestamp("added_time").toString());
+			            recentActivities.add(activity); // Add activity map to the list
+			        }
+			        recentActivitiesResultSet.close(); // Close recent activities result set
+
+			        // Query to fetch recent user logins
+			        pstmt = connection.prepareStatement("SELECT name, creation_time FROM users ORDER BY creation_time DESC LIMIT 5");
+			        recentActivitiesResultSet = pstmt.executeQuery();
+			        while (recentActivitiesResultSet.next()) {
+			            Map<String, String> activity = new HashMap<>();
+			            activity.put("message", "User \"" + recentActivitiesResultSet.getString("name") + "\" logged in.");
+			            activity.put("time", recentActivitiesResultSet.getTimestamp("creation_time").toString());
+			            recentActivities.add(activity); // Add activity map to the list
+			        }
+			    } catch (SQLException e) {
+			        e.printStackTrace();
+			    } finally {
+			        // Clean up resources
+			        try {
+			            if (recentActivitiesResultSet != null) recentActivitiesResultSet.close(); // Close recent activities result set
+			            if (userCountResultSet != null) userCountResultSet.close();
+			            if (totalSalesResultSet != null) totalSalesResultSet.close();
+			            if (productCountResultSet != null) productCountResultSet.close();
+			            if (pstmt != null) pstmt.close();
+			            if (connection != null) connection.close();
+			        } catch (SQLException e) {
+			            e.printStackTrace();
+			        }
+			    }
+
+			    // Sort recent activities by timestamp (most recent first)
+			    Collections.sort(recentActivities, new Comparator<Map<String, String>>() {
+			        @Override
+			        public int compare(Map<String, String> activity1, Map<String, String> activity2) {
+			            return activity2.get("time").compareTo(activity1.get("time")); // Sort in descending order
+			        }
+			    });
+			%>
+			
+			<!-- Dashboard Content -->
+			<section id="dashboard" class="bg-white p-6 rounded-lg shadow-lg">
+			    <h1 class="text-3xl font-bold mb-6">Welcome to the Admin Dashboard</h1>
+			
+			    <!-- Key Metrics Section -->
+			    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+			        <!-- Total Products -->
+			        <div class="p-4 bg-blue-500 text-white rounded-lg shadow-md">
+			            <h2 class="text-2xl font-semibold mb-2">Total Products</h2>
+			            <p class="text-4xl font-bold"><%= totalProducts %></p>
+			        </div>
+			
+			        <!-- Total Sales -->
+			        <div class="p-4 bg-green-500 text-white rounded-lg shadow-md">
+			            <h2 class="text-2xl font-semibold mb-2">Total Sales</h2>
+			            <p class="text-4xl font-bold">$<%= String.format("%.2f", totalSales) %></p>
+			        </div>
+			
+			        <!-- Total Users -->
+			        <div class="p-4 bg-yellow-500 text-white rounded-lg shadow-md">
+			            <h2 class="text-2xl font-semibold mb-2">Total Users</h2>
+			            <p class="text-4xl font-bold"><%= totalUsers %></p>
+			        </div>
+			    </div>
+			
+			    <!-- Recent Activities Section -->
+				<div class="mb-6 max-h-96 overflow-y-auto border border-gray-200 rounded-lg">
+				    <div class="flex flex-col space-y-4 p-4">
+				        <%
+				            if (!recentActivities.isEmpty()) {
+				                for (Map<String, String> activity : recentActivities) {
+				        %>
+				        <div class="p-4 bg-white rounded-lg shadow-md">
+				            <div class="flex justify-between items-center mb-2">
+				                <span class="text-sm text-gray-500"><%= activity.get("time") %></span>
+				            </div>
+				            <p class="text-lg font-semibold text-gray-800"><%= activity.get("message") %></p>
+				        </div>
+				        <%
+				                }
+				            } else {
+				        %>
+				        <div class="p-4 bg-white rounded-lg shadow-md">
+				            <p class="text-lg text-gray-800">No recent activities found.</p>
+				        </div>
+				        <%
+				            }
+				        %>
+				    </div>
+				</div>
+
+
+			</section>
             
             <!-- Product Management Container -->
             <section id="productManagement" class="hidden flex flex-col items-center justify-center ">
@@ -217,6 +305,7 @@
                             <th class="p-2 border-b">ID</th>
                             <th class="p-2 border-b">Name</th>
                             <th class="p-2 border-b">Email</th>
+							<th class="p-2 border-b">Creation Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -233,6 +322,7 @@
                                     userListHtml.append("<td class='p-2 border-b'>").append(rs.getInt("id")).append("</td>");
                                     userListHtml.append("<td class='p-2 border-b'>").append(rs.getString("name")).append("</td>");
                                     userListHtml.append("<td class='p-2 border-b'>").append(rs.getString("email")).append("</td>");
+                                    userListHtml.append("<td class='p-2 border-b'>").append(rs.getString("creation_time")).append("</td>");
                                     userListHtml.append("</tr>");
                                 }
                                 con.close();

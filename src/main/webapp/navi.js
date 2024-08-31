@@ -326,11 +326,6 @@ function removeFromCart(itemName) {
     renderCartItems();
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Initial call to render cart items when the page loads
-    renderCartItems();
-});
-
 // Function to render cart items and total cost
 function renderCartItems() {
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
@@ -392,10 +387,13 @@ function renderCartItems() {
             </div>
         `;
         cartItemsContainer.insertAdjacentHTML('beforeend', paymentHTML);
-        document.getElementById('buy-icon').addEventListener('click', purchaseItems);
+        const buyIcon = document.getElementById('buy-icon');
+        buyIcon.addEventListener('click', purchaseItems);
+       // buyIcon.addEventListener('click', updateCartCount);
+
     }
 
-    updateCartCount(); // Update cart count display
+     updateCartCount(); // Update cart count display
 }
 
 // Function to change the quantity of an item in the cart
@@ -596,7 +594,7 @@ function sendDataToServlet() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Product quantities updated successfully.');
+            alert('Thank for your Purchase!');
             localStorage.removeItem('database'); // Clear the "database" in local storage
         } else {
             alert('Failed to update product quantities.');
