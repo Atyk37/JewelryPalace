@@ -27,11 +27,64 @@
         <!-- Main Content -->
         <div class=" p-10 pt-24 ">
         
-       		<!-- Dashboard Content (Optional) -->
-            <section id="dashboard" class=" ">
-                <h1 class="text-4xl font-bold mb-4">Welcome to the Admin Dashboard</h1>
-                <!-- Dashboard content goes here -->
-            </section>
+       		<!-- Dashboard Content -->
+			<section id="dashboard" class="bg-white p-6 rounded-lg shadow-lg">
+		        <h1 class="text-3xl font-bold mb-6">Welcome to the Admin Dashboard</h1>
+		
+		        <!-- Key Metrics Section -->
+		        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+		            <!-- Total Products -->
+					<div class="p-4 bg-blue-500 text-white rounded-lg shadow-md">
+					    <h2 class="text-2xl font-semibold mb-2">Total Products</h2>
+						<p class="text-4xl font-bold"><%= request.getAttribute("totalProducts") != null ? request.getAttribute("totalProducts") : "0" %></p>
+					</div>
+		            
+		            <!-- Total Sales -->
+					<div class="p-4 bg-green-500 text-white rounded-lg shadow-md">
+					    <h2 class="text-2xl font-semibold mb-2">Total Sales</h2>
+					    <p class="text-4xl font-bold">
+					        $<%= (request.getAttribute("totalSales") != null) ? String.format("%.2f", (double) request.getAttribute("totalSales")) : "0.00" %>
+					    </p>
+					</div>
+		
+		            
+		            <!-- Total Users -->
+					<div class="p-4 bg-yellow-500 text-white rounded-lg shadow-md">
+					    <h2 class="text-2xl font-semibold mb-2">Total Users</h2>
+					    <p class="text-4xl font-bold"><%= request.getAttribute("totalUsers") != null ? request.getAttribute("totalUsers") : "0" %></p>
+					</div>
+		        </div>
+		
+		        <!-- Recent Activities Section -->
+		        <div class="mb-6">
+		            <h2 class="text-2xl font-bold mb-4">Recent Activities</h2>
+		            <ul class="space-y-4">
+		                <li class="p-4 bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
+		                    <span>New product "Gold Necklace" added.</span>
+		                    <span class="text-sm text-gray-500">2 hours ago</span>
+		                </li>
+		                <li class="p-4 bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
+		                    <span>User "john_doe" registered.</span>
+		                    <span class="text-sm text-gray-500">5 hours ago</span>
+		                </li>
+		                <li class="p-4 bg-gray-100 rounded-lg shadow-sm flex justify-between items-center">
+		                    <span>Product "Silver Ring" was sold.</span>
+		                    <span class="text-sm text-gray-500">1 day ago</span>
+		                </li>
+		            </ul>
+		        </div>
+		
+		        <!-- Quick Links Section -->
+		        <div class="mb-6">
+		            <h2 class="text-2xl font-bold mb-4">Quick Links</h2>
+		            <div class="flex space-x-4">
+		                <a href="#addProduct" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Add Product</a>
+		                <a href="#deleteProduct" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Delete Product</a>
+		                <a href="#reports" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">View Reports</a>
+		            </div>
+		        </div>
+		    </section>
+
             
             <!-- Product Management Container -->
             <section id="productManagement" class="hidden flex flex-col items-center justify-center ">

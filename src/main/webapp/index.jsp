@@ -6,6 +6,7 @@
 boolean isLoggedInServer = session.getAttribute("username") != null;
 %>  
 <%@ page import="Submit.Review" %> <!-- Adjust this line -->
+<!-- <script type="text/javascript" src="${pageContext.request.contextPath}/navi.js"></script> -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,26 +25,7 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
     --neutral-color: #F5F5DC; /* Beige as a neutral base */
 	}
 	
-	body {
-    /*background-color: var(--neutral-color);*/
-    color: var(--secondary-color);
-	}
 	
-	.header {
-	    /*background-color: var(--gold-color);*/
-	    color: var(--neutral-color);
-	}
-	
-	.button {
-	    background-color: var(--secondary-color);
-	    color: var(--neutral-color);
-	    border: 2px solid var(--gold-color); /* Use gold for button borders */
-	}
-	
-	.button:hover {
-	    background-color: var(--gold-color); /* Change button color to gold on hover */
-	    color: var(--secondary-color);
-	}
 
     /* Additional styles, including scrollbars */
 	/* (rest of your existing styles) */

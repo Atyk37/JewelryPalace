@@ -1,3 +1,4 @@
+
 // Function to initialize the navigation bar
 function initializeNav() {
   const navContainer = document.getElementById("nav");
@@ -457,9 +458,19 @@ function purchaseItems() {
         // Clear the cart after purchase
         localStorage.removeItem('cart');
         renderCartItems(); // Re-render cart items
+        
+        // Store the cart items in the "database" local storage before clearing
+	    const databaseItems = JSON.parse(localStorage.getItem('database')) || [];
+	    databaseItems.push(...cartItems); // Add all items to the "database"
+	    localStorage.setItem('database', JSON.stringify(databaseItems));
+
     } else {
         alert('Your cart is empty.');
     }
+    
+    // Send the data to the servlet
+    sendDataToServlet();
+    
 }
 
 function populateReceipt(cartItems) {
@@ -565,6 +576,36 @@ function populateReceipt(cartItems) {
             closeModal();
         });
     }
+}
+
+function sendDataToServlet() {
+    const databaseItems = JSON.parse(localStorage.getItem('database')) || [];
+
+    if (databaseItems.length === 0) {
+        alert('No purchase data found.');
+        return;
+    }
+
+    fetch('UpdateProductQuantityServlet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(databaseItems)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Product quantities updated successfully.');
+            localStorage.removeItem('database'); // Clear the "database" in local storage
+        } else {
+            alert('Failed to update product quantities.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while processing the request.');
+    });
 }
 
 
