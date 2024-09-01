@@ -597,7 +597,7 @@ function sendDataToServlet() {
             alert('Thank for your Purchase!');
             localStorage.removeItem('database'); // Clear the "database" in local storage
         } else {
-            alert('Failed to update product quantities.');
+            alert('Product is out of stock!');
         }
     })
     .catch(error => {

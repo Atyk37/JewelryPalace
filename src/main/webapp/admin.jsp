@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="java.sql.*" %>
-<%@ page import="java.util.*" %>
+<%@ page import="java.sql.*, java.util.*, javax.servlet.*" %>
+<%@ page import="com.google.gson.JsonArray, com.google.gson.JsonObject" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,10 +37,10 @@
 			
 			    Connection connection = null;
 			    PreparedStatement pstmt = null;
-			    ResultSet productCountResultSet = null; // Changed variable name
-			    ResultSet totalSalesResultSet = null; // Changed variable name
-			    ResultSet userCountResultSet = null; // Changed variable name
-			    ResultSet recentActivitiesResultSet = null; // Result set for recent activities
+			    ResultSet productCountResultSet = null;
+			    ResultSet totalSalesResultSet = null;
+			    ResultSet userCountResultSet = null;
+			    ResultSet recentActivitiesResultSet = null;
 			
 			    Integer totalProducts = 0;
 			    Double totalSales = 0.0;
@@ -49,6 +49,7 @@
 			    List<Map<String, String>> recentActivities = new ArrayList<>(); // List to hold recent activities
 			
 			    try {
+			    	Class.forName("com.mysql.cj.jdbc.Driver");
 			    	// Establish a connection to the database
 			        connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword);
 
@@ -75,26 +76,52 @@
 			            totalUsers = userCountResultSet.getInt("total");
 			        }
 
-			        // Query to fetch recent product additions
+			     // Query to fetch recent product additions, deletions, and sold-out status
 			        pstmt = connection.prepareStatement("SELECT name, added_time FROM product ORDER BY added_time DESC LIMIT 5");
 			        recentActivitiesResultSet = pstmt.executeQuery();
 			        while (recentActivitiesResultSet.next()) {
-			            Map<String, String> activity = new HashMap<>();
-			            activity.put("message", "New product \"" + recentActivitiesResultSet.getString("name") + "\" added.");
-			            activity.put("time", recentActivitiesResultSet.getTimestamp("added_time").toString());
-			            recentActivities.add(activity); // Add activity map to the list
-			        }
-			        recentActivitiesResultSet.close(); // Close recent activities result set
+			            String productName = recentActivitiesResultSet.getString("name");
 
-			        // Query to fetch recent user logins
+			            Map<String, String> activity = new HashMap<>();
+			            activity.put("message", "New product \"" + productName + "\" added.");
+			            activity.put("time", recentActivitiesResultSet.getTimestamp("added_time").toString());
+
+			            recentActivities.add(activity);
+
+			        }
+			        
+			        recentActivitiesResultSet.close();
+
+			        // Query to fetch recent user logins (assuming users table exists in your DB)
 			        pstmt = connection.prepareStatement("SELECT name, creation_time FROM users ORDER BY creation_time DESC LIMIT 5");
 			        recentActivitiesResultSet = pstmt.executeQuery();
 			        while (recentActivitiesResultSet.next()) {
 			            Map<String, String> activity = new HashMap<>();
-			            activity.put("message", "User \"" + recentActivitiesResultSet.getString("name") + "\" logged in.");
+			            activity.put("message", "User \"" + recentActivitiesResultSet.getString("name") + "\" signed in.");
 			            activity.put("time", recentActivitiesResultSet.getTimestamp("creation_time").toString());
-			            recentActivities.add(activity); // Add activity map to the list
+			            recentActivities.add(activity);
 			        }
+			        
+			     // Query to fetch recent sold-out products (quantity = 0)
+			        pstmt = connection.prepareStatement("SELECT name, sold_out_time FROM product WHERE quantity = 0 ORDER BY sold_out_time DESC LIMIT 5");
+			        recentActivitiesResultSet = pstmt.executeQuery();
+
+			        while (recentActivitiesResultSet.next()) {
+			            String productName = recentActivitiesResultSet.getString("name");
+			            Timestamp soldOutTime = recentActivitiesResultSet.getTimestamp("sold_out_time");
+
+			            if (productName != null && soldOutTime != null) { // Check if values are not null
+			                Map<String, String> activity = new HashMap<>();
+			                activity.put("message", "Product \"" + productName + "\" is sold out.");
+			                activity.put("time", soldOutTime.toString());
+			                recentActivities.add(activity);
+			            } else {
+			                // Debugging output
+			                System.out.println("Null value found for product or sold_out_time.");
+			            }
+			        }
+			        recentActivitiesResultSet.close(); // Close the result set
+			                		
 			    } catch (SQLException e) {
 			        e.printStackTrace();
 			    } finally {
@@ -170,7 +197,6 @@
 				        %>
 				    </div>
 				</div>
-
 
 			</section>
             
