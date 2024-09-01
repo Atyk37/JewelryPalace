@@ -90,24 +90,38 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
                 <img class="w-full h-auto rounded-lg shadow-lg" src="./item/aboutus.jpg" alt="About Us">
             </div>
         </div>
-        <div class="mt-8 px-4 md:px-12">
-            <h2 class="text-3xl font-bold mb-4">Welcome to JewelryPalace!</h2>
-            <p class="mb-4">At JewelryPalace, we believe that every piece of jewelry tells a unique story. Founded with a passion for craftsmanship and elegance, we are dedicated to offering high-quality, exquisite jewelry that adds a touch of luxury to your life.</p>
-            
-            <h3 class="text-2xl font-semibold mt-6">Our Journey</h3>
-            <p class="mb-4">Our journey began with a love for timeless beauty and intricate designs. Each piece in our collection is thoughtfully crafted by skilled artisans who pour their heart and soul into every creation. We source only the finest materials, ensuring that our jewelry is not just a purchase but a cherished heirloom for generations to come.</p>
-            
-            <h3 class="text-2xl font-semibold mt-6">Our Mission</h3>
-            <p class="mb-4">Our mission is to empower individuals to express their unique style and celebrate special moments through our jewelry. Whether it’s an engagement ring, a gift for a loved one, or a treat for yourself, we strive to provide pieces that resonate with your personal story.</p>
-            
-            <h3 class="text-2xl font-semibold mt-6">Our Promise</h3>
-            <p class="mb-4">At JewelryPalace, customer satisfaction is our top priority. We are committed to providing exceptional service, from the moment you browse our collection to the day you wear your new treasure. Our team is here to assist you with personalized recommendations and to ensure that your shopping experience is seamless and enjoyable.</p>
-            
-            <h3 class="text-2xl font-semibold mt-6">Join Our Community</h3>
-            <p class="mb-4">We invite you to explore our exquisite collection and find the perfect piece that speaks to you. Follow us on social media to stay updated on new arrivals, exclusive offers, and behind-the-scenes glimpses into our craftsmanship.</p>
-            
-            <p>Thank you for being part of the JewelryPalace family. We look forward to helping you create memories that last a lifetime!</p>
+        <div class="my-20 px-20 text-2xl text-gray-800 font-bold font-mono text-center leading-relaxed">
+        	<p>Since being founded in 2023, Jewelry Palace has turned fine jewelry into an <br> everyday occasion while working towards making a positive impact in our <br> communities, the industry, and the world.</p>
         </div>
+        <div class="mt-8 px-4 border border-slate-950 mx-5"></div>
+        
+        <div class="flex mt-8 px-10 mx-5 ">
+		    
+		        <div class="w-full md:w-2/4 flex justify-center md:justify-start">
+		            <img class=" object-cover h-full w-full md:w-auto" src="./item/flower.jpg" alt="Flower Image">
+		        </div>
+		        
+		        <div class="mt-8 md:mt-0 px-4 md:px-12 text-gray-800 leading-relaxed w-full md:w-2/3">
+		            <h2 class="text-4xl font-extrabold mb-6 text-slate-950">Welcome to JewelryPalace!</h2>
+		            <p class="mb-6 text-lg">At JewelryPalace, we believe that every piece of jewelry tells a unique story. Founded with a passion for craftsmanship and elegance, we are dedicated to offering high-quality, exquisite jewelry that adds a touch of luxury to your life.</p>
+		            
+		            <h3 class="text-3xl font-bold mt-10 mb-4 text-slate-950">Our Journey</h3>
+		            <p class="mb-6 text-lg">Our journey began with a love for timeless beauty and intricate designs. Each piece in our collection is thoughtfully crafted by skilled artisans who pour their heart and soul into every creation. We source only the finest materials, ensuring that our jewelry is not just a purchase but a cherished heirloom for generations to come.</p>
+		            
+		            <h3 class="text-3xl font-bold mt-10 mb-4 text-slate-950">Our Mission</h3>
+		            <p class="mb-6 text-lg">Our mission is to empower individuals to express their unique style and celebrate special moments through our jewelry. Whether it’s an engagement ring, a gift for a loved one, or a treat for yourself, we strive to provide pieces that resonate with your personal story.</p>
+		            
+		            <h3 class="text-3xl font-bold mt-10 mb-4 text-slate-950">Our Promise</h3>
+		            <p class="mb-6 text-lg">At JewelryPalace, customer satisfaction is our top priority. We are committed to providing exceptional service, from the moment you browse our collection to the day you wear your new treasure. Our team is here to assist you with personalized recommendations and to ensure that your shopping experience is seamless and enjoyable.</p>
+		            
+		            <h3 class="text-3xl font-bold mt-10 mb-4 text-slate-950">Join Our Community</h3>
+		            <p class="mb-6 text-lg">We invite you to explore our exquisite collection and find the perfect piece that speaks to you. Follow us on social media to stay updated on new arrivals, exclusive offers, and behind-the-scenes glimpses into our craftsmanship.</p>
+		            
+		            <p class="text-lg font-medium">Thank you for being part of the JewelryPalace family. We look forward to helping you create memories that last a lifetime!</p>
+		        </div>
+		        
+		</div>
+
     </div>
 </section>
 

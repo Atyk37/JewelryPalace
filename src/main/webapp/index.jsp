@@ -97,7 +97,7 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             conn = DriverManager.getConnection(url, user, password);
                             stmt = conn.createStatement();
-                            String sql = "SELECT * FROM product WHERE price > 3400000 ORDER BY id LIMIT 20"; 
+                            String sql = "SELECT * FROM product WHERE price > 3400000 ORDER BY id DESC LIMIT 20"; 
                             rs = stmt.executeQuery(sql);
 
                             while (rs.next()) {
