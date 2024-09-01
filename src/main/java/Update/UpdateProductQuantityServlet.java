@@ -60,7 +60,7 @@ public class UpdateProductQuantityServlet extends HttpServlet {
         if (updateSuccess) {
             sendSuccessResponse(response);
         } else {
-            sendErrorResponse(response, "Failed to update product quantities.");
+            sendErrorResponse(response, "Product is out of stock !");
         }
     }
 

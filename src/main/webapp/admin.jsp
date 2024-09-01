@@ -90,7 +90,7 @@
 
 			        }
 			        
-			        recentActivitiesResultSet.close();
+			        // recentActivitiesResultSet.close();
 
 			        // Query to fetch recent user logins (assuming users table exists in your DB)
 			        pstmt = connection.prepareStatement("SELECT name, creation_time FROM users ORDER BY creation_time DESC LIMIT 5");
@@ -112,7 +112,7 @@
 
 			            if (productName != null && soldOutTime != null) { // Check if values are not null
 			                Map<String, String> activity = new HashMap<>();
-			                activity.put("message", "Product \"" + productName + "\" is sold out.");
+			                activity.put("message", "Product \"" + productName + "\" of the quantity is no left.");
 			                activity.put("time", soldOutTime.toString());
 			                recentActivities.add(activity);
 			            } else {
@@ -120,6 +120,7 @@
 			                System.out.println("Null value found for product or sold_out_time.");
 			            }
 			        }
+			        
 			        recentActivitiesResultSet.close(); // Close the result set
 			                		
 			    } catch (SQLException e) {
