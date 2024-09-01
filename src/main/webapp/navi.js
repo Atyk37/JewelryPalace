@@ -164,6 +164,14 @@ const footerInnerHTML = `
             <p class=" text-base "><i class="fab fa-facebook-square"></i>&nbsp;facebook</p>
             <p class=" text-base "><i class="fab fa-instagram"></i>&nbsp;Instagram</p>
           </div>
+          
+          <div class="">
+            <a href="aboutus.jsp">
+            	<p class=" font-semibold text-2xl pb-2 tracking-widest">ABOUTUS</p>
+	            <p class=" text-base ">Our Journey</p>
+	            <p class=" text-base ">Our Mission</p>
+            </a>
+          </div>
         </div>
 
       </div>
