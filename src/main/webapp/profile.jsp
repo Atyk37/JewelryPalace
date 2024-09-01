@@ -58,13 +58,13 @@
         <span id="textForPfMwPh">My Profile</span>
         <h1 id="pageTitle" class="font-mono mt-5 text-5xl tracking-tighter">MY PROFILE</h1>
     </div>
-    <div class="flex space-x-3 my-8">
-        <div id="profile" class="p-3 w-max bg-slate-300 cursor-pointer">
+    <div class="flex space-x-3 my-8 mt-0">
+        <!-- <div id="profile" class="p-3 w-max bg-slate-300 cursor-pointer">
             My Profile
-        </div>
-        <div id="purchase" class="p-3 w-max bg-slate-300 cursor-pointer">
+        </div> -->
+        <!-- <div id="purchase" class="p-3 w-max bg-slate-300 cursor-pointer">
             Purchase History
-        </div>
+        </div> -->
     </div>
     <div class="border-b border-slate-950 w-full"></div>
     <!-- My Profile -->
@@ -81,12 +81,12 @@
     </div>
    
     <!-- Purchase History -->
-    <div id="purchaseHistory" class="hidden pt-10 space-y-10 text-xl">
+    <!-- <div id="purchaseHistory" class="hidden pt-10 space-y-10 text-xl">
         <div class="font-semibold">Purchase History</div>
         <div>
-            <!-- Purchase history items go here -->
+            <!-- Purchase history items go here --
         </div>
-    </div>
+    </div> -->
 </section>
 
 <!-- footer section  -->
@@ -98,7 +98,8 @@
 
 <script src="navi.js"></script>
 <script>
-    // profile, wishlist, purchase page add & remove
+ 	<!--
+ 	profile, wishlist, purchase page add & remove
 	const profile = document.getElementById('profile');
     const myProfile = document.getElementById('myProfile');
     const purchase = document.getElementById('purchase');
@@ -128,10 +129,10 @@
     });
 
     purchase.addEventListener('click', function() {
-        showSection(purchaseHistory, purchase, 'PURCHASE HISTORY', 'Purchase History');
+    	showSection(purchaseHistory, purchase, 'PURCHASE HISTORY', 'Purchase History');
     });
 
- 
+ 	-->
 </script>
 </body>
 </html>
