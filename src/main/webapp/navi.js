@@ -476,6 +476,7 @@ function purchaseItems() {
     
     // Send the data to the servlet
     sendDataToServlet();
+ 	sendDataToServletTotalCost();
     
 }
 
@@ -486,7 +487,8 @@ function populateReceipt(cartItems) {
         const itemQuantity = item.quantity || 1;
         return total + (itemPrice * itemQuantity);
     }, 0); 
-
+    
+	localStorage.setItem("totalCost", totalCost); // Store the total cost in local storage
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('en-GB', { 
         day: '2-digit',
@@ -606,6 +608,31 @@ function sendDataToServlet() {
             localStorage.removeItem('database'); // Clear the "database" in local storage
         } else {
             alert('Product is out of stock!');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while processing the request.');
+    });
+}
+
+function sendDataToServletTotalCost() {
+    const total_cost = JSON.parse(localStorage.getItem('totalCost')) || 0;
+
+    fetch('TotalCostServlet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(total_cost)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // alert('calculating total cost succcess!');
+            localStorage.removeItem('totalCost'); // Clear the "totalCost" in local storage
+        } else {
+            alert('Fail to calculate total cost!');
         }
     })
     .catch(error => {

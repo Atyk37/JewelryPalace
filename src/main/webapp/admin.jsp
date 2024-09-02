@@ -62,7 +62,7 @@
 			        productCountResultSet.close(); // Close the result set
 
 			        // Query to get total sales
-			        pstmt = connection.prepareStatement("SELECT SUM(price) AS totalSales FROM product");
+			        pstmt = connection.prepareStatement("SELECT SUM(total_cost) AS totalSales FROM total_cost");
 			        totalSalesResultSet = pstmt.executeQuery();
 			        if (totalSalesResultSet.next()) {
 			            totalSales = totalSalesResultSet.getDouble("totalSales");
