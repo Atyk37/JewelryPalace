@@ -21,36 +21,50 @@ public class DeleteProductServlet extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String productName = request.getParameter("productName");
-        
-        Connection conn = null;
-        PreparedStatement ps = null;
+		String productName = request.getParameter("productName");
+        Integer deletedProductId = null; // Variable to hold the deleted product ID
+        String deletedProductCategory = null; // Variable to hold the deleted product category
+        Double deletedProductPrice = null; // Variable to hold the deleted product price
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jewelrypalace", "root", "root");
-            
-            String sql = "DELETE FROM product WHERE name=?";
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, productName);
-            
-            int rowsAffected = ps.executeUpdate();
-            
-            if (rowsAffected > 0) {
-                response.sendRedirect("admin.jsp?deleteSuccess=true");
-            } else {
-                response.sendRedirect("admin.jsp?deleteError=true");
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jewelrypalace", "root", "root")) {
+            // First, fetch the product details before deletion
+            String fetchQuery = "SELECT id, category, price FROM product WHERE name=?";
+            try (PreparedStatement fetchPstmt = conn.prepareStatement(fetchQuery)) {
+                fetchPstmt.setString(1, productName);
+                try (ResultSet rs = fetchPstmt.executeQuery()) {
+                    if (rs.next()) {
+                        deletedProductId = rs.getInt("id"); // Get the ID of the product to be deleted
+                        deletedProductCategory = rs.getString("category"); // Get the category
+                        deletedProductPrice = rs.getDouble("price"); // Get the price
+                    }
+                }
             }
-        } catch (Exception e) {
+
+            // Now delete the product
+            String sql = "DELETE FROM product WHERE name=?";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, productName);
+                int rowsAffected = ps.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    // Log the delete activity only if deletion is successful
+                    String logQuery = "INSERT INTO activity_log (product_id, product_name, product_category, product_price, action) VALUES (?, ?, ?, ?, ?)";
+                    try (PreparedStatement logPstmt = conn.prepareStatement(logQuery)) {
+                        logPstmt.setInt(1, deletedProductId); // ID of the deleted product
+                        logPstmt.setString(2, productName); // Name of the deleted product
+                        logPstmt.setString(3, deletedProductCategory); // Category of the deleted product
+                        logPstmt.setDouble(4, deletedProductPrice); // Price of the deleted product
+                        logPstmt.setString(5, "deleted"); // Action taken
+                        logPstmt.executeUpdate(); // Execute the logging statement
+                    }
+                    response.sendRedirect("admin.jsp?deleteSuccess=true");
+                } else {
+                    response.sendRedirect("admin.jsp?deleteError=true");
+                }
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
             response.sendRedirect("admin.jsp?deleteError=true");
-        } finally {
-            try {
-                if (ps != null) ps.close();
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
-	}
+    }
 }

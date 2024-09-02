@@ -76,7 +76,7 @@
 			            totalUsers = userCountResultSet.getInt("total");
 			        }
 
-			     // Query to fetch recent product additions, deletions, and sold-out status
+			     // Query to fetch recent product additions
 			        pstmt = connection.prepareStatement("SELECT name, added_time FROM product ORDER BY added_time DESC LIMIT 5");
 			        recentActivitiesResultSet = pstmt.executeQuery();
 			        while (recentActivitiesResultSet.next()) {
@@ -102,7 +102,7 @@
 			            recentActivities.add(activity);
 			        }
 			        
-			     // Query to fetch recent sold-out products (quantity = 0)
+			     	// Query to fetch recent sold-out products (quantity = 0)
 			        pstmt = connection.prepareStatement("SELECT name, sold_out_time FROM product WHERE quantity = 0 ORDER BY sold_out_time DESC LIMIT 5");
 			        recentActivitiesResultSet = pstmt.executeQuery();
 
@@ -118,6 +118,21 @@
 			            } else {
 			                // Debugging output
 			                System.out.println("Null value found for product or sold_out_time.");
+			            }
+			        }
+			        
+			     	// Query to fetch recent delete activities
+			        pstmt = connection.prepareStatement("SELECT product_name, action_time FROM activity_log WHERE action = 'deleted' ORDER BY action_time DESC LIMIT 2");
+			        recentActivitiesResultSet = pstmt.executeQuery();
+			        while (recentActivitiesResultSet.next()) {
+			            String productName = recentActivitiesResultSet.getString("product_name");
+			            Timestamp actionTime = recentActivitiesResultSet.getTimestamp("action_time");
+
+			            if (productName != null && actionTime != null) { // Check if values are not null
+			                Map<String, String> activity = new HashMap<>();
+			                activity.put("message", "Product \"" + productName + "\" has been deleted.");
+			                activity.put("time", actionTime.toString());
+			                recentActivities.add(activity);
 			            }
 			        }
 			        
@@ -172,7 +187,7 @@
 			            <p class="text-4xl font-bold"><%= totalUsers %></p>
 			        </div>
 			    </div>
-			
+				<div class="text-3xl font-bold mb-5">Recent Activities</div>
 			    <!-- Recent Activities Section -->
 				<div class="mb-6 max-h-96 overflow-y-auto border border-gray-200 rounded-lg">
 				    <div class="flex flex-col space-y-4 p-4">

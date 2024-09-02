@@ -253,6 +253,11 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
 	        </div>
 	    </div>
 	</section>
+	
+	<!-- Gold Price -->
+	<section>
+		
+	</section>
 
     <!-- footer section  -->
     <div id="footer"></div>
