@@ -469,6 +469,11 @@ function purchaseItems() {
 	    const databaseItems = JSON.parse(localStorage.getItem('database')) || [];
 	    databaseItems.push(...cartItems); // Add all items to the "database"
 	    localStorage.setItem('database', JSON.stringify(databaseItems));
+	    
+	    // Store the cart items in the "soldout" local storage before clearing
+	    //const soldOutItems = JSON.parse(localStorage.getItem('soldout')) || [];
+	    //soldOutItems.push(...cartItems); // Add all items to the "database"
+	    //localStorage.setItem('soldout', JSON.stringify(soldOutItems));
 
     } else {
         alert('Your cart is empty.');

@@ -20,8 +20,8 @@
                 <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('dashboard')">Dashboard</a></li>
 				<li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('productManagement')">Product Management</a></li>
                 <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('userList')">Users</a></li>
-               <!--  <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('report')">Reports</a></li>
-                <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded">Settings</a></li> -->
+                <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('report')">Reports</a></li>
+                <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('setting')">Settings</a></li>
             </ul>
         </div>
 
@@ -135,6 +135,28 @@
 			                recentActivities.add(activity);
 			            }
 			        }
+			        
+			        pstmt = connection.prepareStatement(
+			        	    "SELECT name, (10 - quantity) AS sold_quantity, soldout_quantity_time " +
+			        	    "FROM product " +
+			        	    "WHERE quantity < 10 AND soldout_quantity_time IS NOT NULL " +
+			        	    "ORDER BY soldout_quantity_time DESC " +
+			        	    "LIMIT 5"
+			        	);
+			        	recentActivitiesResultSet = pstmt.executeQuery();
+
+			        	while (recentActivitiesResultSet.next()) {
+			        	    String productName = recentActivitiesResultSet.getString("name");
+			        	    int soldQuantity = recentActivitiesResultSet.getInt("sold_quantity");
+			        	    Timestamp soldOutQuantityTime = recentActivitiesResultSet.getTimestamp("soldout_quantity_time");
+
+			        	    if (productName != null && soldOutQuantityTime != null) {
+			        	        Map<String, String> activity = new HashMap<>();
+			        	        activity.put("message", "Product \"" + productName + "\" has less than 10 items remaining. Total sold quantity: " + soldQuantity + ".");
+			        	        activity.put("time", soldOutQuantityTime.toString());
+			        	        recentActivities.add(activity);
+			        	    }
+			        	}
 			        
 			        recentActivitiesResultSet.close(); // Close the result set
 			                		
@@ -473,6 +495,7 @@
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onload = function () {
                 if (xhr.status === 200) {
+                	
                     // Update UI with new values
                     document.getElementById("name-" + productId).innerText = name;
                     document.getElementById("category-" + productId).innerText = category;
@@ -487,6 +510,7 @@
                     
                     // Hide the save button
                     document.getElementById("save-" + productId).classList.add("hidden");
+                    
                 }
             };
             xhr.send("id=" + productId + "&name=" + encodeURIComponent(name) + "&category=" + encodeURIComponent(category) + "&price=" + price + "&quantity=" + quantity);
