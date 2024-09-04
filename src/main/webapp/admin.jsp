@@ -157,6 +157,19 @@
 			        	        recentActivities.add(activity);
 			        	    }
 			        	}
+			        	
+			        	// Query to fetch recent reviews
+			            pstmt = connection.prepareStatement("SELECT user_name, content, created_at FROM review ORDER BY created_at DESC LIMIT 5");
+			            recentActivitiesResultSet = pstmt.executeQuery();
+			            while (recentActivitiesResultSet.next()) {
+			                String userName = recentActivitiesResultSet.getString("user_name");
+			                Timestamp createdAt = recentActivitiesResultSet.getTimestamp("created_at");
+
+			                Map<String, String> activity = new HashMap<>();
+			                activity.put("message", "User \"" + userName + "\"was reviewed.");
+			                activity.put("time", createdAt.toString());
+			                recentActivities.add(activity);
+			            }
 			        
 			        recentActivitiesResultSet.close(); // Close the result set
 			                		
@@ -399,11 +412,42 @@
                 </table>
             </section>
             
-            <!-- Report Container -->
-            <section id="dashboard" class="hidden" >
-                <h1 class="text-4xl font-bold mb-4">Report</h1>
-                <!-- Report content goes here -->
-            </section>
+            <%
+			    // Database connection variables
+			    List<Map<String, String>> reviews = new ArrayList<>();
+			    
+			    try {
+			        // Establish connection to the database
+			        Class.forName("com.mysql.cj.jdbc.Driver");
+			        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/jewelrypalace", "root", "root");
+			        // Execute the SQL query
+			        String sql = "SELECT * FROM review";
+			        Statement statement = connection.createStatement();
+			        ResultSet resultSet = statement.executeQuery(sql);
+			
+			        // Process the results
+			        while (resultSet.next()) {
+			            Map<String, String> review = new HashMap<>();
+			            review.put("user_name", resultSet.getString("user_name"));
+			            review.put("content", resultSet.getString("content"));
+			            review.put("created_at", resultSet.getString("created_at"));
+			            reviews.add(review);
+			        }
+			
+			        // Close the database connection
+			        resultSet.close();
+			        statement.close();
+			        connection.close();
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			    }
+			%>
+			
+			<!-- Report Container -->
+			<section id="report" class="hidden">
+				<!-- <h1 class="text-4xl font-bold mb-4">Report</h1> -->			    
+			    
+			</section>
             
         </div>
         
