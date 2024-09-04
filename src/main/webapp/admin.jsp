@@ -20,8 +20,8 @@
                 <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('dashboard')">Dashboard</a></li>
 				<li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('productManagement')">Product Management</a></li>
                 <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('userList')">Users</a></li>
-                <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('report')">Reports</a></li>
-                <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded">Settings</a></li>
+               <!--  <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded" onclick="showContainer('report')">Reports</a></li>
+                <li><a href="#" class="block py-2 px-4 hover:bg-gray-700 rounded">Settings</a></li> -->
             </ul>
         </div>
 
