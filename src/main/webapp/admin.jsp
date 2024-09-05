@@ -152,7 +152,7 @@
 
 			        	    if (productName != null && soldOutQuantityTime != null) {
 			        	        Map<String, String> activity = new HashMap<>();
-			        	        activity.put("message", "Product \"" + productName + "\" has less than 10 items remaining. Total sold quantity: " + soldQuantity + ".");
+			        	        activity.put("message", "Product \"" + productName + "\" was sold out. Total sold quantity: " + soldQuantity + ".");
 			        	        activity.put("time", soldOutQuantityTime.toString());
 			        	        recentActivities.add(activity);
 			        	    }
