@@ -13,7 +13,7 @@
         <img class=" w-full h-[800px]" src="./item/background1.jpg" alt="Logo 1">
       </div>
       <div class="carouselItem">
-        <img class=" w-full h-[800px]" src="./item/background3.jpg" alt="Logo 2">
+        <img class=" w-full h-[800px]" src="./item/background5.png" alt="Logo 2">
       </div>
       <div class="carouselItem">
         <img class=" w-full h-[800px]" src="./item/background4.jpg" alt="Logo 3">
