@@ -28,7 +28,7 @@ public class SubmitReviewServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        loadReviews(request, response, "id DESC"); // Load reviews in ascending order by ID
+    	loadReviews(request, response, "id DESC"); // Load reviews in descending order by ID
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

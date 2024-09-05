@@ -444,9 +444,41 @@
 			%>
 			
 			<!-- Report Container -->
-			<section id="report" class="hidden">
-				<!-- <h1 class="text-4xl font-bold mb-4">Report</h1> -->			    
-			    
+			<section id="report" class=" hidden p-4">
+			    <h1 class="text-4xl font-bold mb-4">User Reviews</h1>
+				    <!-- Scrollable div container -->
+	    			<div class="h-96 overflow-y-scroll space-y-4 p-4 bg-gray-100 rounded-lg shadow-inner">
+	        
+			            <%
+			                try {
+			                    Class.forName("com.mysql.cj.jdbc.Driver");
+			                     conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jewelrypalace", "root", "root");
+			                     stmt = conn.createStatement();
+			                    String query = "SELECT * FROM review";
+			                     rs = stmt.executeQuery(query);
+			                    
+			                    while (rs.next()) {
+			                        int id = rs.getInt("id");
+			                        String userName = rs.getString("user_name");
+			                        String content = rs.getString("content");
+			                        String createdAt = rs.getString("created_at");
+			            %>
+			            <!-- Review Card -->
+				        <div class="bg-white shadow rounded-lg p-6 flex flex-col justify-between h-auto">
+				            <div class="flex justify-between items-start">
+				                <h2 class="text-xl font-semibold"><%= userName %></h2>
+				                <p class="text-sm text-gray-500"><%= createdAt %></p>
+				            </div>
+				            <p class="mt-1 text-gray-700 flex-grow"><%= content %></p>
+				        </div>
+			            <%
+			                    }
+			                    conn.close();
+			                } catch (Exception e) {
+			                    e.printStackTrace();
+			                }
+			            %>
+					</div>
 			</section>
             
         </div>
