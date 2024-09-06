@@ -160,7 +160,7 @@
         function openModal(productName, productImage, productPrice, productQuantity) {
             document.getElementById('modalImage').src = './product_image/' + productImage;
             document.getElementById('modalProductName').textContent = productName;
-            document.getElementById('modalProductPrice').textContent = productPrice;
+            document.getElementById('modalProductPrice').textContent = productPrice + " kyats";
 
             const stockStatusElement = document.getElementById("modalStockStatus");
             const stockStatus = productQuantity > 0 ? "INSTOCK" : "Out of Stock";
@@ -168,14 +168,22 @@
 
             // Set text color based on stock status
             stockStatusElement.className = productQuantity > 0 ? "text-lg font-semibold mt-2 p-2 text-blue-800" : "text-lg font-semibold mt-2 p-2 text-red-800";
-            
-            // Assign the addToCart function to the button's onclick event
+
+            // Assign the addToCart function to the button's onclick event with switch statement
             document.getElementById('addToCart').onclick = function() {
-                addToCart(productName, productImage, productPrice);
+                // Use a switch statement to check conditions
+                
+                    if (productQuantity <= 0){
+                        alert("This product is out of stock!");
+                    }else{
+                        addToCart(productName, productImage, productPrice); // Add the item to the cart
+                        alert("Item added to cart!");
+                }
             };
 
             document.getElementById('productModal').classList.remove('hidden');
         }
+
 
         function addToCart(productName, productImage, productPrice) {
             let cart = JSON.parse(localStorage.getItem("cart")) || [];

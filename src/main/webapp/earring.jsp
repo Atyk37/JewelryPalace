@@ -159,11 +159,12 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
 	const isLoggedInServer = <%= isLoggedInServer ? "true" : "false" %> === "true";
 	// Combine both server-side and client-side checks
 	const isLoggedIn = isLoggedInServer || isLoggedInLocalStorage;
-    function openModal(productName, productImage, productPrice, productQuantity) {
+	
+	function openModal(productName, productImage, productPrice, productQuantity) {
         document.getElementById("modalProductName").innerText = productName;
         document.getElementById("modalImage").src = "./product_image/" + productImage;
         document.getElementById("modalProductPrice").innerText = productPrice + " kyats";
-        
+
         const stockStatusElement = document.getElementById("modalStockStatus");
         const stockStatus = productQuantity > 0 ? "INSTOCK" : "Out of Stock";
         stockStatusElement.innerText = stockStatus;
@@ -174,8 +175,10 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
         const modal = document.getElementById("productModal");
         modal.classList.remove("hidden");
 
-        // Add click event to the Add to Wishlist button
-        document.getElementById("addToWishlist").onclick = function() {
+        // Clear any previous event listeners before adding new ones
+        const addToWishlistBtn = document.getElementById("addToWishlist");
+        addToWishlistBtn.onclick = null;
+        addToWishlistBtn.onclick = function() {
             if (isLoggedIn) {
                 addToWishlist(productName, productImage, productPrice);
             } else {
@@ -183,15 +186,23 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
             }
         };
 
-        // Add click event to the Add to Cart button
-        document.getElementById("addToCart").onclick = function() {
-            if (isLoggedIn) {
-                addToCart(productName, productImage, productPrice);
-            } else {
-                alert('Please sign up first.');
+        const addToCartBtn = document.getElementById("addToCart");
+        addToCartBtn.onclick = null;
+        addToCartBtn.onclick = function() {
+            // Use a switch statement to check conditions
+            switch (true) {
+                case !isLoggedIn:
+                    alert('Please sign up first.');
+                    break;
+                case productQuantity <= 0:
+                    alert("This product is out of stock!");
+                    break;
+                default:
+                    addToCart(productName, productImage, productPrice); // Add the item to the cart
+                    //alert("Item added to cart!");
+                    break;
             }
         };
-
     }
 
     function addToWishlist(productName, productImage, productPrice) {
