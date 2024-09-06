@@ -47,15 +47,16 @@
                             String[] wishlistArray = wishlistData.split(",");
 
                             for (String itemName : wishlistArray) {
-                                String sql = "SELECT * FROM product WHERE name = '" + itemName + "'";
+                                String sql = "SELECT name, image, price, quantity FROM product WHERE name = '" + itemName + "'";
                                 rs = stmt.executeQuery(sql);
 
                                 if (rs.next()) {
                                     String productName = rs.getString("name");
                                     String productImage = rs.getString("image");
                                     String productPrice = rs.getString("price");
+                                    int productQuantity = rs.getInt("quantity");
                 %>
-                                    <div class="w-80 h-96 relative mb-7 inline-block cursor-pointer" data-product="<%= productName %>" onclick="openModal('<%= productName %>', '<%= productImage %>', '<%= productPrice %>')">
+                                    <div class="w-80 h-96 relative mb-7 inline-block cursor-pointer" data-product="<%= productName %>" onclick="openModal('<%= productName %>', '<%= productImage %>', '<%= productPrice %>', <%= productQuantity %>)">
                                         <div>
                                             <img class="w-80 h-96 object-cover" src="./product_image/<%= productImage %>" alt="<%= productName %>">
                                         </div>
@@ -104,7 +105,8 @@
                             These exquisite stuff are crafted with precision and elegance. Made from high-quality materials, they feature a stunning design that adds a touch of sophistication to any outfit. Perfect for special occasions or as a luxurious gift.
                         </p>
                     </div>
-
+					
+					<div id="modalStockStatus" class=" " style="display: inline-block;"></div>
                     <div class="flex justify-between ">
                         <button id="addToCart" class="w-full ml-2 px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
                             Add to Cart
@@ -155,11 +157,18 @@
             });
         };
 
-        function openModal(productName, productImage, productPrice) {
-        	document.getElementById('modalImage').src = './product_image/' + productImage;
+        function openModal(productName, productImage, productPrice, productQuantity) {
+            document.getElementById('modalImage').src = './product_image/' + productImage;
             document.getElementById('modalProductName').textContent = productName;
             document.getElementById('modalProductPrice').textContent = productPrice;
 
+            const stockStatusElement = document.getElementById("modalStockStatus");
+            const stockStatus = productQuantity > 0 ? "INSTOCK" : "Out of Stock";
+            stockStatusElement.innerText = stockStatus;
+
+            // Set text color based on stock status
+            stockStatusElement.className = productQuantity > 0 ? "text-lg font-semibold mt-2 p-2 text-blue-800" : "text-lg font-semibold mt-2 p-2 text-red-800";
+            
             // Assign the addToCart function to the button's onclick event
             document.getElementById('addToCart').onclick = function() {
                 addToCart(productName, productImage, productPrice);
@@ -190,13 +199,6 @@
             document.getElementById('productModal').classList.add('hidden');
         };
 
-
-        // Close modal when clicking on the close icon
-        document.getElementById('closeModal').onclick = function() {
-            document.getElementById('productModal').classList.add('hidden');
-        };
-
     </script>
-
 </body>
 </html>
