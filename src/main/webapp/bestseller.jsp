@@ -107,6 +107,7 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
                             Add to Cart
                         </button>
                     </div>
+                	<span id="showMsg" class="text-sm mt-2"></span>
                 </div>
             </div>
         </div>
@@ -158,25 +159,35 @@ function openModal(productName, productImage, productPrice, productQuantity) {
     };
 
     const addToCartBtn = document.getElementById("addToCart");
-    addToCartBtn.onclick = null;
+    const showMsg = document.getElementById("showMsg");
+
     addToCartBtn.onclick = function() {
+        // Clear previous message
+        showMsg.innerText = "";
+        showMsg.classList.remove("text-green-500", "text-red-500"); // Reset message color
+
         // Use a switch statement to check conditions
         switch (true) {
             case !isLoggedIn:
-                alert('Please sign up first.');
+                showMsg.innerText = "Please sign up first.";
+                showMsg.classList.add("text-red-500");
                 break;
             case productQuantity <= 0:
-                alert("This product is out of stock!");
+                showMsg.innerText = "This product is out of stock!";
+                showMsg.classList.add("text-red-500");
                 break;
             default:
                 addToCart(productName, productImage, productPrice); // Add the item to the cart
-                //alert("Item added to cart!");
+                showMsg.innerText = "Item added to cart!";
+                showMsg.classList.add("text-green-500");
                 break;
         }
     };
 }
 
 function addToWishlist(productName, productImage, productPrice) {
+    const showMsg = document.getElementById("showMsg");
+
     // Retrieve existing wishlist from local storage
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
@@ -190,13 +201,17 @@ function addToWishlist(productName, productImage, productPrice) {
             price: productPrice
         });
         localStorage.setItem("wishlist", JSON.stringify(wishlist));
-        alert(productName + " has been added to your wishlist!");
+        showMsg.innerText = productName + " has been added to your wishlist!";
+        showMsg.style.color = "green";
     } else {
-        alert(productName + " is already in your wishlist.");
+        showMsg.innerText = productName + " is already in your wishlist.";
+        showMsg.style.color = "red";
     }
 }
 
 function addToCart(productName, productImage, productPrice) {
+    const showMsg = document.getElementById("showMsg");
+
     // Retrieve existing cart from local storage
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -210,9 +225,11 @@ function addToCart(productName, productImage, productPrice) {
             price: productPrice
         });
         localStorage.setItem("cart", JSON.stringify(cart));
-        alert(productName + " has been added to your cart!");
+        showMsg.innerText = productName + " has been added to your cart!";
+        showMsg.style.color = "green";
     } else {
-        alert(productName + " is already in your cart.");
+        showMsg.innerText = productName + " is already in your cart.";
+        showMsg.style.color = "red";
     }
 }
 

@@ -94,6 +94,7 @@ function initializeNav() {
           <div class="mb-6">
             <label for="password" class="block text-sm font-medium text-slate-700 mb-1">Enter your password</label>
             <input type="password" id="password" name="password" class="w-full px-0 py-2 border-b border-slate-300 focus:border-slate-950 focus:outline-none transition duration-200" required>
+       		<span id="errMsg" class="text-red-600 text-sm mt-2"></span>
           </div>
           <div>
             <button id="submitBtn" type="submit" class="w-full bg-slate-500 text-white py-2 rounded-md shadow-lg hover:bg-slate-600 focus:ring-4 focus:ring-slate-300 transition ease-in-out duration-150">SIGN UP</button>
@@ -196,6 +197,9 @@ footerContainer.innerHTML = footerInnerHTML;
   const shoppingCartBox = document.getElementById('shoppingCartBox');
   const closeShoppingCart = document.getElementById('closeShoppingCart');
   const signOutLink = document.getElementById('signOutLink');
+  
+// Simulating user login status
+const isUserLoggedIn = true; // Set this based on actual login status
 
 // Function to validate password
 function validatePassword(password) {
@@ -209,10 +213,21 @@ function validatePassword(password) {
 document.querySelector('form[action="authServlet"]').addEventListener('submit', function(event) {
   const passwordInput = document.getElementById('password');
   const password = passwordInput.value;
+  const errMsg = document.getElementById('errMsg');
+
+  // Clear any previous error message
+  errMsg.textContent = '';
 
   if (!validatePassword(password)) {
     event.preventDefault(); // Prevent form submission
-    alert('Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
+
+    // Show a different message if the user is already logged in
+    if (isUserLoggedIn) {
+      errMsg.textContent = 'Please enter a valid password.';
+    } else {
+      errMsg.textContent = 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.';
+    }
+    
     passwordInput.focus(); // Focus on the password input for correction
   }
 });
@@ -384,6 +399,7 @@ function renderCartItems() {
                 </select>
                 <input type="text" id="paymentAccountPhone" placeholder="Enter payment account phone number" class="my-2 border rounded-sm w-full p-2" />
            		<input type="text" id="customerAddress" placeholder="Enter your address" class="my-2 border rounded-sm w-full p-2" />
+    			<span id="errorMsg" class="text-red-500 text-sm mt-2 block"></span>
             </div>
             <div class="mt-4 text-right mb-4">
                 <span>Total Cost: ${totalCost.toFixed(2)} MMK</span>
@@ -424,24 +440,27 @@ function changeQuantity(itemName, change) {
 
 function purchaseItems() {
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-    
-	const phoneNumber = document.getElementById('paymentAccountPhone').value.trim();
+    const phoneNumber = document.getElementById('paymentAccountPhone').value.trim();
     const address = document.getElementById('customerAddress').value.trim();
-	
-	// Regular expression for validating phone number format (09XXXXXXXXX)
+    const errorMsg = document.getElementById('errorMsg');
+
+    // Regular expression for validating phone number format (09XXXXXXXXX)
     const phonePattern = /^09\d{9}$/;
-	
+
+    // Clear previous error message
+    errorMsg.innerText = "";
+
     // Validate that phone number and address are not empty
     if (!phoneNumber) {
-        alert("Please enter your payment account phone number.");
+        errorMsg.innerText = "Please enter your payment account phone number.";
         return;
     }
     if (!phonePattern.test(phoneNumber)) {
-        alert("Please enter a valid phone number (format: 09XXXXXXXXX).");
+        errorMsg.innerText = "Please enter a valid phone number (format: 09XXXXXXXXX).";
         return;
     }
     if (!address) {
-        alert("Please enter your address.");
+        errorMsg.innerText = "Please enter your address.";
         return;
     }
     if (cartItems.length > 0) {
@@ -456,7 +475,7 @@ function purchaseItems() {
         // Store payment method and phone number in local storage
         localStorage.setItem('paymentMethod', paymentMethod);
         localStorage.setItem('paymentAccountPhone', paymentAccountPhone);
-		localStorage.setItem('customerAddress', customerAddress);
+        localStorage.setItem('customerAddress', customerAddress);
 
         populateReceipt(cartItems);
         document.getElementById('receiptModal').classList.remove('hidden'); // Show the receipt modal
@@ -464,24 +483,23 @@ function purchaseItems() {
         // Clear the cart after purchase
         localStorage.removeItem('cart');
         renderCartItems(); // Re-render cart items
-        
-        // Store the cart items in the "database" local storage before clearing
-	    const databaseItems = JSON.parse(localStorage.getItem('database')) || [];
-	    databaseItems.push(...cartItems); // Add all items to the "database"
-	    localStorage.setItem('database', JSON.stringify(databaseItems));
-	    
-	    // Store the cart items in the "soldout" local storage before clearing
-	    //const soldOutItems = JSON.parse(localStorage.getItem('soldout')) || [];
-	    //soldOutItems.push(...cartItems); // Add all items to the "database"
-	    //localStorage.setItem('soldout', JSON.stringify(soldOutItems));
 
+        // Store the cart items in the "database" local storage before clearing
+        const databaseItems = JSON.parse(localStorage.getItem('database')) || [];
+        databaseItems.push(...cartItems); // Add all items to the "database"
+        localStorage.setItem('database', JSON.stringify(databaseItems));
+
+        // Show a success message
+        errorMsg.innerText = "Purchase successful!";
+        errorMsg.style.color = "green";
+
+        // Send the data to the servlet
+        sendDataToServlet();
+        sendDataToServletTotalCost();
     } else {
-        alert('Your cart is empty.');
+        errorMsg.innerText = "Your cart is empty.";
+        errorMsg.style.color = "red";
     }
-    
-    // Send the data to the servlet
-    sendDataToServlet();
- 	sendDataToServletTotalCost();
     
 }
 
@@ -616,8 +634,11 @@ function sendDataToServlet() {
         }
     })
     .catch(error => {
+		// json object null error code is here
+		alert('Thank for your Purchase!');
+	    localStorage.removeItem('database'); // Clear the "database" in local storage
         console.error('Error:', error);
-        alert('An error occurred while processing the request.');
+        // alert('An error occurred while processing the request.');
     });
 }
 

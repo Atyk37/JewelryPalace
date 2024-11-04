@@ -27,7 +27,7 @@ public class DeleteProductServlet extends HttpServlet {
         Double deletedProductPrice = null; // Variable to hold the deleted product price
 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jewelrypalace", "root", "root")) {
-            // First, fetch the product details before deletion
+            // Fetch the product details before deletion
             String fetchQuery = "SELECT id, category, price FROM product WHERE name=?";
             try (PreparedStatement fetchPstmt = conn.prepareStatement(fetchQuery)) {
                 fetchPstmt.setString(1, productName);
@@ -41,13 +41,13 @@ public class DeleteProductServlet extends HttpServlet {
             }
 
             // Now delete the product
-            String sql = "DELETE FROM product WHERE name=?";
-            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, productName);
-                int rowsAffected = ps.executeUpdate();
+            String deleteQuery = "DELETE FROM product WHERE name=?";
+            try (PreparedStatement deletePstmt = conn.prepareStatement(deleteQuery)) {
+                deletePstmt.setString(1, productName);
+                int rowsAffected = deletePstmt.executeUpdate();
 
-                if (rowsAffected > 0) {
-                    // Log the delete activity only if deletion is successful
+                if (rowsAffected > 0 && deletedProductId != null) {
+                    // Insert deleted product info into activity_log after successful deletion
                     String logQuery = "INSERT INTO activity_log (product_id, product_name, product_category, product_price, action) VALUES (?, ?, ?, ?, ?)";
                     try (PreparedStatement logPstmt = conn.prepareStatement(logQuery)) {
                         logPstmt.setInt(1, deletedProductId); // ID of the deleted product
@@ -55,7 +55,7 @@ public class DeleteProductServlet extends HttpServlet {
                         logPstmt.setString(3, deletedProductCategory); // Category of the deleted product
                         logPstmt.setDouble(4, deletedProductPrice); // Price of the deleted product
                         logPstmt.setString(5, "deleted"); // Action taken
-                        logPstmt.executeUpdate(); // Execute the logging statement
+                        logPstmt.executeUpdate(); // Log the deletion in activity_log
                     }
                     response.sendRedirect("admin.jsp?deleteSuccess=true");
                 } else {

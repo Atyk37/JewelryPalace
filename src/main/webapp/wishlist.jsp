@@ -108,10 +108,11 @@
 					
 					<div id="modalStockStatus" class=" " style="display: inline-block;"></div>
                     <div class="flex justify-between ">
-                        <button id="addToCart" class="w-full ml-2 px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
+                        <button id="addToCart" class="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-sm shadow hover:bg-slate-400 transition duration-200">
                             Add to Cart
                         </button>
                     </div>
+                    <span id="showMsg" class="text-sm mt-2 "></span>
                 </div>
             </div>
         </div>
@@ -174,10 +175,11 @@
                 // Use a switch statement to check conditions
                 
                     if (productQuantity <= 0){
-                        alert("This product is out of stock!");
+                    	showMsg.innerText = "This product is out of stock!";
+                        showMsg.classList.add("text-red-500");
                     }else{
                         addToCart(productName, productImage, productPrice); // Add the item to the cart
-                        alert("Item added to cart!");
+                      //  alert("Item added to cart!");
                 }
             };
 
@@ -186,19 +188,26 @@
 
 
         function addToCart(productName, productImage, productPrice) {
+            const showMsg = document.getElementById("showMsg");
+
+            // Retrieve existing cart from local storage
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+            // Check if the product is already in the cart
             const exists = cart.find(item => item.name === productName);
             if (!exists) {
+                // Add new product to the cart
                 cart.push({
                     name: productName,
                     image: productImage,
                     price: productPrice
                 });
                 localStorage.setItem("cart", JSON.stringify(cart));
-                alert(productName + " has been added to your cart!");
+                showMsg.innerText = productName + " has been added to your cart!";
+                showMsg.style.color = "green";
             } else {
-                alert(productName + " is already in your cart.");
+                showMsg.innerText = productName + " is already in your cart.";
+                showMsg.style.color = "red";
             }
         }
 
