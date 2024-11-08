@@ -302,7 +302,6 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
             	showMsg.innerText = "Please sign up first.";
                 showMsg.classList.add("text-red-500");
                 
-             // Clear error message after 3 seconds
                 setTimeout(() => {
                     showMsg.innerText = "";
                     showMsg.classList.remove("text-red-500");
