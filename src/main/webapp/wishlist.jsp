@@ -177,6 +177,11 @@
                     if (productQuantity <= 0){
                     	showMsg.innerText = "This product is out of stock!";
                         showMsg.classList.add("text-red-500");
+                        
+                        setTimeout(() => {
+                            showMsg.innerText = "";
+                            showMsg.classList.remove("text-red-500");
+                        }, 2000);
                     }else{
                         addToCart(productName, productImage, productPrice); // Add the item to the cart
                       //  alert("Item added to cart!");
@@ -205,9 +210,19 @@
                 localStorage.setItem("cart", JSON.stringify(cart));
                 showMsg.innerText = productName + " has been added to your cart!";
                 showMsg.style.color = "green";
+                
+                setTimeout(() => {
+                    showMsg.innerText = "";
+                    showMsg.style.color = ""; 
+                }, 2000);
             } else {
                 showMsg.innerText = productName + " is already in your cart.";
                 showMsg.style.color = "red";
+                
+                setTimeout(() => {
+                    showMsg.innerText = "";
+                    showMsg.style.color = ""; 
+                }, 2000);
             }
         }
 

@@ -201,12 +201,32 @@ footerContainer.innerHTML = footerInnerHTML;
 // Simulating user login status
 const isUserLoggedIn = true; // Set this based on actual login status
 
-// Function to validate password
+// Function to validate password and return specific errors
 function validatePassword(password) {
-  // Regular expression for password requirements: at least 8 characters, 
-  // at least one uppercase letter, one lowercase letter, one digit, and one special character
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  return passwordRegex.test(password);
+  const errors = [];
+
+  // Check each condition using switch-case
+  switch (true) {
+    case !/[a-z]/.test(password):
+      errors.push('Password must contain at least one lowercase letter.');
+      break;
+    case !/[A-Z]/.test(password):
+      errors.push('Password must contain at least one uppercase letter.');
+      break;
+    case !/\d/.test(password):
+      errors.push('Password must contain at least one number.');
+      break;
+    case !/[@$!%*?&]/.test(password):
+      errors.push('Password must contain at least one special character (@, $, !, %, *, ?, &).');
+      break;
+    case password.length < 8:
+      errors.push('Password must be at least 8 characters long.');
+      break;
+    default:
+      break;
+  }
+
+  return errors;
 }
 
 // Event listener for the form submission
@@ -218,19 +238,30 @@ document.querySelector('form[action="authServlet"]').addEventListener('submit', 
   // Clear any previous error message
   errMsg.textContent = '';
 
-  if (!validatePassword(password)) {
+  // Validate password and get errors
+  const passwordErrors = validatePassword(password);
+
+  // If there are any errors
+  if (passwordErrors.length > 0) {
     event.preventDefault(); // Prevent form submission
 
-    // Show a different message if the user is already logged in
+    // If the user is logged in, show a general message
     if (isUserLoggedIn) {
-      errMsg.textContent = 'Please enter a valid password.';
-    } else {
-      errMsg.textContent = 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.';
+      //errMsg.textContent = 'Please enter a valid password.';
     }
-    
+
+    // Otherwise, show each specific error message
+    passwordErrors.forEach(error => {
+      const errorMessage = document.createElement('p');
+      errorMessage.textContent = error;
+      errMsg.appendChild(errorMessage);
+    });
+
     passwordInput.focus(); // Focus on the password input for correction
   }
 });
+
+
 
 
  // Event listener for Sign Up link
@@ -658,7 +689,7 @@ function sendDataToServletTotalCost() {
             // alert('calculating total cost succcess!');
             localStorage.removeItem('totalCost'); // Clear the "totalCost" in local storage
         } else {
-            alert('Fail to calculate total cost!');
+           // alert('Fail to calculate total cost!');
         }
     })
     .catch(error => {

@@ -183,8 +183,13 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
             if (isLoggedIn) {
                 addToWishlist(productName, productImage, productPrice);
             } else {
-                alert('Please sign up first.');
-            }
+            	showMsg.innerText = "Please sign up first.";
+                showMsg.classList.add("text-red-500");
+                
+                setTimeout(() => {
+                    showMsg.innerText = "";
+                    showMsg.classList.remove("text-red-500");
+                }, 2000);            }
         };
 
         const addToCartBtn = document.getElementById("addToCart");
@@ -200,16 +205,21 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
                 case !isLoggedIn:
                     showMsg.innerText = "Please sign up first.";
                     showMsg.classList.add("text-red-500");
+                    
+                    setTimeout(() => {
+                        showMsg.innerText = "";
+                    }, 2000);
                     break;
                 case productQuantity <= 0:
                     showMsg.innerText = "This product is out of stock!";
                     showMsg.classList.add("text-red-500");
+                    
+                    setTimeout(() => {
+                        showMsg.innerText = "";
+                    }, 2000);
                     break;
                 default:
                     addToCart(productName, productImage, productPrice); // Add the item to the cart
-                    showMsg.innerText = "Item added to cart!";
-                    showMsg.classList.add("text-green-500");
-                    break;
             }
         };
     }
@@ -232,9 +242,19 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
 	        localStorage.setItem("wishlist", JSON.stringify(wishlist));
 	        showMsg.innerText = productName + " has been added to your wishlist!";
 	        showMsg.style.color = "green";
+	        
+	        setTimeout(() => {
+                showMsg.innerText = "";
+                showMsg.style.color = ""; 
+            }, 2000);
 	    } else {
 	        showMsg.innerText = productName + " is already in your wishlist.";
 	        showMsg.style.color = "red";
+	        
+	        setTimeout(() => {
+                showMsg.innerText = "";
+                showMsg.style.color = ""; 
+            }, 2000);
 	    }
 	}
 
@@ -256,9 +276,19 @@ boolean isLoggedInServer = session.getAttribute("username") != null;
 	        localStorage.setItem("cart", JSON.stringify(cart));
 	        showMsg.innerText = productName + " has been added to your cart!";
 	        showMsg.style.color = "green";
+	        
+	        setTimeout(() => {
+                showMsg.innerText = "";
+                showMsg.style.color = ""; 
+            }, 2000);
 	    } else {
 	        showMsg.innerText = productName + " is already in your cart.";
 	        showMsg.style.color = "red";
+	        
+	        setTimeout(() => {
+                showMsg.innerText = "";
+                showMsg.style.color = ""; 
+            }, 2000);
 	    }
 	}
 
